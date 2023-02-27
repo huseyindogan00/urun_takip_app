@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:urun_takip_app/core/constants/strings/cons_app_text.dart';
-import 'package:urun_takip_app/core/theme/theme_app.dart';
-import 'package:urun_takip_app/ui/pages/home/home_page.dart';
+import 'package:urun_takip_app/core/constant/strings/const_appbar_text.dart';
+import 'package:urun_takip_app/core/constant/theme/theme_app.dart';
+import 'package:urun_takip_app/ui/pages/splash/splash_view.dart';
 
-void main() => runApp(const MyApp());
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  runApp(const MyApp());
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -11,17 +15,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: ConstAppText.materialTitle,
-      theme: ThemeApp.themeData,
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text(
-            ConstAppText.materialTitle,
-            style: Theme.of(context).textTheme.titleLarge,
-          ),
-        ),
-        body: const HomePage(),
-      ),
+      title: ConstAppbarText.appName,
+      debugShowCheckedModeBanner: false,
+      theme: ThemeApp.myThemeData,
+      home: const SplashView(),
     );
   }
 }

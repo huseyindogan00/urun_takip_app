@@ -5,17 +5,6 @@ class HomeTextWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Card(
-          child: ElevatedButton(
-              onPressed: () {},
-              child: Text('Ürün Ara',
-                  style: Theme.of(context).textTheme.displayMedium)),
-        ),
-        //Text('Ürün Ekle', style: Theme.of(context).textTheme.displayMedium),
-      ],
-    );
+    return Column();
   }
 }
