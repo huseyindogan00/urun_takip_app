@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:urun_takip_app/core/constant/images/const_image.dart';
 import 'package:urun_takip_app/core/constant/strings/const_appbar_text.dart';
-import 'package:urun_takip_app/ui/components/lottie_custom_widget.dart';
+import 'package:urun_takip_app/ui/components/common/lottie_custom_widget.dart';
 import 'package:urun_takip_app/ui/pages/home/home_page.dart';
 import 'package:urun_takip_app/ui/pages/splash/splash_view_model.dart';
 
@@ -22,6 +22,7 @@ class _SplashViewState extends State<SplashView> {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       // splashViewModel da yapılacak işlemler burada yapılacak. Sayfa yönlendirme vs.
       await Future.delayed(const Duration(seconds: 3));
+      // ignore: use_build_context_synchronously
       Navigator.push(
           context,
           MaterialPageRoute(
@@ -29,7 +30,6 @@ class _SplashViewState extends State<SplashView> {
           ));
       print('callback çalıştı');
     });
-    Future.microtask(() => print('futuretask çalıştı'));
   }
 
   @override
@@ -61,6 +61,10 @@ class _SplashViewState extends State<SplashView> {
     );
   }
 
-  Widget _buildLotieAnimation() =>
-      Expanded(flex: 4, child: LottieCustomWidget(path: 'stock.json'));
+  Widget _buildLotieAnimation() => Expanded(
+      flex: 4,
+      child: LottieCustomWidget(
+        path: 'stock.json',
+        fit: BoxFit.contain,
+      ));
 }
