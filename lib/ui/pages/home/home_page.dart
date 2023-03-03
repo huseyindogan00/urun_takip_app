@@ -2,48 +2,48 @@ import 'package:flutter/material.dart';
 import 'package:urun_takip_app/core/constant/colors/const_application_colors.dart';
 import 'package:urun_takip_app/core/constant/images/const_image.dart';
 import 'package:urun_takip_app/ui/components/common/home_card_container.dart';
+import 'package:urun_takip_app/ui/pages/product/product_add/product_add_view.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-        child: Scaffold(
+    return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
       body: Column(
         children: [
           _buildLogo(flex: 2),
           //_buildCustomDivider(),
-          _buildRowFirst(flex: 2),
-          _buildRowSecond(flex: 2),
+          _buildRowFirst(flex: 2, context: context),
+          _buildRowSecond(flex: 2, context: context),
           const Spacer(flex: 1),
-        ],
-      ),
-    ));
-  }
-
-  Expanded _buildRowSecond({required int flex}) {
-    return Expanded(
-      flex: flex,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          _buildOrderHistoryContainer(),
-          _buildSettingsContainer(),
         ],
       ),
     );
   }
 
-  Expanded _buildRowFirst({required int flex}) {
+  Expanded _buildRowSecond({required BuildContext context, required int flex}) {
     return Expanded(
       flex: flex,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          _buildStockStatusContainer(),
-          _buildAddProductContainer(),
+          _buildOrderHistoryContainer(context),
+          _buildSettingsContainer(context),
+        ],
+      ),
+    );
+  }
+
+  Expanded _buildRowFirst({required BuildContext context, required int flex}) {
+    return Expanded(
+      flex: flex,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          _buildStockStatusContainer(context),
+          _buildAddProductContainer(context),
         ],
       ),
     );
@@ -74,7 +74,8 @@ class HomeView extends StatelessWidget {
     );
   }
 
-  Widget _buildStockStatusContainer() {
+  // STOK DURUMU
+  Widget _buildStockStatusContainer(BuildContext context) {
     return HomeCardContainer(
       iconPath: ConstImage.iconStockStatusPath,
       onTap: () {
@@ -88,11 +89,13 @@ class HomeView extends StatelessWidget {
     );
   }
 
-  Widget _buildAddProductContainer() {
+  // ÜRÜN EKLE
+  Widget _buildAddProductContainer(BuildContext context) {
     return HomeCardContainer(
       iconPath: ConstImage.iconAddProductPath,
       onTap: () {
-        print('Ürün Ekle tıklandı');
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => const ProductAddView()));
       },
       title: 'Ürün Ekle',
       color: ConstApplicationColors.homeAddProductContainerColor,
@@ -102,7 +105,10 @@ class HomeView extends StatelessWidget {
     );
   }
 
-  Widget _buildOrderHistoryContainer() {
+  // SİPARİŞ GEÇMİŞİ
+  Widget _buildOrderHistoryContainer(
+    BuildContext context,
+  ) {
     return HomeCardContainer(
       iconPath: ConstImage.iconOrderHistoryPath,
       onTap: () {
@@ -116,7 +122,10 @@ class HomeView extends StatelessWidget {
     );
   }
 
-  Widget _buildSettingsContainer() {
+  // AYARLAR
+  Widget _buildSettingsContainer(
+    BuildContext context,
+  ) {
     return HomeCardContainer(
       iconPath: ConstImage.iconSettingsPath,
       onTap: () {
