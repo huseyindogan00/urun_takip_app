@@ -1,40 +1,46 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
-
 class CategoryModel {
   String? categoryId;
-  Map<String, List<String>> category;
+  String? categoryName;
+  String? categorySubName;
   CategoryModel({
     this.categoryId,
-    required this.category,
+    this.categoryName,
+    this.categorySubName,
   });
 
   CategoryModel copyWith({
     String? categoryId,
-    Map<String, List<String>>? category,
+    String? categoryName,
+    String? categorySubName,
   }) {
     return CategoryModel(
       categoryId: categoryId ?? this.categoryId,
-      category: category ?? this.category,
+      categoryName: categoryName ?? this.categoryName,
+      categorySubName: categorySubName ?? this.categorySubName,
     );
   }
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'categoryId': categoryId,
-      'category': category,
+      'categoryName': categoryName,
+      'categorySubName': categorySubName,
     };
   }
 
   factory CategoryModel.fromMap(Map<String, dynamic> map) {
     return CategoryModel(
-        categoryId:
-            map['categoryId'] != null ? map['categoryId'] as String : null,
-        category: Map<String, List<String>>.from(
-          (map['category'] as Map<String, List<String>>),
-        ));
+      categoryId:
+          map['categoryId'] != null ? map['categoryId'] as String : null,
+      categoryName:
+          map['categoryName'] != null ? map['categoryName'] as String : null,
+      categorySubName: map['categorySubName'] != null
+          ? map['categorySubName'] as String
+          : null,
+    );
   }
 
   String toJson() => json.encode(toMap());
@@ -44,16 +50,18 @@ class CategoryModel {
 
   @override
   String toString() =>
-      'CategoryModel(categoryId: $categoryId, category: $category)';
+      'CategoryModel(categoryId: $categoryId, categoryName: $categoryName, categorySubName: $categorySubName)';
 
   @override
   bool operator ==(covariant CategoryModel other) {
     if (identical(this, other)) return true;
 
     return other.categoryId == categoryId &&
-        mapEquals(other.category, category);
+        other.categoryName == categoryName &&
+        other.categorySubName == categorySubName;
   }
 
   @override
-  int get hashCode => categoryId.hashCode ^ category.hashCode;
+  int get hashCode =>
+      categoryId.hashCode ^ categoryName.hashCode ^ categorySubName.hashCode;
 }

@@ -6,7 +6,7 @@ class CustomAppbarWidget extends StatelessWidget
     implements PreferredSizeWidget {
   CustomAppbarWidget({super.key, required this.title});
   String title;
-  double imageWidth = 75;
+  double imageWidth = 80;
 
   @override
   Widget build(BuildContext context) {

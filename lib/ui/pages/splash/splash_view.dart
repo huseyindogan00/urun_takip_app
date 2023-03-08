@@ -21,7 +21,7 @@ class _SplashViewState extends State<SplashView> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       // _splashViewModel da yapılacak işlemler burada yapılacak. Sayfa yönlendirme vs.
-      await Future.delayed(const Duration(seconds: 3));
+      await Future.delayed(const Duration(seconds: 2));
       // ignore: use_build_context_synchronously
       Navigator.push(
           context,
