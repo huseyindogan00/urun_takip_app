@@ -15,7 +15,7 @@ class HomeView extends StatelessWidget {
       backgroundColor: Theme.of(context).primaryColor,
       body: Column(
         children: [
-          _buildLogo(flex: 2),
+          _buildLogo(flex: 3, context: context),
           //_buildCustomDivider(),
           _buildRowFirst(flex: 2, context: context),
           _buildRowSecond(flex: 2, context: context),
@@ -25,15 +25,15 @@ class HomeView extends StatelessWidget {
     );
   }
 
-  Expanded _buildRowSecond({required BuildContext context, required int flex}) {
+  Widget _buildLogo({required int flex, required BuildContext context}) {
     return Expanded(
       flex: flex,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          _buildOrderHistoryContainer(context),
-          _buildSettingsContainer(context),
-        ],
+      child: Center(
+        child: SizedBox(
+          width: MediaQuery.of(context).size.width,
+          height: 200,
+          child: Image.asset(ConstImage.logoPath),
+        ),
       ),
     );
   }
@@ -51,15 +51,15 @@ class HomeView extends StatelessWidget {
     );
   }
 
-  Widget _buildLogo({required int flex}) {
+  Expanded _buildRowSecond({required BuildContext context, required int flex}) {
     return Expanded(
       flex: flex,
-      child: Center(
-        child: SizedBox(
-          width: 200,
-          height: 200,
-          child: Image.asset(ConstImage.logoPath),
-        ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          _buildOrderHistoryContainer(context),
+          _buildSettingsContainer(context),
+        ],
       ),
     );
   }
@@ -99,9 +99,8 @@ class HomeView extends StatelessWidget {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => ChangeNotifierProvider(
-                    create: (context) => ProductViewModel(),
-                    child: const ProductAddView())));
+                builder: (context) =>
+                    ChangeNotifierProvider(create: (context) => ProductViewModel(), child: const ProductAddView())));
       },
       title: 'Ürün Ekle',
       color: ConstApplicationColors.homeAddProductContainerColor,

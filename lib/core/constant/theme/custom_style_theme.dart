@@ -6,16 +6,13 @@ class CustomStyleTheme {
         displayMedium: TextStyle(
             fontSize: 28,
             color: Color.fromRGBO(211, 211, 211, 100),
-            shadows: [
-              Shadow(blurRadius: 2, color: Colors.white),
-              Shadow(blurRadius: 4)
-            ]),
+            shadows: [Shadow(blurRadius: 2, color: Colors.white), Shadow(blurRadius: 4)]),
         displaySmall: TextStyle(fontSize: 15, color: Colors.red),
+        titleSmall: TextStyle(color: Colors.red, fontSize: 14),
       );
 
   // INPUT DECORATION THEME
-  static InputDecorationTheme get inputDecorationTheme =>
-      const InputDecorationTheme(
+  static InputDecorationTheme get inputDecorationTheme => const InputDecorationTheme(
         labelStyle: TextStyle(
           color: Color(0xdd000000),
           fontSize: null,
@@ -195,8 +192,7 @@ class CustomStyleTheme {
 
   // CHECKBOX THEME DATA
   static CheckboxThemeData get checkbocThemeData => CheckboxThemeData(
-        fillColor: MaterialStateProperty.resolveWith<Color?>(
-            (Set<MaterialState> states) {
+        fillColor: MaterialStateProperty.resolveWith<Color?>((Set<MaterialState> states) {
           if (states.contains(MaterialState.disabled)) {
             return null;
           }
@@ -215,8 +211,7 @@ class CustomStyleTheme {
       );
 
   // TEXT SELECTION THEME DATA
-  static TextSelectionThemeData get textSelectionThemeData =>
-      const TextSelectionThemeData(
+  static TextSelectionThemeData get textSelectionThemeData => const TextSelectionThemeData(
         cursorColor: Color(0xff4285f4),
         selectionColor: Color(0xffd1c7c7),
         selectionHandleColor: Color(0xffbaabab),

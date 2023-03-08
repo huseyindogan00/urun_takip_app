@@ -1,13 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:provider/provider.dart';
 import 'package:urun_takip_app/core/constant/size/custom_padding.dart';
-import 'package:urun_takip_app/core/constant/size/custom_size.dart';
 import 'package:urun_takip_app/models/category_json.dart';
-import 'package:urun_takip_app/models/category_model.dart';
 import 'package:urun_takip_app/ui/components/common/custom_appbar_widget.dart';
 import 'package:urun_takip_app/ui/components/common/custom_dropdown.dart';
-import 'package:urun_takip_app/ui/pages/product/viewModel/product_view_model.dart';
 
 class ProductAddView extends StatefulWidget {
   const ProductAddView({super.key});
@@ -18,16 +13,15 @@ class ProductAddView extends StatefulWidget {
 
 class _ProductAddViewState extends State<ProductAddView> {
   late final TextEditingController _controller;
-  late final _productViewModel;
   late final formKey;
-  late String selectCategoryName;
+  late String _selectCategoryName;
 
   @override
   void initState() {
     super.initState();
     _controller = TextEditingController();
     formKey = GlobalKey<FormState>();
-    selectCategoryName = categoryAllMap.keys.first.toString();
+    _selectCategoryName = categoryAllMap.keys.first.toString();
   }
 
   @override
@@ -57,18 +51,18 @@ class _ProductAddViewState extends State<ProductAddView> {
           padding: CustomPadding.paddinDefaultSymmetric,
           child: Column(
             children: [
-              CustomDropdownButton(
-                items: categoryAllMap.keys.toList(),
-                onChanged: (value) {
-                  _productViewModel.selectCategoryName(value);
-                },
-              ),
-              CustomDropdownButton(
-                items: categoryAllMap[
-                    Provider.of<ProductViewModel>(context).selectCategoryName]!,
-                onChanged: (value) {
-                  print(value);
-                },
+              CustomDropdownButton(),
+              TextFormField(
+                maxLines: 5,
+                maxLength: 150,
+                decoration: InputDecoration(
+                    alignLabelWithHint: true,
+                    filled: true,
+                    border: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
+                    label: Text(
+                      'Açıklama',
+                      style: Theme.of(context).textTheme.titleSmall,
+                    )),
               ),
             ],
           ),
