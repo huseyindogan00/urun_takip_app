@@ -6,4 +6,5 @@ class CustomPadding {
   static const double paddingTextLeft = 20;
   static const paddinDefaultSymmetric =
       EdgeInsets.symmetric(vertical: 20, horizontal: 20);
+  static const paddingTextFormField = EdgeInsets.all(15);
 }

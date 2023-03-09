@@ -11,5 +11,7 @@ class CustomSize {
     return MediaQuery.of(context).size.height;
   }
 
-  static double appbarHeight = 65;
+  static const double appbarHeight = 65;
+
+  static const customRadius = BorderRadius.all(Radius.circular(10));
 }

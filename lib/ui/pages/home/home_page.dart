@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:urun_takip_app/core/constant/colors/const_application_colors.dart';
 import 'package:urun_takip_app/core/constant/images/const_image.dart';
+import 'package:urun_takip_app/core/constant/text/app_text.dart';
 import 'package:urun_takip_app/ui/components/common/home_card_container.dart';
 import 'package:urun_takip_app/ui/pages/product/product_add/product_add_view.dart';
 import 'package:urun_takip_app/ui/pages/product/viewModel/product_view_model.dart';
@@ -83,7 +84,7 @@ class HomeView extends StatelessWidget {
       onTap: () {
         print('Stok Durumu tıklandı');
       },
-      title: 'Stok Durumu',
+      title: AppText.stokDurumu,
       color: ConstApplicationColors.homeStockStatusContainerColor,
       height: 150,
       width: 150,
@@ -99,10 +100,11 @@ class HomeView extends StatelessWidget {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) =>
-                    ChangeNotifierProvider(create: (context) => ProductViewModel(), child: const ProductAddView())));
+                builder: (context) => ChangeNotifierProvider(
+                    create: (context) => ProductViewModel(),
+                    child: const ProductAddView())));
       },
-      title: 'Ürün Ekle',
+      title: AppText.urunEkle,
       color: ConstApplicationColors.homeAddProductContainerColor,
       height: 150,
       width: 150,
@@ -119,7 +121,7 @@ class HomeView extends StatelessWidget {
       onTap: () {
         print('Stok geçmişi tıklandı');
       },
-      title: 'Stok Geçmişi',
+      title: AppText.stokGecmisi,
       color: ConstApplicationColors.homeOrderHistoryContainerColor,
       height: 150,
       width: 150,
@@ -136,7 +138,7 @@ class HomeView extends StatelessWidget {
       onTap: () {
         print('Ayarlar');
       },
-      title: 'Ayarlar',
+      title: AppText.ayarlar,
       color: ConstApplicationColors.homeSettingsContainerColor,
       height: 150,
       width: 150,

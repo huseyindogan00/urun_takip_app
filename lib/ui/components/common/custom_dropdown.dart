@@ -4,8 +4,9 @@ import 'package:urun_takip_app/core/constant/size/custom_size.dart';
 import 'package:urun_takip_app/models/category_json.dart';
 import 'package:urun_takip_app/ui/pages/product/viewModel/product_view_model.dart';
 
-class CustomDropdownButton extends StatelessWidget {
-  CustomDropdownButton({super.key});
+///Belirlenen kategoriye göre
+class CustomCategoryDropdownButton extends StatelessWidget {
+  CustomCategoryDropdownButton({super.key});
   String? _categoryName;
   final String _categoriTitle = 'Kategori Seçiniz';
   final String _categorySubTitle = 'Alt Kategori Seçiniz';
@@ -25,7 +26,9 @@ class CustomDropdownButton extends StatelessWidget {
           value: _categoryName,
           isExpanded: true,
           underline: const SizedBox(),
-          items: categoryAllMap.keys.map((key) => _buildDropdownMenuItem(key)).toList(),
+          items: categoryAllMap.keys
+              .map((key) => _buildDropdownMenuItem(key))
+              .toList(),
           onChanged: (value) {
             _categoryName = value;
             context.read<ProductViewModel>().selectCategoryName = value;
@@ -41,7 +44,8 @@ class CustomDropdownButton extends StatelessWidget {
           value: context.watch<ProductViewModel>().selectCategorySubName,
           isExpanded: true,
           underline: const SizedBox(),
-          items: categoryAllMap[context.watch<ProductViewModel>().selectCategoryName]!
+          items: categoryAllMap[
+                  context.watch<ProductViewModel>().selectCategoryName]!
               .map((name) => _buildDropdownMenuItem(name))
               .toList(),
           onChanged: (value) {
