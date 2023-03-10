@@ -64,6 +64,7 @@ class _ProductAddViewState extends State<ProductAddView> {
     ),
   );
 
+//yeni commit
   @override
   Widget build(BuildContext context) {
     print('product add buildi çalıştı');
