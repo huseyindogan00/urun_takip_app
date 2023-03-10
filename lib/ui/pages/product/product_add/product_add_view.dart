@@ -26,6 +26,8 @@ class _ProductAddViewState extends State<ProductAddView> {
   late final formKey;
   late String _selectCategoryName;
 
+  // branch
+
   @override
   void initState() {
     super.initState();
