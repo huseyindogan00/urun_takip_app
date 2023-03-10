@@ -82,7 +82,7 @@ class _ProductAddViewState extends State<ProductAddView> {
             children: [
               CustomCategoryDropdownButton(),
               TextFormField(
-                maxLines: 5,
+                maxLines: 4,
                 maxLength: 150,
                 decoration: InputDecoration(
                   alignLabelWithHint: true,
