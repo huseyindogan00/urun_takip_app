@@ -6,4 +6,7 @@ class AppText {
   static const ayarlar = 'Ayarlar';
   static const stokAdedi = 'Stok Adedi';
   static const stokKodu = 'Stok Kodu';
+  static const birimFiyat = 'Birim Fiyat';
+  static const kdv = 'KDV';
+  static const netFiyat = 'Net Fiyat';
 }

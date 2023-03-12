@@ -98,11 +98,14 @@ class HomeView extends StatelessWidget {
       iconPath: ConstImage.iconAddProductPath,
       onTap: () {
         Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => ChangeNotifierProvider(
-                    create: (context) => ProductViewModel(),
-                    child: const ProductAddView())));
+          context,
+          MaterialPageRoute(
+            builder: (context) => ChangeNotifierProvider(
+              create: (context) => ProductViewModel(),
+              child: const ProductAddView(),
+            ),
+          ),
+        );
       },
       title: AppText.urunEkle,
       color: ConstApplicationColors.homeAddProductContainerColor,

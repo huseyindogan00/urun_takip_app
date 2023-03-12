@@ -1,0 +1,12 @@
+
+
+Yapılanlar 
+1. fotoğraf ekleme yapıldı. 
+2. Net tutar hesaplama yapıldı.
+
+
+Yapılacaklar
+1. Kamera ile çekilen fotoğraf görsele eklenecek
+2. ProductModel nesnesini kaydetme işlemi yapılacak.
+3. Eklenen ProductModel nesnelerini Stokta gösterme yapılacak
+4. Firebase bağlantıları yapılacak

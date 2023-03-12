@@ -8,30 +8,31 @@ class CustomStyleTheme {
             color: Color.fromRGBO(211, 211, 211, 100),
             shadows: [Shadow(blurRadius: 2, color: Colors.white), Shadow(blurRadius: 4)]),
         displaySmall: TextStyle(fontSize: 15, color: Colors.red),
-        titleSmall: TextStyle(color: Colors.red, fontSize: 14),
+        titleSmall: TextStyle(color: Colors.red, fontSize: 17),
+        titleMedium: TextStyle(color: Colors.black),
       );
 
   // INPUT DECORATION THEME
-  static InputDecorationTheme get inputDecorationTheme => const InputDecorationTheme(
-        labelStyle: TextStyle(
+  static InputDecorationTheme get inputDecorationTheme => InputDecorationTheme(
+        labelStyle: const TextStyle(
           color: Color(0xdd000000),
           fontSize: null,
           fontWeight: FontWeight.w400,
           fontStyle: FontStyle.normal,
         ),
-        helperStyle: TextStyle(
+        helperStyle: const TextStyle(
           color: Color(0xdd000000),
           fontSize: null,
           fontWeight: FontWeight.w400,
           fontStyle: FontStyle.normal,
         ),
-        hintStyle: TextStyle(
+        hintStyle: const TextStyle(
           color: Color(0xdd000000),
           fontSize: null,
           fontWeight: FontWeight.w400,
           fontStyle: FontStyle.normal,
         ),
-        errorStyle: TextStyle(
+        errorStyle: const TextStyle(
           color: Color(0xdd000000),
           fontSize: null,
           fontWeight: FontWeight.w400,
@@ -39,29 +40,29 @@ class CustomStyleTheme {
         ),
         errorMaxLines: null,
         isDense: false,
-        contentPadding: EdgeInsets.only(top: 12, bottom: 12, left: 0, right: 0),
+        contentPadding: const EdgeInsets.only(top: 12, bottom: 12, left: 0, right: 0),
         isCollapsed: false,
-        prefixStyle: TextStyle(
+        prefixStyle: const TextStyle(
           color: Color(0xdd000000),
           fontSize: null,
           fontWeight: FontWeight.w400,
           fontStyle: FontStyle.normal,
         ),
-        suffixStyle: TextStyle(
+        suffixStyle: const TextStyle(
           color: Color(0xdd000000),
           fontSize: null,
           fontWeight: FontWeight.w400,
           fontStyle: FontStyle.normal,
         ),
-        counterStyle: TextStyle(
+        counterStyle: const TextStyle(
           color: Color(0xdd000000),
           fontSize: null,
           fontWeight: FontWeight.w400,
           fontStyle: FontStyle.normal,
         ),
-        filled: false,
-        fillColor: Color(0x00000000),
-        errorBorder: UnderlineInputBorder(
+        filled: true,
+        fillColor: Colors.amber.shade200,
+        errorBorder: const UnderlineInputBorder(
           borderSide: BorderSide(
             color: Color(0xff000000),
             width: 1,
@@ -69,7 +70,7 @@ class CustomStyleTheme {
           ),
           borderRadius: BorderRadius.all(Radius.circular(4.0)),
         ),
-        focusedBorder: UnderlineInputBorder(
+        focusedBorder: const UnderlineInputBorder(
           borderSide: BorderSide(
             color: Color(0xff000000),
             width: 1,
@@ -77,7 +78,7 @@ class CustomStyleTheme {
           ),
           borderRadius: BorderRadius.all(Radius.circular(4.0)),
         ),
-        focusedErrorBorder: UnderlineInputBorder(
+        focusedErrorBorder: const UnderlineInputBorder(
           borderSide: BorderSide(
             color: Color(0xff000000),
             width: 1,
@@ -85,7 +86,7 @@ class CustomStyleTheme {
           ),
           borderRadius: BorderRadius.all(Radius.circular(4.0)),
         ),
-        disabledBorder: UnderlineInputBorder(
+        disabledBorder: const UnderlineInputBorder(
           borderSide: BorderSide(
             color: Color(0xff000000),
             width: 1,
@@ -93,7 +94,7 @@ class CustomStyleTheme {
           ),
           borderRadius: BorderRadius.all(Radius.circular(4.0)),
         ),
-        enabledBorder: UnderlineInputBorder(
+        enabledBorder: const UnderlineInputBorder(
           borderSide: BorderSide(
             color: Color(0xff000000),
             width: 1,
@@ -101,7 +102,7 @@ class CustomStyleTheme {
           ),
           borderRadius: BorderRadius.all(Radius.circular(4.0)),
         ),
-        border: UnderlineInputBorder(
+        border: const UnderlineInputBorder(
           borderSide: BorderSide(
             color: Color(0xff000000),
             width: 1,
@@ -129,14 +130,14 @@ class CustomStyleTheme {
         buttonColor: Color(0xffe0e0e0),
         disabledColor: Color(0x61000000),
         highlightColor: Color(0x29000000),
-        splashColor: Color(0x1f000000),
+        splashColor: Colors.transparent,
         focusColor: Color(0x1f000000),
         hoverColor: Color(0x0a000000),
         colorScheme: ColorScheme(
           primary: Color(0xff453838),
           secondary: Color(0xff8d7272),
           surface: Color(0xffffffff),
-          background: Color(0xffd1c7c7),
+          background: Color.fromARGB(255, 181, 166, 166),
           error: Color(0xffd32f2f),
           onPrimary: Color(0xffffffff),
           onSecondary: Color(0xffffffff),
