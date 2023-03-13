@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:urun_takip_app/core/constant/size/custom_size.dart';
 
 class CustomElevatedIconButton extends StatelessWidget {
   const CustomElevatedIconButton(
