@@ -3,10 +3,15 @@
 Yapılanlar 
 1. fotoğraf ekleme yapıldı. 
 2. Net tutar hesaplama yapıldı.
+3. Ürün ekleme ekranı bitti. TextFormFieldlara eklenen değer extension ile double formata çevrilerek modele aktarılıyor.
+
+Sorun
+1. Validation çalıştığında TextFormFieldın borderı siliniyor. Focus olduğunda border ayarlaması yapılacak
+2. 
 
 
 Yapılacaklar
-1. Kamera ile çekilen fotoğraf görsele eklenecek
-2. ProductModel nesnesini kaydetme işlemi yapılacak.
+1. (EKLENDİ) Kamera ile çekilen fotoğraf görsele eklenecek 
+2. ProductModel nesnesi veritabanına kaydedilecek
 3. Eklenen ProductModel nesnelerini Stokta gösterme yapılacak
 4. Firebase bağlantıları yapılacak

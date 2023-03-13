@@ -1,7 +1,5 @@
-import 'dart:ffi';
-
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:urun_takip_app/core/utility/extension/string_extension.dart';
 import 'package:urun_takip_app/core/utility/util/calculation_operations.dart';
@@ -9,23 +7,44 @@ import 'package:urun_takip_app/core/utility/util/currency_formatter.dart';
 import 'package:urun_takip_app/core/utility/util/image_and_video_manager.dart';
 import 'package:urun_takip_app/core/utility/util/validation.dart';
 import 'package:urun_takip_app/data/repository/category_repository.dart';
-import 'package:urun_takip_app/models/category_json.dart';
-import 'package:urun_takip_app/models/category_model.dart';
+import 'package:urun_takip_app/data/models/category_json.dart';
+import 'package:urun_takip_app/data/models/product_model.dart';
+import 'package:urun_takip_app/ui/components/common/dialog/platform_sensitive_alert_dialog.dart';
+import 'package:urun_takip_app/data/models/category_model.dart';
 
 class ProductViewModel extends ChangeNotifier {
   final CategoryRepository _categoryRepository = CategoryRepository();
-  final CategoryModel categoryModel = CategoryModel();
+  late CategoryModel categoryModel = CategoryModel();
   String totalPrice = '0,00';
   XFile? productImageFile;
 
+  static List<ProductModel> productList = [];
+
   //! BURADA İŞLEMLER REPOSİTORYDEN ÇAĞRILACAK. ŞUANLIK MANAGER SINIFI KULLANILIYOR
-  Future<void> getPhotoFromGallery() async {
-    XFile? xFile = await ImageAndVideoManager().getPhotoFromGallery();
-    if (xFile == null) {
-      return;
+  Future<bool?> getPhotoFromGallery(BuildContext context) async {
+    try {
+      XFile? xFile = await ImageAndVideoManager().getPhotoFromGallery();
+      if (xFile == null) {
+        return false;
+      }
+      productImageFile = xFile;
+
+      notifyListeners();
+    } on PlatformException catch (error) {
+      bool? result = await PlatformSensitiveAlertDialog(
+        content: error.message.toString(),
+        title: 'Fotoğraf seçerken hata oluştu',
+        doneButtonTitle: 'Tamam',
+      ).show(context);
+      return result;
     }
-    productImageFile = xFile;
-    notifyListeners();
+    return true;
+  }
+
+  Future<void> addProductModel(ProductModel productModel) async {
+    productList.add(productModel);
+    await Future.delayed(const Duration(seconds: 2));
+    print('Productmodelde bulunan ürün sayısı : ${productList.length}');
   }
 
   //* HESAPLAMA YAPAR VE GERİYE DEĞERİ STRİNG OLARAK DÖNER
@@ -39,17 +58,21 @@ class ProductViewModel extends ChangeNotifier {
         (unitPrice.contains(RegExp(',')) || unitPrice.contains(RegExp('.'))) &&
         !unitPrice.contains(RegExp('[a-zA-Z]'))) {
       //* Verilen birim fiyatı  doubleFromString ile noktasız yapıyor ve virgül var ise yerine nokta getiriyor ve double değere dönüştürüyor
-      double _unitPrice = double.parse(unitPrice.doubleFromString().replaceAll(',', '.'));
+      double _unitPrice =
+          double.parse(unitPrice.doubleFromString().replaceAll(',', '.'));
       double _kdv = double.parse(kdv.replaceAll(',', '.'));
       double _stockPiece = double.parse(stockPiece);
 
-      double resultDouble = CalculationOperations.calculateNetPrice(_unitPrice, _stockPiece, _kdv);
+      double resultDouble = CalculationOperations.calculateNetPrice(
+          _unitPrice, _stockPiece, _kdv);
 
-      String resultString = CurrencyFormatter.instance().moneyValueCheck(resultDouble.toString().replaceAll('.', ','));
+      String resultString = CurrencyFormatter.instance()
+          .moneyValueCheck(resultDouble.toString().replaceAll('.', ','));
 
       totalPrice = resultString;
       notifyListeners();
     }
+    return null;
   }
 
   //* KATEGORİ LİSTESİNDEKİ BAŞLIKLAR

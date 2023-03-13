@@ -6,7 +6,10 @@ class CustomStyleTheme {
         displayMedium: TextStyle(
             fontSize: 28,
             color: Color.fromRGBO(211, 211, 211, 100),
-            shadows: [Shadow(blurRadius: 2, color: Colors.white), Shadow(blurRadius: 4)]),
+            shadows: [
+              Shadow(blurRadius: 2, color: Colors.white),
+              Shadow(blurRadius: 4)
+            ]),
         displaySmall: TextStyle(fontSize: 15, color: Colors.red),
         titleSmall: TextStyle(color: Colors.red, fontSize: 17),
         titleMedium: TextStyle(color: Colors.black),
@@ -40,7 +43,8 @@ class CustomStyleTheme {
         ),
         errorMaxLines: null,
         isDense: false,
-        contentPadding: const EdgeInsets.only(top: 12, bottom: 12, left: 0, right: 0),
+        contentPadding:
+            const EdgeInsets.only(top: 12, bottom: 12, left: 0, right: 0),
         isCollapsed: false,
         prefixStyle: const TextStyle(
           color: Color(0xdd000000),
@@ -137,7 +141,7 @@ class CustomStyleTheme {
           primary: Color(0xff453838),
           secondary: Color(0xff8d7272),
           surface: Color(0xffffffff),
-          background: Color.fromARGB(255, 181, 166, 166),
+          background: Color.fromARGB(255, 129, 118, 118),
           error: Color(0xffd32f2f),
           onPrimary: Color(0xffffffff),
           onSecondary: Color(0xffffffff),
@@ -193,7 +197,8 @@ class CustomStyleTheme {
 
   // CHECKBOX THEME DATA
   static CheckboxThemeData get checkbocThemeData => CheckboxThemeData(
-        fillColor: MaterialStateProperty.resolveWith<Color?>((Set<MaterialState> states) {
+        fillColor: MaterialStateProperty.resolveWith<Color?>(
+            (Set<MaterialState> states) {
           if (states.contains(MaterialState.disabled)) {
             return null;
           }
@@ -212,7 +217,8 @@ class CustomStyleTheme {
       );
 
   // TEXT SELECTION THEME DATA
-  static TextSelectionThemeData get textSelectionThemeData => const TextSelectionThemeData(
+  static TextSelectionThemeData get textSelectionThemeData =>
+      const TextSelectionThemeData(
         cursorColor: Color(0xff4285f4),
         selectionColor: Color(0xffd1c7c7),
         selectionHandleColor: Color(0xffbaabab),

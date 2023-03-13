@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:urun_takip_app/models/product_model.dart';
+import 'package:urun_takip_app/data/models/product_model.dart';
 
 class OrderModel {
   String orderId; // SATIŞ ID

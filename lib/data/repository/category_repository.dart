@@ -1,5 +1,4 @@
-import 'package:urun_takip_app/models/category_json.dart';
-import 'package:urun_takip_app/models/category_model.dart';
+import 'package:urun_takip_app/data/models/category_json.dart';
 
 class CategoryRepository {
   /// KATEGORİLERİN ANA BAŞLIKLARINI SERVİSTEN VEYA TELEFON HAFIZASINDAN GETİRİR

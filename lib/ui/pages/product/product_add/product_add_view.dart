@@ -7,17 +7,19 @@ import 'package:urun_takip_app/core/constant/images/const_image.dart';
 import 'package:urun_takip_app/core/constant/size/custom_padding.dart';
 import 'package:urun_takip_app/core/constant/size/custom_size.dart';
 import 'package:urun_takip_app/core/constant/text/app_text.dart';
+import 'package:urun_takip_app/core/utility/extension/string_extension.dart';
 import 'package:urun_takip_app/core/utility/util/currency_formatter.dart';
-import 'package:urun_takip_app/core/utility/util/image_and_video_manager.dart';
 import 'package:urun_takip_app/core/utility/util/validation.dart';
-import 'package:urun_takip_app/models/category_json.dart';
-import 'package:urun_takip_app/models/constants_model.dart';
-import 'package:urun_takip_app/models/product_model.dart';
+import 'package:urun_takip_app/data/models/category_json.dart';
+import 'package:urun_takip_app/data/models/constants_model.dart';
+import 'package:urun_takip_app/data/models/product_model.dart';
+import 'package:urun_takip_app/ui/components/common/button/custom_elevated_button.dart';
 import 'package:urun_takip_app/ui/components/common/button/custom_elevated_icon_button.dart';
 import 'package:urun_takip_app/ui/components/common/custom_appbar_widget.dart';
 import 'package:urun_takip_app/ui/components/common/custom_dropdown.dart';
 import 'package:urun_takip_app/ui/components/form/custom_text_form_field.dart';
 import 'package:urun_takip_app/ui/pages/product/viewModel/product_view_model.dart';
+import 'package:urun_takip_app/ui/widget/image_view_widget.dart';
 
 class ProductAddView extends StatefulWidget {
   const ProductAddView({super.key});
@@ -35,6 +37,7 @@ class _ProductAddViewState extends State<ProductAddView> {
   late final TextEditingController _totalPriceEditController;
   late final TextEditingController _photoURLEditController;
   late final TextEditingController _createDateEditController;
+  late final ScrollController _scrollController;
 
   late final GlobalKey<FormState> _formKey;
   late String _selectCategoryName;
@@ -50,11 +53,13 @@ class _ProductAddViewState extends State<ProductAddView> {
     _unitPriceEditController = TextEditingController();
     // KDV GİBİ sabit değerleri daha sonra uygulama başlarken veritabanından getireceğiz.
     // Ayarlar menüsünden bu gibi sabit değerlere müdahale edilmeyecek
-    _kdvEditController = TextEditingController(text: ConstantsModel().kdv.toString().replaceAll('.', ','));
+    _kdvEditController = TextEditingController(
+        text: ConstantsModel().kdv.toString().replaceAll('.', ','));
     _totalPriceEditController = TextEditingController();
     _photoURLEditController = TextEditingController();
     _createDateEditController = TextEditingController();
 
+    _scrollController = ScrollController();
     _formKey = GlobalKey<FormState>();
     _selectCategoryName = categoryAllMap.keys.first.toString();
   }
@@ -92,13 +97,15 @@ class _ProductAddViewState extends State<ProductAddView> {
         title: AppText.urunEkle,
       ),
       body: SingleChildScrollView(
+        controller: _scrollController,
         child: Form(
           key: _formKey,
           child: Padding(
             padding: CustomPadding.paddinDefaultSymmetric,
             child: Column(
               children: [
-                CustomCategoryDropdownButton(), //KATEGORİLER
+                //KATEGORİLER
+                CustomCategoryDropdownButton(),
                 CustomSize.betweenWidgetSize,
                 //* AÇIKLAMA
                 CustomTextFormField(
@@ -106,8 +113,10 @@ class _ProductAddViewState extends State<ProductAddView> {
                   labelText: AppText.aciklama,
                   maxLines: 5,
                   maxLength: 150,
-                  validator: (newValue) => Validation.generealValidation(newValue),
-                  onSaved: (newValue) => _commentEditController.text = newValue!,
+                  validator: (newValue) =>
+                      Validation.generealValidation(newValue),
+                  onSaved: (newValue) =>
+                      _commentEditController.text = newValue ?? '',
                 ),
                 CustomSize.betweenWidgetSize,
                 Row(
@@ -119,8 +128,10 @@ class _ProductAddViewState extends State<ProductAddView> {
                         maxLines: 1,
                         controller: _stockCodeEditController,
                         labelText: AppText.stokKodu,
-                        validator: (newValue) => Validation.generealValidation(newValue),
-                        onSaved: (String? newValue) => _stockCodeEditController.text = newValue!,
+                        validator: (newValue) =>
+                            Validation.generealValidation(newValue),
+                        onSaved: (String? newValue) =>
+                            _stockCodeEditController.text = newValue ?? '',
                       ),
                     ),
                     CustomSize.spacerDefaultFlex,
@@ -130,15 +141,22 @@ class _ProductAddViewState extends State<ProductAddView> {
                       child: CustomTextFormField(
                         maxLines: 1,
                         keyboardType: TextInputType.number,
-                        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly
+                        ],
                         controller: _stockPieceEditController,
                         labelText: AppText.stokAdedi,
                         onChanged: (value) {
+                          // PROVIDER İLE NET TUTAR DEĞERİNİ GÜNCELLİYOR
                           _productViewModel.calculateNetPrice(
-                              _unitPriceEditController.text, _kdvEditController.text, _stockPieceEditController.text);
+                              _unitPriceEditController.text,
+                              _kdvEditController.text,
+                              _stockPieceEditController.text);
                         },
-                        validator: (newValue) => Validation.generealValidation(newValue),
-                        onSaved: (newValue) => _stockPieceEditController.text = newValue!,
+                        validator: (newValue) =>
+                            Validation.generealValidation(newValue),
+                        onSaved: (newValue) =>
+                            _stockPieceEditController.text = newValue ?? '',
                       ),
                     ),
                   ],
@@ -153,24 +171,35 @@ class _ProductAddViewState extends State<ProductAddView> {
                         maxLines: 1,
                         controller: _unitPriceEditController,
                         labelText: AppText.birimFiyat,
-                        suffix: Image.asset(ConstImage.iconLiraBlackPath, width: 20),
-                        validator: (newValue) => Validation.moneyValueCheck(newValue),
+                        suffix: Image.asset(ConstImage.iconLiraBlackPath,
+                            width: 20),
+                        validator: (newValue) =>
+                            Validation.moneyValueCheck(newValue),
                         onChanged: (String? value) {
-                          _unitPriceEditController.text = CurrencyFormatter.instance().moneyValueCheck(value);
+                          _unitPriceEditController.text =
+                              CurrencyFormatter.instance()
+                                  .moneyValueCheck(value);
                           _unitPriceEditController.selection =
-                              TextSelection.fromPosition(TextPosition(offset: _unitPriceEditController.text.length));
+                              TextSelection.fromPosition(TextPosition(
+                                  offset:
+                                      _unitPriceEditController.text.length));
+                          // PROVIDER İLE NETTUTAR DEĞERİNİ GÜNCELLİYOR
                           _productViewModel.calculateNetPrice(
-                              _unitPriceEditController.text, _kdvEditController.text, _stockPieceEditController.text);
+                              _unitPriceEditController.text,
+                              _kdvEditController.text,
+                              _stockPieceEditController.text);
                         },
-                        onSaved: (String? newValue) {},
+                        onSaved: (String? newValue) =>
+                            _unitPriceEditController.text = newValue ?? '',
                       ),
                     ),
                     CustomSize.spacerDefaultFlex,
+                    //* KDV
                     Expanded(
                       flex: 4,
-                      //* KDV
                       child: CustomTextFormField(
-                        suffix: Image.asset(ConstImage.iconLiraBlackPath, width: 20),
+                        suffix: Image.asset(ConstImage.iconLiraBlackPath,
+                            width: 20),
                         readOnly: true,
                         controller: _kdvEditController,
                         labelText: AppText.kdv,
@@ -186,7 +215,6 @@ class _ProductAddViewState extends State<ProductAddView> {
                     WidgetsBinding.instance.addPostFrameCallback((_) {
                       _totalPriceEditController.text = model.totalPrice;
                     });
-
                     return CustomTextFormField(
                       controller: _totalPriceEditController,
                       keyboardType: TextInputType.number,
@@ -208,12 +236,58 @@ class _ProductAddViewState extends State<ProductAddView> {
                     _buildSelectProductPhoto(context),
                     //_buildInfoText(context),
                   ],
-                )
+                ),
+                CustomSize.betweenWidgetSize,
+                _buildAddProduct(context), // ÜRÜN EKLEME
+                CustomSize.betweenWidgetSize,
+                _buildCancel(context), // EKLEME İPTAL
+                CustomSize.betweenWidgetSize,
               ],
             ),
           ),
         ),
       ),
+    );
+  }
+
+  CustomElevatedButton _buildCancel(BuildContext context) {
+    return CustomElevatedButton(
+      text: 'İptal',
+      isConfirm: false,
+      onPressed: () {
+        Navigator.pop(context);
+      },
+      height: 50,
+    );
+  }
+
+  CustomElevatedButton _buildAddProduct(BuildContext context) {
+    return CustomElevatedButton(
+      text: 'Ekle',
+      onPressed: () async {
+        if (_formKey.currentState!.validate()) {
+          _formKey.currentState!.save();
+          ProductModel productModel = ProductModel(
+            stockCode: _stockCodeEditController.text,
+            title: _commentEditController.text,
+            category: _productViewModel.categoryModel,
+            stockPiece:
+                _stockPieceEditController.text.convertFromStringToDouble(),
+            unitPrice:
+                _unitPriceEditController.text.convertFromStringToDouble(),
+            kdv: _kdvEditController.text.convertFromStringToDouble(),
+            totalPrice:
+                _totalPriceEditController.text.convertFromStringToDouble(),
+            photoURL: _productViewModel.productImageFile != null
+                ? _productViewModel.productImageFile?.path
+                : '',
+            createDate: DateTime.now(),
+          );
+          await _productViewModel.addProductModel(productModel);
+          if (mounted) Navigator.pop(context);
+        }
+      },
+      height: 50,
     );
   }
 
@@ -224,9 +298,29 @@ class _ProductAddViewState extends State<ProductAddView> {
             ? child!
             : SizedBox(
                 width: CustomSize.kWidth(context),
-                child: Image(
-                  fit: BoxFit.cover,
-                  image: FileImage(File(model.productImageFile!.path)),
+                child: Hero(
+                  tag: 'product_image',
+                  child: Material(
+                    child: InkWell(
+                      onTap: () {
+                        if (model.productImageFile != null) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ImageViewWidget(
+                                  imagePath: model.productImageFile!.path),
+                            ),
+                          );
+                        }
+                      },
+                      child: Image(
+                        fit: BoxFit.cover,
+                        image: FileImage(
+                          File(model.productImageFile!.path),
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
               );
       },
@@ -262,15 +356,23 @@ class _ProductAddViewState extends State<ProductAddView> {
                 child: Column(
                   children: [
                     CustomElevatedIconButton(
-                      onPressed: () async {
-                        await _productViewModel.getPhotoFromGallery();
-                        if (mounted) Navigator.pop(context);
-                      },
                       icon: const Icon(Icons.image),
                       label: 'Galeriden Seç',
                       radius: 0,
                       height: 50,
                       width: CustomSize.kWidth(context),
+                      onPressed: () async {
+                        bool? result = await _productViewModel
+                            .getPhotoFromGallery(context);
+                        if (mounted && (result == null || result)) {
+                          double end =
+                              _scrollController.position.maxScrollExtent;
+                          _scrollController.animateTo(end,
+                              duration: const Duration(seconds: 1000),
+                              curve: Curves.easeInOut);
+                          Navigator.pop(context);
+                        }
+                      },
                     ),
                     const SizedBox(height: 15),
                     CustomElevatedIconButton(
@@ -296,6 +398,7 @@ class _ProductAddViewState extends State<ProductAddView> {
     );
   }
 
+  // RESİM EKLENMEDİĞİ ZAMAN ÜZERİNDE BİLGİ AMAÇLI TEXT YAZDIRMA
   Positioned _buildInfoText(BuildContext context) {
     return Positioned(
       left: 60,

@@ -40,6 +40,11 @@ dependencies:
   provider: ^6.0.5
   hive: ^2.2.3  
   image_picker: ^0.8.7
+  firebase_core: ^2.7.1
+  firebase_storage: ^11.0.15
+  cloud_firestore: ^4.4.4
+  firebase_auth: ^4.2.10
+  http: ^0.13.5
 
 dev_dependencies:
   flutter_test:

@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_this
+
 extension StringExtension on String {
   /// String değeri double.parse ile kullanılacak duruma getiriyor.
   /// noktaları siliyor
@@ -14,5 +16,18 @@ extension StringExtension on String {
     }
 
     return newValue;
+  }
+
+  double convertFromStringToDouble() {
+    List<String> valueList = this.split('');
+    String value = '';
+
+    while (valueList.contains('.')) {
+      valueList.remove('.');
+    }
+    for (var element in valueList) {
+      value += element;
+    }
+    return double.parse(value.replaceAll(',', '.'));
   }
 }
