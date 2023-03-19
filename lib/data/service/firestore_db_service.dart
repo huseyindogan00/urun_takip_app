@@ -1,7 +1,9 @@
 import 'package:urun_takip_app/data/base/db_base.dart';
 import 'package:urun_takip_app/data/models/base_model.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-class ProductRepository extends DbBase {
+class FirestoreDbService extends DbBase {
+  final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
   @override
   Future<bool> delete(String id) {
     // TODO: implement delete

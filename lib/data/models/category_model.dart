@@ -1,23 +1,26 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
-class CategoryModel {
-  String? categoryId;
+import 'package:urun_takip_app/data/models/base_model.dart';
+
+class CategoryModel implements BaseModel {
+  @override
+  String? id;
   String? categoryName;
   String? categorySubName;
   CategoryModel({
-    this.categoryId,
+    this.id,
     this.categoryName,
     this.categorySubName,
   });
 
   CategoryModel copyWith({
-    String? categoryId,
+    String? id,
     String? categoryName,
     String? categorySubName,
   }) {
     return CategoryModel(
-      categoryId: categoryId ?? this.categoryId,
+      id: id ?? this.id,
       categoryName: categoryName ?? this.categoryName,
       categorySubName: categorySubName ?? this.categorySubName,
     );
@@ -25,7 +28,7 @@ class CategoryModel {
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'categoryId': categoryId,
+      'id': id,
       'categoryName': categoryName,
       'categorySubName': categorySubName,
     };
@@ -33,8 +36,7 @@ class CategoryModel {
 
   factory CategoryModel.fromMap(Map<String, dynamic> map) {
     return CategoryModel(
-      categoryId:
-          map['categoryId'] != null ? map['categoryId'] as String : null,
+      id: map['id'] != null ? map['id'] as String : null,
       categoryName:
           map['categoryName'] != null ? map['categoryName'] as String : null,
       categorySubName: map['categorySubName'] != null
@@ -50,18 +52,18 @@ class CategoryModel {
 
   @override
   String toString() =>
-      'CategoryModel(categoryId: $categoryId, categoryName: $categoryName, categorySubName: $categorySubName)';
+      'CategoryModel(id: $id, categoryName: $categoryName, categorySubName: $categorySubName)';
 
   @override
   bool operator ==(covariant CategoryModel other) {
     if (identical(this, other)) return true;
 
-    return other.categoryId == categoryId &&
+    return other.id == id &&
         other.categoryName == categoryName &&
         other.categorySubName == categorySubName;
   }
 
   @override
   int get hashCode =>
-      categoryId.hashCode ^ categoryName.hashCode ^ categorySubName.hashCode;
+      id.hashCode ^ categoryName.hashCode ^ categorySubName.hashCode;
 }

@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 
 class ConstApplicationColors {
-  static Color homeBackgroundColor = Color(0xff695656);
-  static Color homeStockStatusContainerColor = Color(0xff565A7B);
-  static Color homeAddProductContainerColor = Color(0xff186745);
-  static Color homeOrderHistoryContainerColor = Color(0xff868BB1);
-  static Color homeSettingsContainerColor = Color(0xff6E3B49);
+  static Color homeBackgroundColor = const Color.fromARGB(255, 23, 22, 22);
+  static Color homeStockStatusContainerColor =
+      const Color.fromARGB(255, 196, 197, 200);
+  static Color homeAddProductContainerColor =
+      const Color.fromARGB(255, 126, 129, 128);
+  static Color homeOrderHistoryContainerColor =
+      const Color.fromARGB(255, 104, 105, 109);
+  static Color homeSettingsContainerColor =
+      const Color.fromARGB(255, 89, 86, 87);
 }

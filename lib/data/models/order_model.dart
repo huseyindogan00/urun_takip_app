@@ -1,15 +1,19 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
+
+import 'package:urun_takip_app/data/models/base_model.dart';
 import 'package:urun_takip_app/data/models/product_model.dart';
 
-class OrderModel {
-  String orderId; // SATIŞ ID
+class WorkModel implements BaseModel {
+  @override
+  String? id; // SATIŞ ID
   String companyName; // FİRMA ADI
   ProductModel productModel; // ÜRÜN
   double productPiece; // ÜRÜN ADEDİ
   double totalPrice; // TOPLAM TUTAR
   dynamic orderDate; // SATIŞ TARİHİ
-  OrderModel({
-    required this.orderId,
+  WorkModel({
+    this.id,
     required this.companyName,
     required this.productModel,
     required this.productPiece,
@@ -17,16 +21,16 @@ class OrderModel {
     required this.orderDate,
   });
 
-  OrderModel copyWith({
-    String? orderId,
+  WorkModel copyWith({
+    String? id,
     String? companyName,
     ProductModel? productModel,
     double? productPiece,
     double? totalPrice,
     dynamic? orderDate,
   }) {
-    return OrderModel(
-      orderId: orderId ?? this.orderId,
+    return WorkModel(
+      id: id ?? this.id,
       companyName: companyName ?? this.companyName,
       productModel: productModel ?? this.productModel,
       productPiece: productPiece ?? this.productPiece,
@@ -37,7 +41,7 @@ class OrderModel {
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'orderId': orderId,
+      'id': id,
       'companyName': companyName,
       'productModel': productModel.toMap(),
       'productPiece': productPiece,
@@ -46,9 +50,9 @@ class OrderModel {
     };
   }
 
-  factory OrderModel.fromMap(Map<String, dynamic> map) {
-    return OrderModel(
-      orderId: map['orderId'] as String,
+  factory WorkModel.fromMap(Map<String, dynamic> map) {
+    return WorkModel(
+      id: map['id'] != null ? map['id'] as String : null,
       companyName: map['companyName'] as String,
       productModel:
           ProductModel.fromMap(map['productModel'] as Map<String, dynamic>),
@@ -60,19 +64,19 @@ class OrderModel {
 
   String toJson() => json.encode(toMap());
 
-  factory OrderModel.fromJson(String source) =>
-      OrderModel.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory WorkModel.fromJson(String source) =>
+      WorkModel.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
   String toString() {
-    return 'OrderModel(orderId: $orderId, companyName: $companyName, productModel: $productModel, productPiece: $productPiece, totalPrice: $totalPrice, orderDate: $orderDate)';
+    return 'WorkModel(id: $id, companyName: $companyName, productModel: $productModel, productPiece: $productPiece, totalPrice: $totalPrice, orderDate: $orderDate)';
   }
 
   @override
-  bool operator ==(covariant OrderModel other) {
+  bool operator ==(covariant WorkModel other) {
     if (identical(this, other)) return true;
 
-    return other.orderId == orderId &&
+    return other.id == id &&
         other.companyName == companyName &&
         other.productModel == productModel &&
         other.productPiece == productPiece &&
@@ -82,7 +86,7 @@ class OrderModel {
 
   @override
   int get hashCode {
-    return orderId.hashCode ^
+    return id.hashCode ^
         companyName.hashCode ^
         productModel.hashCode ^
         productPiece.hashCode ^

@@ -6,8 +6,11 @@ Yapılanlar
 3. Ürün ekleme ekranı bitti. TextFormFieldlara eklenen değer extension ile double formata çevrilerek modele aktarılıyor.
 
 Sorun
-1. Validation çalıştığında TextFormFieldın borderı siliniyor. Focus olduğunda border ayarlaması yapılacak
-2. 
+1.(YAPILDI) Validation çalıştığında TextFormFieldın borderı siliniyor. Focus olduğunda border ayarlaması yapılacak 
+2.Birim fiyatı TextFormFieldına karakter girişi yapılınca yüzlük ayraç olan nokta, sonuna sayı eklenmiş gibi çalışıyor.
+  Karakter kontrolu yapılarak birim fiyata TextFormFieldınına karakter girişi yapılmaması sağlanacak.
+3. Kameradan foto seçildiği zaman cameraya erişilemedi hatası veriyor. Android telefondan denemesi yapılacak. iosa özgü birşey
+  olup olmadığı tespit edilecek.
 
 
 Yapılacaklar
@@ -15,3 +18,10 @@ Yapılacaklar
 2. ProductModel nesnesi veritabanına kaydedilecek
 3. Eklenen ProductModel nesnelerini Stokta gösterme yapılacak
 4. Firebase bağlantıları yapılacak
+5. İnternet kontrolü yapılacak ve tüm sayfalardan dinlenebilecek
+
+Platform  Firebase App Id
+web       1:1087359245232:web:527504bb41e88f340fd475
+android   1:1087359245232:android:d3ea9e47510c26390fd475
+ios       1:1087359245232:ios:d38c8093b3e7fd350fd475
+macos     1:1087359245232:ios:d38c8093b3e7fd350fd475

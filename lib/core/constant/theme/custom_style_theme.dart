@@ -11,7 +11,8 @@ class CustomStyleTheme {
               Shadow(blurRadius: 4)
             ]),
         displaySmall: TextStyle(fontSize: 15, color: Colors.red),
-        titleSmall: TextStyle(color: Colors.red, fontSize: 17),
+        titleSmall:
+            TextStyle(color: Color.fromARGB(255, 93, 38, 34), fontSize: 17),
         titleMedium: TextStyle(color: Colors.black),
       );
 

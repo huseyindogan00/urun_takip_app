@@ -4,7 +4,7 @@ import 'package:urun_takip_app/core/constant/theme/custom_style_theme.dart';
 class ThemeApp {
   static final ThemeData myThemeData = ThemeData(
     brightness: Brightness.light,
-    primaryColor: const Color(0xff453838),
+    primaryColor: Color.fromARGB(255, 26, 26, 26), // ARKA PLAN RENGİ
     primaryColorLight: const Color(0xffe8e3e3),
     primaryColorDark: const Color(0xff544545),
     canvasColor: const Color(0xfffafafa),

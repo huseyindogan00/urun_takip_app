@@ -38,7 +38,7 @@ class ProductModel {
     double? kdv,
     double? totalPrice,
     String? photoURL,
-    dynamic createDate,
+    dynamic? createDate,
   }) {
     return ProductModel(
       productId: productId ?? this.productId,

@@ -7,14 +7,15 @@ class ImageAndVideoManager {
     _imagePicker = ImagePicker();
   }
 
-  Future<XFile?> takePhoto() async {
-    XFile? xFile = await _imagePicker.pickImage(source: ImageSource.camera);
+  /// SOURCE olarak galeriye gider ve XFile formatında fotoğraf bilgilerini döndürür
+  Future<XFile?> getPhotoFromGallery() async {
+    XFile? xFile = await _imagePicker.pickImage(source: ImageSource.gallery);
 
     return xFile;
   }
 
-  Future<XFile?> getPhotoFromGallery() async {
-    XFile? xFile = await _imagePicker.pickImage(source: ImageSource.gallery);
+  Future<XFile?> getPhotoFromCamera() async {
+    XFile? xFile = await _imagePicker.pickImage(source: ImageSource.camera);
 
     return xFile;
   }

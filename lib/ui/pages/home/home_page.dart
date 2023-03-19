@@ -32,7 +32,7 @@ class HomeView extends StatelessWidget {
       child: Center(
         child: SizedBox(
           width: MediaQuery.of(context).size.width,
-          height: 200,
+          height: 300,
           child: Image.asset(ConstImage.logoPath),
         ),
       ),

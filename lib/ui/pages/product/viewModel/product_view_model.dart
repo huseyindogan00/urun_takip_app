@@ -41,6 +41,27 @@ class ProductViewModel extends ChangeNotifier {
     return true;
   }
 
+  //! BURADA İŞLEMLER REPOSİTORYDEN ÇAĞRILACAK. ŞUANLIK MANAGER SINIFI KULLANILIYOR
+  Future<bool?> getPhotoFromCamera(BuildContext context) async {
+    try {
+      XFile? xFile = await ImageAndVideoManager().getPhotoFromCamera();
+      if (xFile == null) {
+        return false;
+      }
+      productImageFile = xFile;
+
+      notifyListeners();
+    } on PlatformException catch (error) {
+      bool? result = await PlatformSensitiveAlertDialog(
+        content: error.message.toString(),
+        title: 'Fotoğraf seçerken hata oluştu',
+        doneButtonTitle: 'Tamam',
+      ).show(context);
+      return result;
+    }
+    return true;
+  }
+
   Future<void> addProductModel(ProductModel productModel) async {
     productList.add(productModel);
     await Future.delayed(const Duration(seconds: 2));
@@ -50,7 +71,7 @@ class ProductViewModel extends ChangeNotifier {
   //* HESAPLAMA YAPAR VE GERİYE DEĞERİ STRİNG OLARAK DÖNER
   String? calculateNetPrice(String unitPrice, String kdv, String stockPiece) {
     //* eğer gönderilen birimfiyat veya stok adedi boş ise işlem yapma
-    if (unitPrice.isEmpty || stockPiece.isEmpty) {
+    if (unitPrice.isEmpty || stockPiece.isEmpty || kdv.isEmpty) {
       totalPrice = '0,00';
       notifyListeners();
     } else if (Validation.moneyValueCheck(unitPrice) == null &&
@@ -60,7 +81,7 @@ class ProductViewModel extends ChangeNotifier {
       //* Verilen birim fiyatı  doubleFromString ile noktasız yapıyor ve virgül var ise yerine nokta getiriyor ve double değere dönüştürüyor
       double _unitPrice =
           double.parse(unitPrice.doubleFromString().replaceAll(',', '.'));
-      double _kdv = double.parse(kdv.replaceAll(',', '.'));
+      double _kdv = double.parse(kdv) / 100;
       double _stockPiece = double.parse(stockPiece);
 
       double resultDouble = CalculationOperations.calculateNetPrice(

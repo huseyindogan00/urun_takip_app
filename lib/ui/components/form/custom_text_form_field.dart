@@ -11,6 +11,7 @@ class CustomTextFormField extends StatelessWidget {
     required this.controller,
     required this.labelText,
     this.suffix,
+    this.prefix,
     this.readOnly = false,
     this.inputFormatters,
     this.keyboardType,
@@ -27,6 +28,7 @@ class CustomTextFormField extends StatelessWidget {
   final Widget? suffix;
   final List<TextInputFormatter>? inputFormatters;
   final TextInputType? keyboardType;
+  final Widget? prefix;
   final Function(String? newValue)? onSaved;
   final Function(String? value)? onChanged;
   final String? Function(String? newValue)? validator;
@@ -45,18 +47,40 @@ class CustomTextFormField extends StatelessWidget {
       readOnly: readOnly,
       keyboardType: keyboardType,
       decoration: InputDecoration(
+        prefix: prefix,
         filled: readOnly ? true : false,
-        fillColor: readOnly ? Theme.of(context).inputDecorationTheme.fillColor : null,
+        fillColor:
+            readOnly ? Theme.of(context).inputDecorationTheme.fillColor : null,
         suffix: suffix,
         floatingLabelAlignment: FloatingLabelAlignment.start,
         alignLabelWithHint: true,
         contentPadding: CustomPadding.paddingTextFormField,
         labelStyle: Theme.of(context).textTheme.titleSmall,
         labelText: labelText,
-        focusedBorder:
-            OutlineInputBorder(borderSide: readOnly ? const BorderSide(color: Colors.transparent) : const BorderSide()),
-        enabledBorder:
-            OutlineInputBorder(borderSide: readOnly ? const BorderSide(color: Colors.transparent) : const BorderSide()),
+        focusedErrorBorder: OutlineInputBorder(
+            borderSide: readOnly
+                ? const BorderSide(color: Colors.transparent)
+                : const BorderSide(color: Colors.blue)),
+        errorBorder: OutlineInputBorder(
+            borderSide: readOnly
+                ? const BorderSide(color: Colors.transparent)
+                : const BorderSide()),
+        border: OutlineInputBorder(
+            borderSide: readOnly
+                ? const BorderSide(color: Colors.transparent)
+                : const BorderSide()),
+        disabledBorder: OutlineInputBorder(
+            borderSide: readOnly
+                ? const BorderSide(color: Colors.transparent)
+                : const BorderSide()),
+        focusedBorder: OutlineInputBorder(
+            borderSide: readOnly
+                ? const BorderSide(color: Colors.transparent)
+                : const BorderSide(color: Colors.blue)),
+        enabledBorder: OutlineInputBorder(
+            borderSide: readOnly
+                ? const BorderSide(color: Colors.transparent)
+                : const BorderSide(color: Colors.black)),
       ),
     );
   }
