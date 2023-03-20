@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:urun_takip_app/core/constant/colors/const_application_colors.dart';
 
 class HomeCardContainer extends StatelessWidget {
   HomeCardContainer(

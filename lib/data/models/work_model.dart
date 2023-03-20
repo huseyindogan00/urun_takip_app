@@ -54,8 +54,7 @@ class WorkModel implements BaseModel {
     return WorkModel(
       id: map['id'] != null ? map['id'] as String : null,
       companyName: map['companyName'] as String,
-      productModel:
-          ProductModel.fromMap(map['productModel'] as Map<String, dynamic>),
+      productModel: ProductModel.fromMap(map['productModel'] as Map<String, dynamic>),
       productPiece: map['productPiece'] as double,
       totalPrice: map['totalPrice'] as double,
       orderDate: map['orderDate'] as dynamic,
@@ -64,8 +63,7 @@ class WorkModel implements BaseModel {
 
   String toJson() => json.encode(toMap());
 
-  factory WorkModel.fromJson(String source) =>
-      WorkModel.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory WorkModel.fromJson(String source) => WorkModel.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
   String toString() {

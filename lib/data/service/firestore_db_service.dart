@@ -1,6 +1,7 @@
 import 'package:urun_takip_app/data/base/db_base.dart';
 import 'package:urun_takip_app/data/models/base_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:urun_takip_app/data/models/product_model.dart';
 
 class FirestoreDbService extends DbBase {
   final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
@@ -17,9 +18,17 @@ class FirestoreDbService extends DbBase {
   }
 
   @override
-  Future<bool> saveModel(BaseModel model) {
-    // TODO: implement saveModel
-    throw UnimplementedError();
+  Future<bool> addModel(BaseModel model) async {
+    ProductModel? _productModel = model is ProductModel ? model : null;
+
+    if (_productModel != null) {
+      await _firebaseFirestore
+          .collection(DbCollectionName.products.name)
+          .doc(_productModel.id)
+          .set(_productModel.toMap());
+      return true;
+    }
+    return false;
   }
 
   @override
@@ -28,3 +37,5 @@ class FirestoreDbService extends DbBase {
     throw UnimplementedError();
   }
 }
+
+enum DbCollectionName { products, categories, tokens, works }

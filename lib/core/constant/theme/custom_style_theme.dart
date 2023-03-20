@@ -6,37 +6,33 @@ class CustomStyleTheme {
         displayMedium: TextStyle(
             fontSize: 28,
             color: Color.fromRGBO(211, 211, 211, 100),
-            shadows: [
-              Shadow(blurRadius: 2, color: Colors.white),
-              Shadow(blurRadius: 4)
-            ]),
+            shadows: [Shadow(blurRadius: 2, color: Colors.white), Shadow(blurRadius: 4)]),
         displaySmall: TextStyle(fontSize: 15, color: Colors.red),
-        titleSmall:
-            TextStyle(color: Color.fromARGB(255, 93, 38, 34), fontSize: 17),
+        titleSmall: TextStyle(color: Color.fromARGB(255, 93, 38, 34), fontSize: 17),
         titleMedium: TextStyle(color: Colors.black),
       );
 
   // INPUT DECORATION THEME
-  static InputDecorationTheme get inputDecorationTheme => InputDecorationTheme(
-        labelStyle: const TextStyle(
+  static InputDecorationTheme get inputDecorationTheme => const InputDecorationTheme(
+        labelStyle: TextStyle(
           color: Color(0xdd000000),
           fontSize: null,
           fontWeight: FontWeight.w400,
           fontStyle: FontStyle.normal,
         ),
-        helperStyle: const TextStyle(
+        helperStyle: TextStyle(
           color: Color(0xdd000000),
           fontSize: null,
           fontWeight: FontWeight.w400,
           fontStyle: FontStyle.normal,
         ),
-        hintStyle: const TextStyle(
+        hintStyle: TextStyle(
           color: Color(0xdd000000),
           fontSize: null,
           fontWeight: FontWeight.w400,
           fontStyle: FontStyle.normal,
         ),
-        errorStyle: const TextStyle(
+        errorStyle: TextStyle(
           color: Color(0xdd000000),
           fontSize: null,
           fontWeight: FontWeight.w400,
@@ -44,30 +40,29 @@ class CustomStyleTheme {
         ),
         errorMaxLines: null,
         isDense: false,
-        contentPadding:
-            const EdgeInsets.only(top: 12, bottom: 12, left: 0, right: 0),
+        contentPadding: EdgeInsets.only(top: 12, bottom: 12, left: 0, right: 0),
         isCollapsed: false,
-        prefixStyle: const TextStyle(
+        prefixStyle: TextStyle(
           color: Color(0xdd000000),
           fontSize: null,
           fontWeight: FontWeight.w400,
           fontStyle: FontStyle.normal,
         ),
-        suffixStyle: const TextStyle(
+        suffixStyle: TextStyle(
           color: Color(0xdd000000),
           fontSize: null,
           fontWeight: FontWeight.w400,
           fontStyle: FontStyle.normal,
         ),
-        counterStyle: const TextStyle(
+        counterStyle: TextStyle(
           color: Color(0xdd000000),
           fontSize: null,
           fontWeight: FontWeight.w400,
           fontStyle: FontStyle.normal,
         ),
         filled: true,
-        fillColor: Colors.amber.shade200,
-        errorBorder: const UnderlineInputBorder(
+        fillColor: Color(0xff53C763),
+        errorBorder: UnderlineInputBorder(
           borderSide: BorderSide(
             color: Color(0xff000000),
             width: 1,
@@ -75,7 +70,7 @@ class CustomStyleTheme {
           ),
           borderRadius: BorderRadius.all(Radius.circular(4.0)),
         ),
-        focusedBorder: const UnderlineInputBorder(
+        focusedBorder: UnderlineInputBorder(
           borderSide: BorderSide(
             color: Color(0xff000000),
             width: 1,
@@ -83,7 +78,7 @@ class CustomStyleTheme {
           ),
           borderRadius: BorderRadius.all(Radius.circular(4.0)),
         ),
-        focusedErrorBorder: const UnderlineInputBorder(
+        focusedErrorBorder: UnderlineInputBorder(
           borderSide: BorderSide(
             color: Color(0xff000000),
             width: 1,
@@ -91,7 +86,7 @@ class CustomStyleTheme {
           ),
           borderRadius: BorderRadius.all(Radius.circular(4.0)),
         ),
-        disabledBorder: const UnderlineInputBorder(
+        disabledBorder: UnderlineInputBorder(
           borderSide: BorderSide(
             color: Color(0xff000000),
             width: 1,
@@ -99,7 +94,7 @@ class CustomStyleTheme {
           ),
           borderRadius: BorderRadius.all(Radius.circular(4.0)),
         ),
-        enabledBorder: const UnderlineInputBorder(
+        enabledBorder: UnderlineInputBorder(
           borderSide: BorderSide(
             color: Color(0xff000000),
             width: 1,
@@ -107,7 +102,7 @@ class CustomStyleTheme {
           ),
           borderRadius: BorderRadius.all(Radius.circular(4.0)),
         ),
-        border: const UnderlineInputBorder(
+        border: UnderlineInputBorder(
           borderSide: BorderSide(
             color: Color(0xff000000),
             width: 1,
@@ -198,8 +193,7 @@ class CustomStyleTheme {
 
   // CHECKBOX THEME DATA
   static CheckboxThemeData get checkbocThemeData => CheckboxThemeData(
-        fillColor: MaterialStateProperty.resolveWith<Color?>(
-            (Set<MaterialState> states) {
+        fillColor: MaterialStateProperty.resolveWith<Color?>((Set<MaterialState> states) {
           if (states.contains(MaterialState.disabled)) {
             return null;
           }
@@ -218,8 +212,7 @@ class CustomStyleTheme {
       );
 
   // TEXT SELECTION THEME DATA
-  static TextSelectionThemeData get textSelectionThemeData =>
-      const TextSelectionThemeData(
+  static TextSelectionThemeData get textSelectionThemeData => const TextSelectionThemeData(
         cursorColor: Color(0xff4285f4),
         selectionColor: Color(0xffd1c7c7),
         selectionHandleColor: Color(0xffbaabab),

@@ -13,6 +13,10 @@ class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        child: const Text('İŞ YAP'),
+      ),
       backgroundColor: Theme.of(context).primaryColor,
       body: Column(
         children: [

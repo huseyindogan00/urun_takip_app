@@ -20,6 +20,8 @@ Yapılacaklar
 4. Firebase bağlantıları yapılacak
 5. İnternet kontrolü yapılacak ve tüm sayfalardan dinlenebilecek
 
+!!! ilk ürün denemesi başarılı fakat photo url kısmı db ye null olarak kayıt ediliyor
+
 Platform  Firebase App Id
 web       1:1087359245232:web:527504bb41e88f340fd475
 android   1:1087359245232:android:d3ea9e47510c26390fd475
