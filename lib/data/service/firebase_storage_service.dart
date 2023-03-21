@@ -19,8 +19,8 @@ class FirebaseStorageServise extends StorageBase {
             .child('productPhoto')
             .child(_productModel.photoPath!.substring(_productModel.photoPath!.lastIndexOf('/')));
 
-        ref.putFile(File(_productModel.photoPath!));
-        String url = await ref.getDownloadURL();
+        TaskSnapshot taskSnapshot = await ref.putFile(File(_productModel.photoPath!));
+        String url = await taskSnapshot.ref.getDownloadURL();
 
         return url;
       }

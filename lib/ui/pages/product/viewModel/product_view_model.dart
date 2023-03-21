@@ -66,13 +66,14 @@ class ProductViewModel extends ChangeNotifier {
     return true;
   }
 
+  //* PRODUCT EKLEME METHODU
   Future<void> addProductModel(ProductModel productModel) async {
     try {
       bool result = await _productRepository.addModel(productModel);
       print('ürün ekleme işlemi -> $result');
     } on Exception catch (e) {
       print(e.toString());
-    }
+    } finally {}
   }
 
   //* HESAPLAMA YAPAR VE GERİYE DEĞERİ STRİNG OLARAK DÖNER

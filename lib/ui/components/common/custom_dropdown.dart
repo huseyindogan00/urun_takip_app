@@ -35,12 +35,8 @@ class CustomCategoryDropdownButton extends StatelessWidget {
             value: context.watch<ProductViewModel>().selectCategoryName,
             isExpanded: true,
             underline: const SizedBox(),
-            items: categoryAllMap.keys
-                .map((key) => _buildDropdownMenuItem(key))
-                .toList(),
-            onChanged: (value) {
-              context.read<ProductViewModel>().selectCategoryName = value;
-            },
+            items: categoryAllMap.keys.map((key) => _buildDropdownMenuItem(key)).toList(),
+            onChanged: (value) => context.read<ProductViewModel>().selectCategoryName = value,
           ),
         ),
         CustomSize.betweenWidgetSize,
@@ -59,13 +55,10 @@ class CustomCategoryDropdownButton extends StatelessWidget {
             value: context.watch<ProductViewModel>().selectCategorySubName,
             isExpanded: true,
             underline: const SizedBox(),
-            items: categoryAllMap[
-                    context.watch<ProductViewModel>().selectCategoryName]!
+            items: categoryAllMap[context.watch<ProductViewModel>().selectCategoryName]!
                 .map((name) => _buildDropdownMenuItem(name))
                 .toList(),
-            onChanged: (value) {
-              context.read<ProductViewModel>().selectCategorySubName = value;
-            },
+            onChanged: (value) => context.read<ProductViewModel>().selectCategorySubName = value,
           ),
         ),
       ],

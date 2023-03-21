@@ -17,6 +17,7 @@ import 'package:urun_takip_app/ui/components/common/button/custom_elevated_butto
 import 'package:urun_takip_app/ui/components/common/button/custom_elevated_icon_button.dart';
 import 'package:urun_takip_app/ui/components/common/custom_appbar_widget.dart';
 import 'package:urun_takip_app/ui/components/common/custom_dropdown.dart';
+import 'package:urun_takip_app/ui/components/common/dialog/platform_sensitive_alert_dialog.dart';
 import 'package:urun_takip_app/ui/components/form/custom_text_form_field.dart';
 import 'package:urun_takip_app/ui/pages/product/viewModel/product_view_model.dart';
 import 'package:urun_takip_app/ui/widget/image_view_widget.dart';
@@ -269,22 +270,29 @@ class _ProductAddViewState extends State<ProductAddView> {
     return CustomElevatedButton(
       text: 'Ürün Ekle',
       onPressed: () async {
-        if (_formKey.currentState!.validate()) {
-          _formKey.currentState!.save();
-          ProductModel productModel = ProductModel(
-            id: UuidManager().randomId(),
-            stockCode: _stockCodeEditController.text,
-            title: _commentEditController.text,
-            category: _productViewModel.categoryModel,
-            stockPiece: _stockPieceEditController.text.convertFromStringToDouble(),
-            unitPrice: _unitPriceEditController.text.convertFromStringToDouble(),
-            kdv: _kdvEditController.text.convertFromStringToDouble(),
-            totalPrice: _totalPriceEditController.text.convertFromStringToDouble(),
-            photoPath: _productViewModel.productImageFilePath?.path,
-            createDate: DateTime.now(),
-          );
-          await _productViewModel.addProductModel(productModel);
-          if (mounted) Navigator.pop(context);
+        if (_productViewModel.categoryModel.categoryName == null ||
+            _productViewModel.categoryModel.categorySubName == null) {
+          await const PlatformSensitiveAlertDialog(
+                  content: 'Kategori seçiniz', title: 'Uyarı!', doneButtonTitle: 'tamam')
+              .show(context);
+        } else {
+          if (_formKey.currentState!.validate()) {
+            _formKey.currentState!.save();
+            ProductModel productModel = ProductModel(
+              id: UuidManager().randomId(),
+              stockCode: _stockCodeEditController.text,
+              title: _commentEditController.text,
+              category: _productViewModel.categoryModel,
+              stockPiece: _stockPieceEditController.text.convertFromStringToDouble(),
+              unitPrice: _unitPriceEditController.text.convertFromStringToDouble(),
+              kdv: _kdvEditController.text.convertFromStringToDouble(),
+              totalPrice: _totalPriceEditController.text.convertFromStringToDouble(),
+              photoPath: _productViewModel.productImageFilePath?.path,
+              createDate: DateTime.now(),
+            );
+            await _productViewModel.addProductModel(productModel);
+            if (mounted) Navigator.pop(context);
+          }
         }
       },
       height: 50,
