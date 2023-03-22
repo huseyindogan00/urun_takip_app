@@ -43,7 +43,7 @@ class ProductModel implements BaseModel {
     double? totalPrice,
     String? photoURL,
     String? photoPath,
-    dynamic? createDate,
+    dynamic createDate,
   }) {
     return ProductModel(
       id: id ?? this.id,

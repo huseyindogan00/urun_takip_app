@@ -145,7 +145,9 @@ class _ProductAddViewState extends State<ProductAddView> {
                         width: 20,
                       ),
                       labelText: AppText.netFiyat,
-                      onSaved: (newValue) {},
+                      onSaved: (newValue) {
+                        _totalPriceEditController.text = newValue!;
+                      },
                     );
                   },
                 ),
@@ -266,39 +268,6 @@ class _ProductAddViewState extends State<ProductAddView> {
     );
   }
 
-  CustomElevatedButton _buildAddProduct(BuildContext context) {
-    return CustomElevatedButton(
-      text: 'Ürün Ekle',
-      onPressed: () async {
-        if (_productViewModel.categoryModel.categoryName == null ||
-            _productViewModel.categoryModel.categorySubName == null) {
-          await const PlatformSensitiveAlertDialog(
-                  content: 'Kategori seçiniz', title: 'Uyarı!', doneButtonTitle: 'tamam')
-              .show(context);
-        } else {
-          if (_formKey.currentState!.validate()) {
-            _formKey.currentState!.save();
-            ProductModel productModel = ProductModel(
-              id: UuidManager().randomId(),
-              stockCode: _stockCodeEditController.text,
-              title: _commentEditController.text,
-              category: _productViewModel.categoryModel,
-              stockPiece: _stockPieceEditController.text.convertFromStringToDouble(),
-              unitPrice: _unitPriceEditController.text.convertFromStringToDouble(),
-              kdv: _kdvEditController.text.convertFromStringToDouble(),
-              totalPrice: _totalPriceEditController.text.convertFromStringToDouble(),
-              photoPath: _productViewModel.productImageFilePath?.path,
-              createDate: DateTime.now(),
-            );
-            await _productViewModel.addProductModel(productModel);
-            if (mounted) Navigator.pop(context);
-          }
-        }
-      },
-      height: 50,
-    );
-  }
-
   Consumer<ProductViewModel> _buildViewPhoto(BuildContext context) {
     return Consumer<ProductViewModel>(
       builder: (context, model, child) {
@@ -391,6 +360,39 @@ class _ProductAddViewState extends State<ProductAddView> {
           shadows: [BoxShadow(color: Colors.grey, blurRadius: 5)],
         ),
       ),
+    );
+  }
+
+  CustomElevatedButton _buildAddProduct(BuildContext context) {
+    return CustomElevatedButton(
+      text: 'Ürün Ekle',
+      onPressed: () async {
+        if (_productViewModel.categoryModel.categoryName == null ||
+            _productViewModel.categoryModel.categorySubName == null) {
+          await const PlatformSensitiveAlertDialog(
+                  content: 'Kategori seçiniz', title: 'Uyarı!', doneButtonTitle: 'tamam')
+              .show(context);
+        } else {
+          if (_formKey.currentState!.validate()) {
+            _formKey.currentState!.save();
+            ProductModel productModel = ProductModel(
+              id: UuidManager().randomId(),
+              stockCode: _stockCodeEditController.text,
+              title: _commentEditController.text,
+              category: _productViewModel.categoryModel,
+              stockPiece: _stockPieceEditController.text.convertFromStringToDouble(),
+              unitPrice: _unitPriceEditController.text.convertFromStringToDouble(),
+              kdv: _kdvEditController.text.convertFromStringToDouble(),
+              totalPrice: _totalPriceEditController.text.convertFromStringToDouble(),
+              photoPath: _productViewModel.productImageFilePath?.path,
+              createDate: DateTime.now(),
+            );
+            await _productViewModel.addProductModel(productModel);
+            if (mounted) Navigator.pop(context);
+          }
+        }
+      },
+      height: 50,
     );
   }
 
