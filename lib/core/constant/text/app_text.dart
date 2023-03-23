@@ -1,7 +1,7 @@
 class AppText {
   static const aciklama = 'Açıklama';
   static const urunEkle = 'Ürün Ekle';
-  static const stokDurumu = 'Ürün Stok Durumu';
+  static const urunStokDurumu = 'Ürün Stok Durumu';
   static const stokGecmisi = 'İş Geçmişi';
   static const ayarlar = 'Ayarlar';
   static const stokAdedi = 'Stok Adedi';

@@ -5,6 +5,7 @@ import 'package:urun_takip_app/core/constant/images/const_image.dart';
 import 'package:urun_takip_app/core/constant/text/app_text.dart';
 import 'package:urun_takip_app/ui/components/common/home_card_container.dart';
 import 'package:urun_takip_app/ui/pages/product/product_add/product_add_view.dart';
+import 'package:urun_takip_app/ui/pages/product/product_stock_status/product_stock_status.dart';
 import 'package:urun_takip_app/ui/pages/product/viewModel/product_view_model.dart';
 
 class HomeView extends StatelessWidget {
@@ -81,14 +82,18 @@ class HomeView extends StatelessWidget {
     );
   }
 
-  // STOK DURUMU
+  //* STOK DURUMU
   Widget _buildStockStatusContainer(BuildContext context) {
     return HomeCardContainer(
       iconPath: ConstImage.iconStockStatusPath,
       onTap: () {
-        print('Stok Durumu tıklandı');
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ProductStockStatusView(),
+            ));
       },
-      title: AppText.stokDurumu,
+      title: AppText.urunStokDurumu,
       color: ConstApplicationColors.homeStockStatusContainerColor,
       height: 150,
       width: 150,
@@ -96,7 +101,7 @@ class HomeView extends StatelessWidget {
     );
   }
 
-  // ÜRÜN EKLE
+  //* ÜRÜN EKLE
   Widget _buildAddProductContainer(BuildContext context) {
     return HomeCardContainer(
       iconPath: ConstImage.iconAddProductPath,
@@ -119,7 +124,7 @@ class HomeView extends StatelessWidget {
     );
   }
 
-  // SİPARİŞ GEÇMİŞİ
+  //* SİPARİŞ GEÇMİŞİ
   Widget _buildOrderHistoryContainer(
     BuildContext context,
   ) {
