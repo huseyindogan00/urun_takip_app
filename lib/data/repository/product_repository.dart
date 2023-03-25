@@ -39,4 +39,8 @@ class ProductRepository extends DbBase {
     // TODO: implement update
     throw UnimplementedError();
   }
+
+  Stream<List<ProductModel>> fetchProductAll() {
+    return _firestoreDbService.fetchProductAll();
+  }
 }

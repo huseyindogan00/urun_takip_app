@@ -6,7 +6,6 @@ import 'package:urun_takip_app/core/constant/text/app_text.dart';
 import 'package:urun_takip_app/ui/components/common/home_card_container.dart';
 import 'package:urun_takip_app/ui/pages/product/product_add/product_add_view.dart';
 import 'package:urun_takip_app/ui/pages/product/product_stock_status/product_stock_status.dart';
-import 'package:urun_takip_app/ui/pages/product/viewModel/product_view_model.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
@@ -90,7 +89,7 @@ class HomeView extends StatelessWidget {
         Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => ProductStockStatusView(),
+              builder: (context) => const ProductStockStatusView(),
             ));
       },
       title: AppText.urunStokDurumu,
@@ -109,10 +108,7 @@ class HomeView extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => ChangeNotifierProvider(
-              create: (context) => ProductViewModel(),
-              child: const ProductAddView(),
-            ),
+            builder: (context) => const ProductAddView(),
           ),
         );
       },

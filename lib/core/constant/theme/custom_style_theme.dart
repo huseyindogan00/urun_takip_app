@@ -3,14 +3,17 @@ import 'package:flutter/material.dart';
 class CustomStyleTheme {
   // TEXT THEME
   static TextTheme get textTheme => const TextTheme(
-        displayMedium: TextStyle(
-            fontSize: 28,
-            color: Color.fromRGBO(211, 211, 211, 100),
-            shadows: [Shadow(blurRadius: 2, color: Colors.white), Shadow(blurRadius: 4)]),
-        displaySmall: TextStyle(fontSize: 15, color: Colors.red),
-        titleSmall: TextStyle(color: Color.fromARGB(255, 93, 38, 34), fontSize: 17),
-        titleMedium: TextStyle(color: Colors.black),
-      );
+      displayMedium: TextStyle(
+          fontSize: 28,
+          color: Color.fromRGBO(211, 211, 211, 100),
+          shadows: [Shadow(blurRadius: 2, color: Colors.white), Shadow(blurRadius: 4)]),
+      displaySmall: TextStyle(fontSize: 15, color: Colors.red),
+      titleSmall: TextStyle(color: Color.fromARGB(255, 93, 38, 34), fontSize: 17),
+      titleMedium: TextStyle(color: Colors.black),
+      labelLarge: TextStyle(
+        color: Color.fromARGB(255, 135, 64, 64),
+        fontSize: 16,
+      ));
 
   // INPUT DECORATION THEME
   static InputDecorationTheme get inputDecorationTheme => const InputDecorationTheme(

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:urun_takip_app/core/constant/images/const_image.dart';
-import 'package:urun_takip_app/core/constant/strings/const_appbar_text.dart';
+import 'package:urun_takip_app/core/constant/text/const_appbar_text.dart';
 import 'package:urun_takip_app/ui/components/common/lottie_custom_widget.dart';
 import 'package:urun_takip_app/ui/pages/home/home_page.dart';
+import 'package:urun_takip_app/ui/pages/product/viewModel/product_view_model.dart';
 import 'package:urun_takip_app/ui/pages/splash/splash_view_model.dart';
 
 class SplashView extends StatefulWidget {
@@ -22,13 +24,16 @@ class _SplashViewState extends State<SplashView> {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       // _splashViewModel da yapılacak işlemler burada yapılacak. Sayfa yönlendirme vs.
       await Future.delayed(const Duration(seconds: 2));
-      // ignore: use_build_context_synchronously
-      Navigator.push(
+      //! PROVİDER BURADAN VERİLİYOR
+      if (mounted) {
+        Navigator.pushReplacement(
           context,
           MaterialPageRoute(
+            //! provider ürün ekle menüsünde bulunamıyor
             builder: (context) => const HomeView(),
-          ));
-      print('callback çalıştı');
+          ),
+        );
+      }
     });
   }
 
@@ -50,14 +55,12 @@ class _SplashViewState extends State<SplashView> {
     );
   }
 
-  Widget _buildLogo() =>
-      Expanded(flex: 6, child: Image.asset(ConstImage.logoPath));
+  Widget _buildLogo() => Expanded(flex: 6, child: Image.asset(ConstImage.logoPath));
 
   Widget _buildAppName(BuildContext context) {
     return Expanded(
       flex: 1,
-      child: Text(ConstAppbarText.appName,
-          style: Theme.of(context).textTheme.displayMedium),
+      child: Text(ConstAppbarText.appName, style: Theme.of(context).textTheme.displayMedium),
     );
   }
 

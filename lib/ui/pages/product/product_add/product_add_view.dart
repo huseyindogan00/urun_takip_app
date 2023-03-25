@@ -77,6 +77,7 @@ class _ProductAddViewState extends State<ProductAddView> {
     _formKey.currentState?.dispose();
     //!sayfada görevini bitirmeden dispose olduğu için hata veriyor
     //_productViewModel.dispose();
+    _productViewModel.productImageFilePath = null;
     super.dispose();
   }
 
@@ -399,7 +400,10 @@ class _ProductAddViewState extends State<ProductAddView> {
   void _getPhotoFromGallery() async {
     bool? result = await _productViewModel.getPhotoFromGallery(context);
     if (mounted && (result == null || result)) {
-      double end = _scrollController.position.maxScrollExtent;
+      double end = MediaQuery.of(context).size.height;
+      print('max scroll extend değeri : $end');
+      print('min scroll extend değeri : ${_scrollController.position.minScrollExtent}');
+      print('sayfa yüksekliği = ${MediaQuery.of(context).size.height}');
       _scrollController.animateTo(end, duration: const Duration(milliseconds: 1000), curve: Curves.easeInOut);
       Navigator.pop(context);
     }
@@ -408,7 +412,7 @@ class _ProductAddViewState extends State<ProductAddView> {
   void _getPhotoFromCamera() async {
     bool? result = await _productViewModel.getPhotoFromCamera(context);
     if (mounted && (result == null || result)) {
-      double end = _scrollController.position.maxScrollExtent;
+      double end = MediaQuery.of(context).size.height;
       _scrollController.animateTo(end, duration: const Duration(milliseconds: 1000), curve: Curves.easeInOut);
       Navigator.pop(context);
     }

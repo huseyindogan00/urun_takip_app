@@ -24,6 +24,10 @@ class ProductViewModel extends ChangeNotifier {
 
   static List<ProductModel> productList = [];
 
+  Stream<List<ProductModel>> fetchProductAll() {
+    return _productRepository.fetchProductAll();
+  }
+
   //! BURADA İŞLEMLER REPOSİTORYDEN ÇAĞRILACAK. ŞUANLIK MANAGER SINIFI KULLANILIYOR
   Future<bool?> getPhotoFromGallery(BuildContext context) async {
     try {

@@ -10,6 +10,7 @@ class CustomElevatedButton extends StatelessWidget {
     required this.height,
     this.width,
     this.isConfirm = true,
+    this.buttonStyle,
   });
 
   final Function onPressed;
@@ -18,6 +19,7 @@ class CustomElevatedButton extends StatelessWidget {
   final double height;
   double? width;
   bool isConfirm;
+  final ButtonStyle? buttonStyle;
 
   @override
   Widget build(BuildContext context) {
@@ -26,23 +28,23 @@ class CustomElevatedButton extends StatelessWidget {
       height: height,
       width: width,
       child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: isConfirm
-              ? Theme.of(context).buttonTheme.colorScheme!.primary
-              : Theme.of(context).buttonTheme.colorScheme!.secondary,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(
-              Radius.circular(radius),
+        style: buttonStyle ??
+            ElevatedButton.styleFrom(
+              backgroundColor: isConfirm
+                  ? Theme.of(context).buttonTheme.colorScheme!.primary
+                  : Theme.of(context).buttonTheme.colorScheme!.secondary,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(radius),
+                ),
+              ),
             ),
-          ),
-        ),
         onPressed: () async => onPressed(),
         child: Text(
           text,
-          style: Theme.of(context)
-              .textTheme
-              .titleLarge
-              ?.copyWith(color: Colors.white),
+          style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                color: Colors.white,
+              ),
         ),
       ),
     );

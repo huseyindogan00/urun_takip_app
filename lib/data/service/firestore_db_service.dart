@@ -36,6 +36,15 @@ class FirestoreDbService extends DbBase {
     // TODO: implement update
     throw UnimplementedError();
   }
+
+  Stream<List<ProductModel>> fetchProductAll() {
+    Stream<QuerySnapshot<Map<String, dynamic>>> snapshot = _firebaseFirestore.collection('products').snapshots();
+
+    Stream<List<ProductModel>> modelList =
+        snapshot.map((event) => event.docs.map((e) => ProductModel.fromMap(e.data())).toList());
+
+    return modelList;
+  }
 }
 
 enum DbCollectionName { products, categories, tokens, works }

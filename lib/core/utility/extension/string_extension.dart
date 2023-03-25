@@ -1,8 +1,5 @@
 // ignore_for_file: unnecessary_this
 
-import 'package:urun_takip_app/data/models/base_model.dart';
-import 'package:urun_takip_app/data/models/product_model.dart';
-
 extension StringExtension on String {
   /// String değeri double.parse ile kullanılacak duruma getiriyor.
   /// noktaları siliyor
@@ -18,6 +15,16 @@ extension StringExtension on String {
       newValue += number;
     }
 
+    return newValue;
+  }
+
+  String convertDoubleToTurkeyCurrency() {
+    String newValue = '';
+    //int length = this.lastIndexOf('.');
+    List<String> value = this.replaceAll('.', ',').split('');
+    for (var element in value) {
+      newValue += element;
+    }
     return newValue;
   }
 
