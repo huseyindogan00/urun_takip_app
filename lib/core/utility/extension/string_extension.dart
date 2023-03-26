@@ -18,6 +18,7 @@ extension StringExtension on String {
     return newValue;
   }
 
+  /// double tipten para birimine çevir
   String convertDoubleToTurkeyCurrency() {
     String newValue = '';
     //int length = this.lastIndexOf('.');
@@ -28,6 +29,7 @@ extension StringExtension on String {
     return newValue;
   }
 
+  /// String tipden double tipe çevir
   double convertFromStringToDouble() {
     List<String> valueList = this.split('');
     String value = '';

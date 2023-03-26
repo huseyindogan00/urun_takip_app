@@ -3,10 +3,10 @@ import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:urun_takip_app/core/init/locator/global_locator.dart';
 import 'package:urun_takip_app/core/utility/extension/string_extension.dart';
-import 'package:urun_takip_app/core/utility/util/calculation_operations.dart';
-import 'package:urun_takip_app/core/utility/util/currency_formatter.dart';
-import 'package:urun_takip_app/core/utility/util/image_and_video_manager.dart';
-import 'package:urun_takip_app/core/utility/util/validation.dart';
+import 'package:urun_takip_app/core/utility/util/calc/calculation_operations.dart';
+import 'package:urun_takip_app/core/utility/util/manager/image_and_video_manager.dart';
+import 'package:urun_takip_app/core/utility/util/validation/currency_formatter.dart';
+import 'package:urun_takip_app/core/utility/util/validation/validation.dart';
 import 'package:urun_takip_app/data/repository/category_repository.dart';
 import 'package:urun_takip_app/data/models/category_json.dart';
 import 'package:urun_takip_app/data/models/product_model.dart';
@@ -91,13 +91,16 @@ class ProductViewModel extends ChangeNotifier {
         (unitPrice.contains(RegExp(',')) || unitPrice.contains(RegExp('.'))) &&
         !unitPrice.contains(RegExp('[a-zA-Z]'))) {
       //* Verilen birim fiyatı  doubleFromString ile noktasız yapıyor ve virgül var ise yerine nokta getiriyor ve double değere dönüştürüyor
-      double _unitPrice = double.parse(unitPrice.doubleFromString().replaceAll(',', '.'));
+      double _unitPrice =
+          double.parse(unitPrice.doubleFromString().replaceAll(',', '.'));
       double _kdv = double.parse(kdv) / 100;
       double _stockPiece = double.parse(stockPiece);
 
-      double resultDouble = CalculationOperations.calculateNetPrice(_unitPrice, _stockPiece, _kdv);
+      double resultDouble = CalculationOperations.calculateNetPrice(
+          _unitPrice, _stockPiece, _kdv);
 
-      String resultString = CurrencyFormatter.instance().moneyValueCheck(resultDouble.toString().replaceAll('.', ','));
+      String resultString = CurrencyFormatter.instance()
+          .moneyValueCheck(resultDouble.toString().replaceAll('.', ','));
 
       totalPrice = resultString;
       notifyListeners();

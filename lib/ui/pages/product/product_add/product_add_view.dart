@@ -8,9 +8,9 @@ import 'package:urun_takip_app/core/constant/size/custom_padding.dart';
 import 'package:urun_takip_app/core/constant/size/custom_size.dart';
 import 'package:urun_takip_app/core/constant/text/app_text.dart';
 import 'package:urun_takip_app/core/utility/extension/string_extension.dart';
-import 'package:urun_takip_app/core/utility/util/currency_formatter.dart';
-import 'package:urun_takip_app/core/utility/util/uuid_manager.dart';
-import 'package:urun_takip_app/core/utility/util/validation.dart';
+import 'package:urun_takip_app/core/utility/util/manager/uuid_manager.dart';
+import 'package:urun_takip_app/core/utility/util/validation/currency_formatter.dart';
+import 'package:urun_takip_app/core/utility/util/validation/validation.dart';
 import 'package:urun_takip_app/data/models/category_json.dart';
 import 'package:urun_takip_app/data/models/product_model.dart';
 import 'package:urun_takip_app/ui/components/common/button/custom_elevated_button.dart';
@@ -184,7 +184,8 @@ class _ProductAddViewState extends State<ProductAddView> {
         controller: _stockCodeEditController,
         labelText: AppText.stokKodu,
         validator: (newValue) => Validation.generealValidation(newValue),
-        onSaved: (String? newValue) => _stockCodeEditController.text = newValue ?? '',
+        onSaved: (String? newValue) =>
+            _stockCodeEditController.text = newValue ?? '',
       ),
     );
   }
@@ -211,8 +212,8 @@ class _ProductAddViewState extends State<ProductAddView> {
         labelText: AppText.stokAdedi,
         onChanged: (value) {
           // PROVIDER İLE NET TUTAR DEĞERİNİ GÜNCELLİYOR
-          _productViewModel.calculateNetPrice(
-              _unitPriceEditController.text, _kdvEditController.text, _stockPieceEditController.text);
+          _productViewModel.calculateNetPrice(_unitPriceEditController.text,
+              _kdvEditController.text, _stockPieceEditController.text);
         },
         validator: (newValue) => Validation.generealValidation(newValue),
         onSaved: (newValue) => _stockPieceEditController.text = newValue ?? '',
@@ -230,15 +231,17 @@ class _ProductAddViewState extends State<ProductAddView> {
         suffix: Image.asset(ConstImage.iconLiraBlackPath, width: 20),
         validator: (newValue) => Validation.moneyValueCheck(newValue),
         onChanged: (String? value) {
-          _unitPriceEditController.text = CurrencyFormatter.instance().moneyValueCheck(value);
+          _unitPriceEditController.text =
+              CurrencyFormatter.instance().moneyValueCheck(value);
           //imleci satır sonuna getirme
-          _unitPriceEditController.selection =
-              TextSelection.fromPosition(TextPosition(offset: _unitPriceEditController.text.length));
+          _unitPriceEditController.selection = TextSelection.fromPosition(
+              TextPosition(offset: _unitPriceEditController.text.length));
           // PROVIDER İLE NET TUTAR DEĞERİNİ GÜNCELLİYOR
-          _productViewModel.calculateNetPrice(
-              _unitPriceEditController.text, _kdvEditController.text, _stockPieceEditController.text);
+          _productViewModel.calculateNetPrice(_unitPriceEditController.text,
+              _kdvEditController.text, _stockPieceEditController.text);
         },
-        onSaved: (String? newValue) => _unitPriceEditController.text = newValue ?? '',
+        onSaved: (String? newValue) =>
+            _unitPriceEditController.text = newValue ?? '',
       ),
     );
   }
@@ -285,7 +288,8 @@ class _ProductAddViewState extends State<ProductAddView> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => ImageViewWidget(imagePath: model.productImageFilePath!.path),
+                              builder: (context) => ImageViewWidget(
+                                  imagePath: model.productImageFilePath!.path),
                             ),
                           );
                         }
@@ -371,7 +375,9 @@ class _ProductAddViewState extends State<ProductAddView> {
         if (_productViewModel.categoryModel.categoryName == null ||
             _productViewModel.categoryModel.categorySubName == null) {
           await const PlatformSensitiveAlertDialog(
-                  content: 'Kategori seçiniz', title: 'Uyarı!', doneButtonTitle: 'tamam')
+                  content: 'Kategori seçiniz',
+                  title: 'Uyarı!',
+                  doneButtonTitle: 'tamam')
               .show(context);
         } else {
           if (_formKey.currentState!.validate()) {
@@ -381,10 +387,13 @@ class _ProductAddViewState extends State<ProductAddView> {
               stockCode: _stockCodeEditController.text,
               title: _commentEditController.text,
               category: _productViewModel.categoryModel,
-              stockPiece: _stockPieceEditController.text.convertFromStringToDouble(),
-              unitPrice: _unitPriceEditController.text.convertFromStringToDouble(),
+              stockPiece:
+                  _stockPieceEditController.text.convertFromStringToDouble(),
+              unitPrice:
+                  _unitPriceEditController.text.convertFromStringToDouble(),
               kdv: _kdvEditController.text.convertFromStringToDouble(),
-              totalPrice: _totalPriceEditController.text.convertFromStringToDouble(),
+              totalPrice:
+                  _totalPriceEditController.text.convertFromStringToDouble(),
               photoPath: _productViewModel.productImageFilePath?.path,
               createDate: DateTime.now(),
             );
@@ -400,11 +409,10 @@ class _ProductAddViewState extends State<ProductAddView> {
   void _getPhotoFromGallery() async {
     bool? result = await _productViewModel.getPhotoFromGallery(context);
     if (mounted && (result == null || result)) {
-      double end = MediaQuery.of(context).size.height;
-      print('max scroll extend değeri : $end');
-      print('min scroll extend değeri : ${_scrollController.position.minScrollExtent}');
-      print('sayfa yüksekliği = ${MediaQuery.of(context).size.height}');
-      _scrollController.animateTo(end, duration: const Duration(milliseconds: 1000), curve: Curves.easeInOut);
+      double end = _scrollController.position.maxScrollExtent;
+      _scrollController.animateTo(end,
+          duration: const Duration(milliseconds: 1000),
+          curve: Curves.easeInOut);
       Navigator.pop(context);
     }
   }
@@ -412,8 +420,10 @@ class _ProductAddViewState extends State<ProductAddView> {
   void _getPhotoFromCamera() async {
     bool? result = await _productViewModel.getPhotoFromCamera(context);
     if (mounted && (result == null || result)) {
-      double end = MediaQuery.of(context).size.height;
-      _scrollController.animateTo(end, duration: const Duration(milliseconds: 1000), curve: Curves.easeInOut);
+      double end = _scrollController.position.maxScrollExtent;
+      _scrollController.animateTo(end,
+          duration: const Duration(milliseconds: 1000),
+          curve: Curves.easeInOut);
       Navigator.pop(context);
     }
   }
