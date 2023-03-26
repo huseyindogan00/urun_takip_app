@@ -33,9 +33,9 @@ class CurrencyFormatter {
     if (moneyValue != null && moneyValue.isNotEmpty) {
       moneyValueList = moneyValue.split('');
 
-      if (moneyValue.contains(',')) {
-        if (moneyValue.indexOf(',') == moneyValue.lastIndexOf(',')) {
-          //* VİRGÜLDEN SONRAKİ DEĞERİN BELİRLENDİĞİ ŞART - default '2'
+      if (moneyValueList.contains(',')) {
+        if (moneyValueList.indexOf(',') == moneyValueList.lastIndexOf(',')) {
+          //* virgülden sonra kaç basamaklı olacağı belirleniyor - default '2'
           while ((moneyValueList.length - moneyValueList.indexOf(',')) > 3) {
             moneyValueList.removeLast();
           }
@@ -61,10 +61,12 @@ class CurrencyFormatter {
     int moneyCount = 0;
     String newValue = '';
 
-    //* SADECE RAKAM OLARAK UZUNLUK ALINIYOR
+    //* sadece rakam olarak uzunluk alınıyor
     for (var element in valueList) {
       if (element == ',') break;
-      if (element.contains(RegExp(r'[0-9]'))) moneyCount++;
+      if (element.contains(RegExp(r'[0-9]'))) {
+        moneyCount++;
+      }
     }
 
     switch (moneyCount) {

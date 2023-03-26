@@ -14,15 +14,16 @@ Sorun
 
 
 Yapılacaklar
-1. (EKLENDİ) Kamera ile çekilen fotoğraf görsele eklenecek 
-2. (YAPILDI) ProductModel nesnesi veritabanına kaydedilecek
-3. (YAPILDI) Eklenen ProductModel nesnelerini Stokta gösterme yapılacak
-4. (YAPILDI) Firebase bağlantıları yapılacak
-5. GÜNCELLE sayfası eklenecek
-6. Girilen işlerin durumunu gösteren sayfa yapılacak
-7. AYARLAR sayfası eklenecek
-8. İnternet kontrolü yapılacak ve tüm sayfalardan dinlenebilecek
-9. SAYILARIN DÖNÜŞÜMÜ YAPILACAK
+1.  (EKLENDİ) Kamera ile çekilen fotoğraf görsele eklenecek 
+2.  (YAPILDI) ProductModel nesnesi veritabanına kaydedilecek
+3.  (YAPILDI) Eklenen ProductModel nesnelerini Stokta gösterme yapılacak
+4.  (YAPILDI) Firebase bağlantıları yapılacak
+5.  GÜNCELLE sayfası eklenecek
+6.  Girilen işlerin durumunu gösteren sayfa yapılacak
+7.  AYARLAR sayfası eklenecek
+8.  İnternet kontrolü yapılacak ve tüm sayfalardan dinlenebilecek
+9.  SAYILARIN DÖNÜŞÜMÜ YAPILACAK
+10.  
  
 
 Platform  Firebase App Id

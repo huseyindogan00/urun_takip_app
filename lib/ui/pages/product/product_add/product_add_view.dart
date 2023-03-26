@@ -183,9 +183,8 @@ class _ProductAddViewState extends State<ProductAddView> {
         maxLines: 1,
         controller: _stockCodeEditController,
         labelText: AppText.stokKodu,
-        validator: (newValue) => Validation.generealValidation(newValue),
-        onSaved: (String? newValue) =>
-            _stockCodeEditController.text = newValue ?? '',
+        validator: (newValue) => Validation.generalValidation(newValue),
+        onSaved: (String? newValue) => _stockCodeEditController.text = newValue ?? '',
       ),
     );
   }
@@ -196,11 +195,12 @@ class _ProductAddViewState extends State<ProductAddView> {
       labelText: AppText.aciklama,
       maxLines: 5,
       maxLength: 150,
-      validator: (newValue) => Validation.generealValidation(newValue),
+      validator: (newValue) => Validation.generalValidation(newValue),
       onSaved: (newValue) => _commentEditController.text = newValue ?? '',
     );
   }
 
+  //* STOK ADEDİ
   Expanded _buildStockPiece() {
     return Expanded(
       flex: 3,
@@ -212,15 +212,16 @@ class _ProductAddViewState extends State<ProductAddView> {
         labelText: AppText.stokAdedi,
         onChanged: (value) {
           // PROVIDER İLE NET TUTAR DEĞERİNİ GÜNCELLİYOR
-          _productViewModel.calculateNetPrice(_unitPriceEditController.text,
-              _kdvEditController.text, _stockPieceEditController.text);
+          _productViewModel.calculateNetPrice(
+              _unitPriceEditController.text, _kdvEditController.text, _stockPieceEditController.text);
         },
-        validator: (newValue) => Validation.generealValidation(newValue),
+        validator: (newValue) => Validation.generalValidation(newValue),
         onSaved: (newValue) => _stockPieceEditController.text = newValue ?? '',
       ),
     );
   }
 
+  //* BİRİM FİYAT
   Expanded _buildUnitPrice() {
     return Expanded(
       flex: 5,
@@ -231,31 +232,30 @@ class _ProductAddViewState extends State<ProductAddView> {
         suffix: Image.asset(ConstImage.iconLiraBlackPath, width: 20),
         validator: (newValue) => Validation.moneyValueCheck(newValue),
         onChanged: (String? value) {
-          _unitPriceEditController.text =
-              CurrencyFormatter.instance().moneyValueCheck(value);
+          _unitPriceEditController.text = CurrencyFormatter.instance().moneyValueCheck(value);
           //imleci satır sonuna getirme
-          _unitPriceEditController.selection = TextSelection.fromPosition(
-              TextPosition(offset: _unitPriceEditController.text.length));
+          _unitPriceEditController.selection =
+              TextSelection.fromPosition(TextPosition(offset: _unitPriceEditController.text.length));
           // PROVIDER İLE NET TUTAR DEĞERİNİ GÜNCELLİYOR
-          _productViewModel.calculateNetPrice(_unitPriceEditController.text,
-              _kdvEditController.text, _stockPieceEditController.text);
+          _productViewModel.calculateNetPrice(
+              _unitPriceEditController.text, _kdvEditController.text, _stockPieceEditController.text);
         },
-        onSaved: (String? newValue) =>
-            _unitPriceEditController.text = newValue ?? '',
+        onSaved: (String? newValue) => _unitPriceEditController.text = newValue ?? '',
       ),
     );
   }
 
+  //* KDV TUTARI
   Expanded _buildKDV() {
     return Expanded(
       flex: 3,
       child: CustomTextFormField(
         keyboardType: TextInputType.number,
         inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-        prefix: const Text('% '),
+        prefix: const Text('% ', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
         controller: _kdvEditController,
         labelText: AppText.kdv,
-        validator: Validation.generealValidation,
+        validator: Validation.generalValidation,
         onSaved: (newValue) => _kdvEditController.text = newValue ?? '',
       ),
     );
@@ -288,8 +288,7 @@ class _ProductAddViewState extends State<ProductAddView> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => ImageViewWidget(
-                                  imagePath: model.productImageFilePath!.path),
+                              builder: (context) => ImageViewWidget(imagePath: model.productImageFilePath!.path),
                             ),
                           );
                         }
@@ -362,7 +361,7 @@ class _ProductAddViewState extends State<ProductAddView> {
         icon: const Icon(
           Icons.image_search_rounded,
           size: 50,
-          shadows: [BoxShadow(color: Colors.grey, blurRadius: 5)],
+          shadows: [BoxShadow(blurRadius: 2)],
         ),
       ),
     );
@@ -375,9 +374,7 @@ class _ProductAddViewState extends State<ProductAddView> {
         if (_productViewModel.categoryModel.categoryName == null ||
             _productViewModel.categoryModel.categorySubName == null) {
           await const PlatformSensitiveAlertDialog(
-                  content: 'Kategori seçiniz',
-                  title: 'Uyarı!',
-                  doneButtonTitle: 'tamam')
+                  content: 'Kategori seçiniz', title: 'Uyarı!', doneButtonTitle: 'tamam')
               .show(context);
         } else {
           if (_formKey.currentState!.validate()) {
@@ -387,13 +384,10 @@ class _ProductAddViewState extends State<ProductAddView> {
               stockCode: _stockCodeEditController.text,
               title: _commentEditController.text,
               category: _productViewModel.categoryModel,
-              stockPiece:
-                  _stockPieceEditController.text.convertFromStringToDouble(),
-              unitPrice:
-                  _unitPriceEditController.text.convertFromStringToDouble(),
+              stockPiece: _stockPieceEditController.text.convertFromStringToDouble(),
+              unitPrice: _unitPriceEditController.text.convertFromStringToDouble(),
               kdv: _kdvEditController.text.convertFromStringToDouble(),
-              totalPrice:
-                  _totalPriceEditController.text.convertFromStringToDouble(),
+              totalPrice: _totalPriceEditController.text.convertFromStringToDouble(),
               photoPath: _productViewModel.productImageFilePath?.path,
               createDate: DateTime.now(),
             );
@@ -410,9 +404,7 @@ class _ProductAddViewState extends State<ProductAddView> {
     bool? result = await _productViewModel.getPhotoFromGallery(context);
     if (mounted && (result == null || result)) {
       double end = _scrollController.position.maxScrollExtent;
-      _scrollController.animateTo(end,
-          duration: const Duration(milliseconds: 1000),
-          curve: Curves.easeInOut);
+      _scrollController.animateTo(end, duration: const Duration(milliseconds: 1000), curve: Curves.easeInOut);
       Navigator.pop(context);
     }
   }
@@ -421,9 +413,7 @@ class _ProductAddViewState extends State<ProductAddView> {
     bool? result = await _productViewModel.getPhotoFromCamera(context);
     if (mounted && (result == null || result)) {
       double end = _scrollController.position.maxScrollExtent;
-      _scrollController.animateTo(end,
-          duration: const Duration(milliseconds: 1000),
-          curve: Curves.easeInOut);
+      _scrollController.animateTo(end, duration: const Duration(milliseconds: 1000), curve: Curves.easeInOut);
       Navigator.pop(context);
     }
   }

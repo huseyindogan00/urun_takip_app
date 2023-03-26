@@ -37,8 +37,10 @@ class _ProductStockStatusViewState extends State<ProductStockStatusView> {
                 stream: _productViewModel.fetchProductAll(),
                 builder: (context, snapshot) {
                   if (!snapshot.hasData) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
+                    return Center(
+                      child: CircularProgressIndicator(
+                        color: Colors.grey.shade300,
+                      ),
                     );
                   } else {
                     return ListView.builder(

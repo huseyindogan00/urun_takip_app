@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:urun_takip_app/core/constant/size/custom_size.dart';
+import 'package:urun_takip_app/ui/pages/product/viewModel/product_view_model.dart';
 
 class CustomElevatedButton extends StatelessWidget {
   CustomElevatedButton({
@@ -40,12 +42,12 @@ class CustomElevatedButton extends StatelessWidget {
               ),
             ),
         onPressed: () async => onPressed(),
-        child: Text(
-          text,
-          style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                color: Colors.white,
-              ),
-        ),
+        child: context.watch<ProductViewModel>().viewState == ProductViewState.IDLE
+            ? Text(
+                text,
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(color: Colors.white),
+              )
+            : CircularProgressIndicator(color: Colors.grey.shade300),
       ),
     );
   }

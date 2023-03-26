@@ -18,11 +18,16 @@ class ProductViewModel extends ChangeNotifier {
   final CategoryRepository _categoryRepository = locator<CategoryRepository>();
   final ProductRepository _productRepository = locator<ProductRepository>();
   late CategoryModel categoryModel = CategoryModel();
+  ProductViewState _viewState = ProductViewState.IDLE;
+
+  get viewState => _viewState;
+  set viewState(state) {
+    _viewState = state;
+    notifyListeners();
+  }
 
   String totalPrice = '0,00';
   XFile? productImageFilePath;
-
-  static List<ProductModel> productList = [];
 
   Stream<List<ProductModel>> fetchProductAll() {
     return _productRepository.fetchProductAll();
@@ -73,34 +78,38 @@ class ProductViewModel extends ChangeNotifier {
   //* PRODUCT EKLEME METHODU
   Future<void> addProductModel(ProductModel productModel) async {
     try {
+      viewState = ProductViewState.BUSY;
       bool result = await _productRepository.addModel(productModel);
-      print('ürün ekleme işlemi -> $result');
     } on Exception catch (e) {
       print(e.toString());
-    } finally {}
+    } finally {
+      viewState = ProductViewState.IDLE;
+    }
   }
 
   //* HESAPLAMA YAPAR VE GERİYE DEĞERİ STRİNG OLARAK DÖNER
   String? calculateNetPrice(String unitPrice, String kdv, String stockPiece) {
-    //* eğer gönderilen birimfiyat veya stok adedi boş ise işlem yapma
+    //* eğer gönderilen birimfiyat veya stok adedi boş ise işlem yapmaz
     if (unitPrice.isEmpty || stockPiece.isEmpty || kdv.isEmpty) {
       totalPrice = '0,00';
       notifyListeners();
     } else if (Validation.moneyValueCheck(unitPrice) == null &&
-        Validation.generealValidation(stockPiece) == null &&
+        Validation.generalValidation(stockPiece) == null &&
         (unitPrice.contains(RegExp(',')) || unitPrice.contains(RegExp('.'))) &&
         !unitPrice.contains(RegExp('[a-zA-Z]'))) {
       //* Verilen birim fiyatı  doubleFromString ile noktasız yapıyor ve virgül var ise yerine nokta getiriyor ve double değere dönüştürüyor
-      double _unitPrice =
-          double.parse(unitPrice.doubleFromString().replaceAll(',', '.'));
+      double _unitPrice = double.parse(unitPrice.doubleFromString().replaceAll(',', '.'));
       double _kdv = double.parse(kdv) / 100;
       double _stockPiece = double.parse(stockPiece);
 
-      double resultDouble = CalculationOperations.calculateNetPrice(
-          _unitPrice, _stockPiece, _kdv);
+      double resultDouble = CalculationOperations.calculateNetPrice(_unitPrice, _stockPiece, _kdv);
 
-      String resultString = CurrencyFormatter.instance()
-          .moneyValueCheck(resultDouble.toString().replaceAll('.', ','));
+      String resultString = CurrencyFormatter.instance().moneyValueCheck(resultDouble.toString().replaceAll('.', ','));
+
+      // virgülden sonraki rakam bir ise 0 ekler
+      if (resultString.split(',').last.length == 1) {
+        resultString = '${resultString}0';
+      }
 
       totalPrice = resultString;
       notifyListeners();
@@ -132,3 +141,5 @@ class ProductViewModel extends ChangeNotifier {
     return _categoryRepository.fetchCategoryNameList();
   }
 }
+
+enum ProductViewState { IDLE, BUSY }

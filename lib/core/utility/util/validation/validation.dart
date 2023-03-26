@@ -1,6 +1,6 @@
 class Validation {
   /// inputun boş olup olmadığını kontrol eder, boş değilse `null` döndürür.
-  static String? generealValidation(String? value) {
+  static String? generalValidation(String? value) {
     if (value == null || value.isEmpty) {
       return 'Lütfen bir değer giriniz';
     }
@@ -13,8 +13,7 @@ class Validation {
   static String? moneyValueCheck(String? moneyValue) {
     if (moneyValue == null || moneyValue.isEmpty) {
       return 'Lütfen birim fiyatı giriniz';
-    } else if (!moneyValue.contains(RegExp(r'[0-9]')) &&
-            !moneyValue.contains(RegExp('.,')) ||
+    } else if (!moneyValue.contains(RegExp(r'[0-9]')) && !moneyValue.contains(RegExp('.,')) ||
         moneyValue.contains(RegExp('[a-zA-Z]'))) {
       return 'ondalıklı giriniz';
     }
