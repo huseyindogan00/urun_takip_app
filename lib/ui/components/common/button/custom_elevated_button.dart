@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:urun_takip_app/core/constant/size/custom_size.dart';
-import 'package:urun_takip_app/ui/pages/product/viewModel/product_view_model.dart';
+import 'package:urun_takip_app/ui/view_model/product_view_model/product_view_model.dart';
 
 class CustomElevatedButton extends StatelessWidget {
-  CustomElevatedButton({
-    super.key,
-    required this.onPressed,
-    required this.text,
-    this.radius = 10,
-    required this.height,
-    this.width,
-    this.isConfirm = true,
-    this.buttonStyle,
-  });
+  CustomElevatedButton(
+      {super.key,
+      required this.onPressed,
+      required this.text,
+      this.radius = 10,
+      required this.height,
+      this.width,
+      this.isConfirm = true,
+      this.buttonStyle,
+      this.isCircularProgressIndicator = false});
 
   final Function onPressed;
   final String text;
@@ -22,6 +22,7 @@ class CustomElevatedButton extends StatelessWidget {
   double? width;
   bool isConfirm;
   final ButtonStyle? buttonStyle;
+  bool isCircularProgressIndicator;
 
   @override
   Widget build(BuildContext context) {
@@ -42,12 +43,12 @@ class CustomElevatedButton extends StatelessWidget {
               ),
             ),
         onPressed: () async => onPressed(),
-        child: context.watch<ProductViewModel>().viewState == ProductViewState.IDLE
-            ? Text(
+        child: context.watch<ProductViewModel>().viewState == ProductViewState.BUSY && isCircularProgressIndicator
+            ? CircularProgressIndicator(color: Colors.grey.shade300)
+            : Text(
                 text,
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(color: Colors.white),
-              )
-            : CircularProgressIndicator(color: Colors.grey.shade300),
+              ),
       ),
     );
   }

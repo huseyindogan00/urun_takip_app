@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:urun_takip_app/core/constant/text/app_text.dart';
 import 'package:urun_takip_app/data/models/product_model.dart';
 import 'package:urun_takip_app/ui/components/common/custom_appbar_widget.dart';
-import 'package:urun_takip_app/ui/pages/product/viewModel/product_view_model.dart';
+import 'package:urun_takip_app/ui/view_model/product_view_model/product_view_model.dart';
 import 'package:urun_takip_app/ui/widget/product_stock_widget.dart';
 
 class ProductStockStatusView extends StatefulWidget {
@@ -29,7 +29,7 @@ class _ProductStockStatusViewState extends State<ProductStockStatusView> {
       appBar: CustomAppbarWidget(title: AppText.urunStokDurumu),
       body: Container(
         padding: const EdgeInsets.all(10.0),
-        color: Color.fromARGB(255, 85, 85, 85),
+        color: const Color.fromARGB(255, 85, 85, 85),
         child: Column(
           children: [
             Expanded(
@@ -40,6 +40,13 @@ class _ProductStockStatusViewState extends State<ProductStockStatusView> {
                     return Center(
                       child: CircularProgressIndicator(
                         color: Colors.grey.shade300,
+                      ),
+                    );
+                  } else if (snapshot.data!.isEmpty) {
+                    return Center(
+                      child: Text(
+                        'Ürün Listesi Boş',
+                        style: Theme.of(context).textTheme.headlineSmall!.copyWith(color: Colors.grey.shade200),
                       ),
                     );
                   } else {

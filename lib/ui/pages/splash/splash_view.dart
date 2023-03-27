@@ -4,7 +4,6 @@ import 'package:urun_takip_app/core/constant/images/const_image.dart';
 import 'package:urun_takip_app/core/constant/text/const_appbar_text.dart';
 import 'package:urun_takip_app/ui/components/common/lottie_custom_widget.dart';
 import 'package:urun_takip_app/ui/pages/home/home_page.dart';
-import 'package:urun_takip_app/ui/pages/product/viewModel/product_view_model.dart';
 import 'package:urun_takip_app/ui/pages/splash/splash_view_model.dart';
 
 class SplashView extends StatefulWidget {

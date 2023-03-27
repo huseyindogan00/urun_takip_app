@@ -9,23 +9,21 @@ class CurrencyFormatter {
     return _instance;
   }
 
-  /// Verilen String tipindeki para biriminin nokta ve virgüllerini ayırarak String tipinde değeri döndürür.
+  /// Kullanıcıdan yeni alınan String tipindeki TR para biriminin nokta ve virgüllerini ayırarak tekrar hesaplar ve String tipinde değeri döndürür.
   ///
   /// Örneğin:
   ///
   /// String value = '123456'
-  ///
   /// var result = moneyValueCheck(value);
-  ///
   /// result -> 123.456
-  ///
   /// -------------------------
-  ///
   /// String value = '123456,1234'
-  ///
   /// var result = moneyValueCheck(value);
-  ///
   /// result -> 123.456,12
+  /// -------------------------
+  /// String value = '123456'
+  /// var result = moneyValueCheck(value);
+  /// result -> 123.456,00
   String moneyValueCheck(String? moneyValue) {
     String newValue = '';
     List<String> moneyValueList;
@@ -40,23 +38,28 @@ class CurrencyFormatter {
             moneyValueList.removeLast();
           }
           newValue = _currencyFormatFromListString(moneyValueList);
-          return newValue;
         } else {
           //* birden fazla virgül yazıldığında
           moneyValueList.removeLast();
           for (var element in moneyValueList) {
             newValue += element;
           }
-          return newValue;
         }
       } else {
-        moneyValue = _currencyFormatFromListString(moneyValueList);
+        newValue = _currencyFormatFromListString(moneyValueList);
       }
     }
-    return moneyValue!;
+
+    // virgülden sonraki rakam bir ise 0 ekle
+    if (newValue.split(',').last.length == 1) newValue = '${newValue}0';
+    // eğer virgül yok ise sonuna 00 ekle
+    if (!newValue.contains(',')) newValue.split('').insert(newValue.length, ',00');
+
+    return newValue;
   }
 
-  //* Verilen String listesindeki sayıları 3'erli gruplara ayırarak kaç tane nokta koyulacağını tespit ediyor
+  //* Verilen String listesindeki sayıları 3'erli gruplara ayırarak
+  //* kaç tane nokta koyulacağını tespit ediyor
   String _currencyFormatFromListString(List<String> valueList) {
     int moneyCount = 0;
     String newValue = '';

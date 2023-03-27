@@ -29,6 +29,7 @@ class ProductViewModel extends ChangeNotifier {
   String totalPrice = '0,00';
   XFile? productImageFilePath;
 
+  //* STOKTA BULUNAN TÜM ÜRÜNLERİ GETİR
   Stream<List<ProductModel>> fetchProductAll() {
     return _productRepository.fetchProductAll();
   }
@@ -89,7 +90,7 @@ class ProductViewModel extends ChangeNotifier {
 
   //* HESAPLAMA YAPAR VE GERİYE DEĞERİ STRİNG OLARAK DÖNER
   String? calculateNetPrice(String unitPrice, String kdv, String stockPiece) {
-    //* eğer gönderilen birimfiyat veya stok adedi boş ise işlem yapmaz
+    // eğer gönderilen birimfiyat veya stok adedi boş ise işlem yapmaz
     if (unitPrice.isEmpty || stockPiece.isEmpty || kdv.isEmpty) {
       totalPrice = '0,00';
       notifyListeners();
@@ -97,19 +98,13 @@ class ProductViewModel extends ChangeNotifier {
         Validation.generalValidation(stockPiece) == null &&
         (unitPrice.contains(RegExp(',')) || unitPrice.contains(RegExp('.'))) &&
         !unitPrice.contains(RegExp('[a-zA-Z]'))) {
-      //* Verilen birim fiyatı  doubleFromString ile noktasız yapıyor ve virgül var ise yerine nokta getiriyor ve double değere dönüştürüyor
-      double _unitPrice = double.parse(unitPrice.doubleFromString().replaceAll(',', '.'));
+      // Verilen birim fiyatı convertFromStringToDouble ile TR para birimini String tipden double tipe çevirir 1.023,12 => 1023.12
+      double _unitPrice = unitPrice.convertFromStringToDouble();
       double _kdv = double.parse(kdv) / 100;
       double _stockPiece = double.parse(stockPiece);
 
       double resultDouble = CalculationOperations.calculateNetPrice(_unitPrice, _stockPiece, _kdv);
-
       String resultString = CurrencyFormatter.instance().moneyValueCheck(resultDouble.toString().replaceAll('.', ','));
-
-      // virgülden sonraki rakam bir ise 0 ekler
-      if (resultString.split(',').last.length == 1) {
-        resultString = '${resultString}0';
-      }
 
       totalPrice = resultString;
       notifyListeners();

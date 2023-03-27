@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:urun_takip_app/core/constant/size/custom_size.dart';
 import 'package:urun_takip_app/data/models/category_json.dart';
-import 'package:urun_takip_app/ui/pages/product/viewModel/product_view_model.dart';
+import 'package:urun_takip_app/ui/view_model/product_view_model/product_view_model.dart';
 
 ///Belirlenen kategoriye göre
 class CustomCategoryDropdownButton extends StatelessWidget {

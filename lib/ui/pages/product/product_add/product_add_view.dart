@@ -19,7 +19,7 @@ import 'package:urun_takip_app/ui/components/common/custom_appbar_widget.dart';
 import 'package:urun_takip_app/ui/components/common/custom_dropdown.dart';
 import 'package:urun_takip_app/ui/components/common/dialog/platform_sensitive_alert_dialog.dart';
 import 'package:urun_takip_app/ui/components/form/custom_text_form_field.dart';
-import 'package:urun_takip_app/ui/pages/product/viewModel/product_view_model.dart';
+import 'package:urun_takip_app/ui/view_model/product_view_model/product_view_model.dart';
 import 'package:urun_takip_app/ui/widget/image_view_widget.dart';
 
 class ProductAddView extends StatefulWidget {
@@ -232,6 +232,7 @@ class _ProductAddViewState extends State<ProductAddView> {
         suffix: Image.asset(ConstImage.iconLiraBlackPath, width: 20),
         validator: (newValue) => Validation.moneyValueCheck(newValue),
         onChanged: (String? value) {
+          // Kullanıcının girdiği değeri TR para birimi formatına çevirir
           _unitPriceEditController.text = CurrencyFormatter.instance().moneyValueCheck(value);
           //imleci satır sonuna getirme
           _unitPriceEditController.selection =
@@ -369,6 +370,7 @@ class _ProductAddViewState extends State<ProductAddView> {
 
   CustomElevatedButton _buildAddProduct(BuildContext context) {
     return CustomElevatedButton(
+      isCircularProgressIndicator: true,
       text: 'Ürün Ekle',
       onPressed: () async {
         if (_productViewModel.categoryModel.categoryName == null ||
