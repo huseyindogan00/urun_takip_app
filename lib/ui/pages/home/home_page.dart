@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:urun_takip_app/core/constant/colors/const_application_colors.dart';
 import 'package:urun_takip_app/core/constant/images/const_image.dart';
 import 'package:urun_takip_app/core/constant/text/app_text.dart';
 import 'package:urun_takip_app/ui/components/common/home_card_container.dart';
 import 'package:urun_takip_app/ui/pages/product/product_add/product_add_view.dart';
 import 'package:urun_takip_app/ui/pages/product/product_stock_status/product_stock_status.dart';
+import 'package:urun_takip_app/ui/pages/work/work_history_view.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
@@ -127,7 +127,11 @@ class HomeView extends StatelessWidget {
     return HomeCardContainer(
       iconPath: ConstImage.iconworkHistoryPath,
       onTap: () {
-        print('İş geçmişi tıklandı');
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => WorkHistoryView(),
+            ));
       },
       title: AppText.isGecmisi,
       color: ConstApplicationColors.homeWorkHistoryContainerColor,

@@ -55,7 +55,7 @@ class ProductViewModel extends ChangeNotifier {
     return true;
   }
 
-  //! BURADA İŞLEMLER REPOSİTORYDEN ÇAĞRILACAK. ŞUANLIK MANAGER SINIFI KULLANILIYOR
+  //! BURADA İŞLEMLER REPOSITORYDEN ÇAĞRILACAK. ŞUANLIK MANAGER SINIFI KULLANILIYOR
   Future<bool?> getPhotoFromCamera(BuildContext context) async {
     try {
       XFile? xFile = await ImageAndVideoManager().getPhotoFromCamera();
