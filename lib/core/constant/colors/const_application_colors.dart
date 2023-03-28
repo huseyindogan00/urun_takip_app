@@ -6,7 +6,7 @@ class ConstApplicationColors {
       const Color.fromARGB(255, 196, 197, 200);
   static Color homeAddProductContainerColor =
       const Color.fromARGB(255, 126, 129, 128);
-  static Color homeOrderHistoryContainerColor =
+  static Color homeWorkHistoryContainerColor =
       const Color.fromARGB(255, 104, 105, 109);
   static Color homeSettingsContainerColor =
       const Color.fromARGB(255, 89, 86, 87);

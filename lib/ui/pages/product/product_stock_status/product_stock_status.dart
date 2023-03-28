@@ -26,7 +26,7 @@ class _ProductStockStatusViewState extends State<ProductStockStatusView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppbarWidget(title: AppText.urunStokDurumu),
+      appBar: CustomAppbarWidget(title: AppText.stokDurumu),
       body: Container(
         padding: const EdgeInsets.all(10.0),
         color: const Color.fromARGB(255, 85, 85, 85),
@@ -46,7 +46,10 @@ class _ProductStockStatusViewState extends State<ProductStockStatusView> {
                     return Center(
                       child: Text(
                         'Ürün Listesi Boş',
-                        style: Theme.of(context).textTheme.headlineSmall!.copyWith(color: Colors.grey.shade200),
+                        style: Theme.of(context)
+                            .textTheme
+                            .headlineSmall!
+                            .copyWith(color: Colors.grey.shade200),
                       ),
                     );
                   } else {
@@ -54,7 +57,8 @@ class _ProductStockStatusViewState extends State<ProductStockStatusView> {
                       physics: const AlwaysScrollableScrollPhysics(),
                       itemCount: snapshot.data!.length,
                       itemBuilder: (_, index) {
-                        return ProductStockWidget(productModel: snapshot.data![index]);
+                        return ProductStockWidget(
+                            productModel: snapshot.data![index]);
                       },
                     );
                   }

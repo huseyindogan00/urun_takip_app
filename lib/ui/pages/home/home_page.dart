@@ -62,7 +62,7 @@ class HomeView extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          _buildOrderHistoryContainer(context),
+          _buildWorkHistoryContainer(context),
           _buildSettingsContainer(context),
         ],
       ),
@@ -92,7 +92,7 @@ class HomeView extends StatelessWidget {
               builder: (context) => const ProductStockStatusView(),
             ));
       },
-      title: AppText.urunStokDurumu,
+      title: AppText.stokDurumu,
       color: ConstApplicationColors.homeStockStatusContainerColor,
       height: 150,
       width: 150,
@@ -121,16 +121,16 @@ class HomeView extends StatelessWidget {
   }
 
   //* SİPARİŞ GEÇMİŞİ
-  Widget _buildOrderHistoryContainer(
+  Widget _buildWorkHistoryContainer(
     BuildContext context,
   ) {
     return HomeCardContainer(
-      iconPath: ConstImage.iconOrderHistoryPath,
+      iconPath: ConstImage.iconworkHistoryPath,
       onTap: () {
-        print('Stok geçmişi tıklandı');
+        print('İş geçmişi tıklandı');
       },
-      title: AppText.stokGecmisi,
-      color: ConstApplicationColors.homeOrderHistoryContainerColor,
+      title: AppText.isGecmisi,
+      color: ConstApplicationColors.homeWorkHistoryContainerColor,
       height: 150,
       width: 150,
       borderRadius: 20,
