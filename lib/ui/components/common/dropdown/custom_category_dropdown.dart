@@ -5,8 +5,8 @@ import 'package:urun_takip_app/data/models/category_json.dart';
 import 'package:urun_takip_app/ui/view_model/product_view_model/product_view_model.dart';
 
 ///Belirlenen kategoriye göre
-class CustomCategoryDropdownButton extends StatelessWidget {
-  CustomCategoryDropdownButton({super.key});
+class CustomCategoryDropdown extends StatelessWidget {
+  CustomCategoryDropdown({super.key});
 
   final String _categoriTitle = 'Kategori Seçiniz';
   final String _categorySubTitle = 'Alt Kategori Seçiniz';

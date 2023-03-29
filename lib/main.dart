@@ -6,7 +6,7 @@ import 'package:urun_takip_app/core/constant/theme/theme_app.dart';
 import 'package:urun_takip_app/core/init/locator/global_locator.dart';
 import 'package:urun_takip_app/firebase_options.dart';
 import 'package:urun_takip_app/ui/view_model/product_view_model/product_view_model.dart';
-import 'package:urun_takip_app/ui/pages/splash/splash_view.dart';
+import 'package:urun_takip_app/ui/view/splash/splash_view.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

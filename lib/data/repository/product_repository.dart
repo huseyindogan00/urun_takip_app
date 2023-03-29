@@ -40,7 +40,7 @@ class ProductRepository extends DbBase {
     throw UnimplementedError();
   }
 
-  Stream<List<ProductModel>> fetchProductAll() {
-    return _firestoreDbService.fetchProductAll();
+  Future<List<ProductModel>> fetchProductAll(String categoryName) {
+    return _firestoreDbService.fetchProductAll(categoryName);
   }
 }

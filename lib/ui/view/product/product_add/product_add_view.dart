@@ -16,8 +16,8 @@ import 'package:urun_takip_app/data/models/product_model.dart';
 import 'package:urun_takip_app/ui/components/common/button/custom_elevated_button.dart';
 import 'package:urun_takip_app/ui/components/common/button/custom_elevated_icon_button.dart';
 import 'package:urun_takip_app/ui/components/common/custom_appbar_widget.dart';
-import 'package:urun_takip_app/ui/components/common/custom_dropdown.dart';
 import 'package:urun_takip_app/ui/components/common/dialog/platform_sensitive_alert_dialog.dart';
+import 'package:urun_takip_app/ui/components/common/dropdown/custom_category_dropdown.dart';
 import 'package:urun_takip_app/ui/components/form/custom_text_form_field.dart';
 import 'package:urun_takip_app/ui/view_model/product_view_model/product_view_model.dart';
 import 'package:urun_takip_app/ui/widget/image_view_widget.dart';
@@ -106,7 +106,7 @@ class _ProductAddViewState extends State<ProductAddView> {
             child: Column(
               children: [
                 //KATEGORİLER
-                CustomCategoryDropdownButton(),
+                CustomCategoryDropdown(),
                 CustomSize.betweenWidgetSize,
                 //* AÇIKLAMA
                 _buildComment(),

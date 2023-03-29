@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:urun_takip_app/core/constant/images/const_image.dart';
 import 'package:urun_takip_app/core/constant/size/custom_size.dart';
 
-class CustomAppbarWidget extends StatelessWidget
-    implements PreferredSizeWidget {
+class CustomAppbarWidget extends StatelessWidget implements PreferredSizeWidget {
   CustomAppbarWidget({super.key, required this.title});
   String title;
   double imageWidth = 80;

@@ -30,8 +30,8 @@ class ProductViewModel extends ChangeNotifier {
   XFile? productImageFilePath;
 
   //* STOKTA BULUNAN TÜM ÜRÜNLERİ GETİR
-  Stream<List<ProductModel>> fetchProductAll() {
-    return _productRepository.fetchProductAll();
+  Future<List<ProductModel>> fetchProductAll(String categoryName) {
+    return _productRepository.fetchProductAll(categoryName);
   }
 
   //! BURADA İŞLEMLER REPOSİTORYDEN ÇAĞRILACAK. ŞUANLIK MANAGER SINIFI KULLANILIYOR
@@ -68,7 +68,7 @@ class ProductViewModel extends ChangeNotifier {
     } on PlatformException catch (error) {
       bool? result = await PlatformSensitiveAlertDialog(
         content: error.message.toString(),
-        title: 'Fotoğraf seçerken hata oluştu',
+        title: 'Kameraya bağlanırken hata oluştu',
         doneButtonTitle: 'Tamam',
       ).show(context);
       return result;
@@ -119,6 +119,14 @@ class ProductViewModel extends ChangeNotifier {
     _selectCategoryName = value!;
     _selectCategorySubName = null; // ALT KATEGORİ VALUE DEĞERİ NULL YAPILIYOR
     categoryModel.categoryName = value;
+    notifyListeners();
+  }
+
+  //* STOK DURUM SAYFASINDA KATEGORİ FİLTRELEME
+  String _selectFilterCategoryName = categoryAllMap.keys.first;
+  String? get selectFilterCategoryName => _selectFilterCategoryName;
+  set selectFilterCategoryName(String? value) {
+    _selectFilterCategoryName = value!;
     notifyListeners();
   }
 

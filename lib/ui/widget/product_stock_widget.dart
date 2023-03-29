@@ -5,15 +5,12 @@ import 'package:urun_takip_app/core/constant/text/product_stock_status_text.dart
 import 'package:urun_takip_app/core/utility/util/validation/currency_formatter.dart';
 import 'package:urun_takip_app/data/models/product_model.dart';
 import 'package:urun_takip_app/ui/components/common/button/custom_elevated_button.dart';
-import 'package:urun_takip_app/ui/view_model/product_view_model/product_view_model.dart';
 
 class ProductStockWidget extends StatelessWidget {
   ProductStockWidget({super.key, required this.productModel});
 
   final ProductModel productModel;
-
   late final TextStyle titleStyle;
-
   late final TextStyle contentStyle;
 
   final _decoration = const BoxDecoration(

@@ -37,13 +37,16 @@ class FirestoreDbService extends DbBase {
     throw UnimplementedError();
   }
 
-  Stream<List<ProductModel>> fetchProductAll() {
-    Stream<QuerySnapshot<Map<String, dynamic>>> snapshot = _firebaseFirestore.collection('products').snapshots();
+  Future<List<ProductModel>> fetchProductAll(String categoryName) async {
+    List<ProductModel> _productList = [];
+    QuerySnapshot<Map<String, dynamic>> snapshot =
+        await _firebaseFirestore.collection('products').where('category.categoryName', isEqualTo: categoryName).get();
 
-    Stream<List<ProductModel>> modelList =
-        snapshot.map((event) => event.docs.map((e) => ProductModel.fromMap(e.data())).toList());
+    for (var element in snapshot.docs) {
+      _productList.add(ProductModel.fromMap(element.data()));
+    }
 
-    return modelList;
+    return _productList;
   }
 }
 
