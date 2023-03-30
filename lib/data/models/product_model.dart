@@ -94,7 +94,8 @@ class ProductModel implements BaseModel {
 
   String toJson() => json.encode(toMap());
 
-  factory ProductModel.fromJson(String source) => ProductModel.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory ProductModel.fromJson(String source) =>
+      ProductModel.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
   String toString() {
