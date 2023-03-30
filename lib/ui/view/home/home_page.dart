@@ -15,7 +15,7 @@ class HomeView extends StatelessWidget {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
-        child: const Text('İŞ YAP'),
+        child: const Text('İŞ\nYAP'),
       ),
       backgroundColor: Theme.of(context).primaryColor,
       body: Column(
