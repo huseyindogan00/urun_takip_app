@@ -6,15 +6,9 @@ import 'package:urun_takip_app/data/models/product_model.dart';
 class FirestoreDbService extends DbBase {
   final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
   @override
-  Future<bool> delete(String id) {
-    // TODO: implement delete
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<List<BaseModel>> fetchModel() {
-    // TODO: implement fetchModel
-    throw UnimplementedError();
+  Future<bool?> delete(String productId) async {
+    await _firebaseFirestore.collection(DbCollectionName.products.name).doc(productId).delete();
+    return true;
   }
 
   @override
@@ -37,7 +31,8 @@ class FirestoreDbService extends DbBase {
     throw UnimplementedError();
   }
 
-  Future<List<ProductModel>> fetchProductAll(String categoryName) async {
+  @override
+  Future<List<BaseModel>> fetchProductByCategory(String categoryName) async {
     List<ProductModel> _productList = [];
     QuerySnapshot<Map<String, dynamic>> snapshot =
         await _firebaseFirestore.collection('products').where('category.categoryName', isEqualTo: categoryName).get();

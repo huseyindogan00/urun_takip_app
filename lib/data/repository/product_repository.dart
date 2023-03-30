@@ -10,15 +10,11 @@ class ProductRepository extends DbBase {
   final FirestoreDbService _firestoreDbService = FirestoreDbService();
   final FirebaseStorageServise _firebaseStorageServise = FirebaseStorageServise();
   @override
-  Future<bool> delete(String id) {
-    // TODO: implement delete
-    throw UnimplementedError();
-  }
+  Future<bool> delete(String productId) async {
+    await _firebaseStorageServise.deleteFile(productId);
+    await _firestoreDbService.delete(productId);
 
-  @override
-  Future<List<BaseModel>> fetchModel() {
-    // TODO: implement fetchModel
-    throw UnimplementedError();
+    return true;
   }
 
   @override
@@ -40,7 +36,8 @@ class ProductRepository extends DbBase {
     throw UnimplementedError();
   }
 
-  Future<List<ProductModel>> fetchProductAll(String categoryName) {
-    return _firestoreDbService.fetchProductAll(categoryName);
+  @override
+  Future<List<BaseModel>> fetchProductByCategory(String categoryName) {
+    return _firestoreDbService.fetchProductByCategory(categoryName);
   }
 }

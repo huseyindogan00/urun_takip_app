@@ -7,6 +7,8 @@ import 'package:urun_takip_app/core/utility/util/calc/calculation_operations.dar
 import 'package:urun_takip_app/core/utility/util/manager/image_and_video_manager.dart';
 import 'package:urun_takip_app/core/utility/util/validation/currency_formatter.dart';
 import 'package:urun_takip_app/core/utility/util/validation/validation.dart';
+import 'package:urun_takip_app/data/base/db_base.dart';
+import 'package:urun_takip_app/data/models/base_model.dart';
 import 'package:urun_takip_app/data/repository/category_repository.dart';
 import 'package:urun_takip_app/data/models/category_json.dart';
 import 'package:urun_takip_app/data/models/product_model.dart';
@@ -14,7 +16,7 @@ import 'package:urun_takip_app/data/repository/product_repository.dart';
 import 'package:urun_takip_app/ui/components/common/dialog/platform_sensitive_alert_dialog.dart';
 import 'package:urun_takip_app/data/models/category_model.dart';
 
-class ProductViewModel extends ChangeNotifier {
+class ProductViewModel extends ChangeNotifier implements DbBase {
   final CategoryRepository _categoryRepository = locator<CategoryRepository>();
   final ProductRepository _productRepository = locator<ProductRepository>();
   late CategoryModel categoryModel = CategoryModel();
@@ -29,10 +31,38 @@ class ProductViewModel extends ChangeNotifier {
   String totalPrice = '0,00';
   XFile? productImageFilePath;
 
+  // ******************************************SERVİS KATMANI
   //* STOKTA BULUNAN TÜM ÜRÜNLERİ GETİR
-  Future<List<ProductModel>> fetchProductAll(String categoryName) {
-    return _productRepository.fetchProductAll(categoryName);
+  @override
+  Future<List<BaseModel>> fetchProductByCategory(String categoryName) async {
+    return _productRepository.fetchProductByCategory(categoryName);
   }
+
+  //* PRODUCT EKLEME METHODU
+  @override
+  Future<bool?> addModel(BaseModel model) async {
+    try {
+      viewState = ProductViewState.BUSY;
+      bool result = await _productRepository.addModel(model);
+    } on Exception catch (_) {
+    } finally {
+      viewState = ProductViewState.IDLE;
+    }
+  }
+
+//* PRODUCT SİLME METHODU
+  @override
+  Future<bool?> delete(String productId) async {
+    await _productRepository.delete(productId);
+  }
+
+  @override
+  Future<bool> update(BaseModel model) {
+    // TODO: implement update
+    throw UnimplementedError();
+  }
+
+  /// ****************************************************************************************************
 
   //! BURADA İŞLEMLER REPOSİTORYDEN ÇAĞRILACAK. ŞUANLIK MANAGER SINIFI KULLANILIYOR
   Future<bool?> getPhotoFromGallery(BuildContext context) async {
@@ -74,18 +104,6 @@ class ProductViewModel extends ChangeNotifier {
       return result;
     }
     return true;
-  }
-
-  //* PRODUCT EKLEME METHODU
-  Future<void> addProductModel(ProductModel productModel) async {
-    try {
-      viewState = ProductViewState.BUSY;
-      bool result = await _productRepository.addModel(productModel);
-    } on Exception catch (e) {
-      print(e.toString());
-    } finally {
-      viewState = ProductViewState.IDLE;
-    }
   }
 
   //* HESAPLAMA YAPAR VE GERİYE DEĞERİ STRİNG OLARAK DÖNER

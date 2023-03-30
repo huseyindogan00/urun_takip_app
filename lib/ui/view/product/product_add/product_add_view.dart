@@ -393,7 +393,7 @@ class _ProductAddViewState extends State<ProductAddView> {
               photoPath: _productViewModel.productImageFilePath?.path,
               createDate: DateTime.now(),
             );
-            await _productViewModel.addProductModel(productModel);
+            await _productViewModel.addModel(productModel);
             if (mounted) Navigator.pop(context);
           }
         }
