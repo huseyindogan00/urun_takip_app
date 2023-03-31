@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:urun_takip_app/core/constant/text/app_text.dart';
 import 'package:urun_takip_app/data/models/base_model.dart';
-import 'package:urun_takip_app/data/models/category_json.dart';
 import 'package:urun_takip_app/data/models/product_model.dart';
 import 'package:urun_takip_app/ui/components/common/custom_appbar_widget.dart';
 import 'package:urun_takip_app/ui/components/common/dialog/platform_sensitive_alert_dialog.dart';
@@ -40,13 +39,16 @@ class _ProductStockStatusViewState extends State<ProductStockStatusView> {
             CustomFilterDropdownWidget(),
             Expanded(
               child: FutureBuilder<List<BaseModel>>(
-                future: _productViewModel
-                    .fetchProductByCategory(context.watch<ProductViewModel>().selectFilterCategoryName!),
+                future: _productViewModel.fetchProductByCategory(context
+                    .watch<ProductViewModel>()
+                    .selectFilterCategoryName!),
                 builder: (context, snapshot) {
-                  if (!snapshot.hasData || snapshot.connectionState == ConnectionState.waiting) {
+                  if (!snapshot.hasData ||
+                      snapshot.connectionState == ConnectionState.waiting) {
                     return _buildProgress();
                   } else {
-                    List<ProductModel> _productModel = snapshot.data as List<ProductModel>;
+                    List<ProductModel> _productModel =
+                        snapshot.data as List<ProductModel>;
                     if (_productModel.isEmpty) {
                       return _buildProductEmpty(context);
                     } else {
@@ -74,12 +76,16 @@ class _ProductStockStatusViewState extends State<ProductStockStatusView> {
     return Center(
       child: Text(
         'Ürün Listesi Boş',
-        style: Theme.of(context).textTheme.headlineSmall!.copyWith(color: Colors.grey.shade200),
+        style: Theme.of(context)
+            .textTheme
+            .headlineSmall!
+            .copyWith(color: Colors.grey.shade200),
       ),
     );
   }
 
-  ListView _buildListProduct(List<ProductModel> _productModel, BuildContext context) {
+  ListView _buildListProduct(
+      List<ProductModel> _productModel, BuildContext context) {
     return ListView.builder(
       physics: const AlwaysScrollableScrollPhysics(),
       itemCount: _productModel.length,

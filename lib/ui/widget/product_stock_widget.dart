@@ -5,6 +5,7 @@ import 'package:urun_takip_app/core/constant/text/product_stock_status_text.dart
 import 'package:urun_takip_app/core/utility/util/validation/currency_formatter.dart';
 import 'package:urun_takip_app/data/models/product_model.dart';
 import 'package:urun_takip_app/ui/components/common/button/custom_elevated_button.dart';
+import 'package:urun_takip_app/ui/view/product/product_add/product_add_view.dart';
 
 class ProductStockWidget extends StatelessWidget {
   ProductStockWidget({super.key, required this.productModel});
@@ -51,27 +52,32 @@ class ProductStockWidget extends StatelessWidget {
           const SizedBox(height: 10),
           Divider(color: Colors.grey.shade600, indent: 10, endIndent: 10),
           const SizedBox(height: 10),
-          _buildUpdateAndDoWorkButton(),
+          _buildUpdateAndDoWorkButton(context),
         ],
       ),
     );
   }
 
-  Row _buildUpdateAndDoWorkButton() {
+  Row _buildUpdateAndDoWorkButton(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
         CustomElevatedButton(
           buttonStyle: ElevatedButton.styleFrom(
-              backgroundColor: Colors.grey.shade500, textStyle: const TextStyle(color: Colors.black)),
-          onPressed: () {},
+              backgroundColor: Colors.grey.shade500,
+              textStyle: const TextStyle(color: Colors.black)),
+          onPressed: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (contex) => ProductAddView()));
+          },
           text: 'Güncelle',
           height: 40,
           width: 120,
         ),
         CustomElevatedButton(
           buttonStyle: ElevatedButton.styleFrom(
-              backgroundColor: Colors.grey.shade900, textStyle: const TextStyle(color: Colors.black)),
+              backgroundColor: Colors.grey.shade900,
+              textStyle: const TextStyle(color: Colors.black)),
           onPressed: () {},
           text: 'İş Yap',
           height: 40,
@@ -131,15 +137,15 @@ class ProductStockWidget extends StatelessWidget {
         Row(
           children: [
             Text(ProductStockStatusText.adet, style: titleStyle),
-            Text(productModel.stockPiece.toInt().toString(), style: contentStyle),
+            Text(productModel.stockPiece.toInt().toString(),
+                style: contentStyle),
           ],
         ),
         Row(
           children: [
             Text(ProductStockStatusText.birimFiyati, style: titleStyle),
             Text(
-                CurrencyFormatter.instance().moneyValueCheck(productModel.unitPrice.toString().replaceAll('.', ',')) +
-                    ' ₺',
+                '${CurrencyFormatter.instance().moneyValueCheck(productModel.unitPrice.toString().replaceAll('.', ','))} ₺',
                 style: contentStyle),
           ],
         ),
@@ -154,13 +160,17 @@ class ProductStockWidget extends StatelessWidget {
         Row(
           children: [
             Text(ProductStockStatusText.kdv, style: titleStyle),
-            Text(' % ${productModel.kdv.toInt().toString()}', style: contentStyle),
+            Text(' % ${productModel.kdv.toInt().toString()}',
+                style: contentStyle),
           ],
         ),
         Wrap(
           children: [
             Text(ProductStockStatusText.aciklama, style: titleStyle),
-            Text(productModel.title, style: contentStyle, overflow: TextOverflow.ellipsis, maxLines: 2),
+            Text(productModel.title,
+                style: contentStyle,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 2),
           ],
         ),
       ],

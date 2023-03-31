@@ -11,7 +11,6 @@ import 'package:urun_takip_app/data/base/db_base.dart';
 import 'package:urun_takip_app/data/models/base_model.dart';
 import 'package:urun_takip_app/data/repository/category_repository.dart';
 import 'package:urun_takip_app/data/models/category_json.dart';
-import 'package:urun_takip_app/data/models/product_model.dart';
 import 'package:urun_takip_app/data/repository/product_repository.dart';
 import 'package:urun_takip_app/ui/components/common/dialog/platform_sensitive_alert_dialog.dart';
 import 'package:urun_takip_app/data/models/category_model.dart';
@@ -38,7 +37,7 @@ class ProductViewModel extends ChangeNotifier implements DbBase {
     return _productRepository.fetchProductByCategory(categoryName);
   }
 
-  //* PRODUCT EKLEME METHODU
+  //* PRODUCT   EKLEME METHODU
   @override
   Future<bool?> addModel(BaseModel model) async {
     try {
@@ -121,8 +120,10 @@ class ProductViewModel extends ChangeNotifier implements DbBase {
       double _kdv = double.parse(kdv) / 100;
       double _stockPiece = double.parse(stockPiece);
 
-      double resultDouble = CalculationOperations.calculateNetPrice(_unitPrice, _stockPiece, _kdv);
-      String resultString = CurrencyFormatter.instance().moneyValueCheck(resultDouble.toString().replaceAll('.', ','));
+      double resultDouble = CalculationOperations.calculateNetPrice(
+          _unitPrice, _stockPiece, _kdv);
+      String resultString = CurrencyFormatter.instance()
+          .moneyValueCheck(resultDouble.toString().replaceAll('.', ','));
 
       totalPrice = resultString;
       notifyListeners();
@@ -131,7 +132,7 @@ class ProductViewModel extends ChangeNotifier implements DbBase {
   }
 
   //* KATEGORİ LİSTESİNDEKİ BAŞLIKLAR
-  String _selectCategoryName = categoryAllMap.keys.first;
+  String? _selectCategoryName = categoryAllMap.keys.first;
   String? get selectCategoryName => _selectCategoryName;
   set selectCategoryName(String? value) {
     _selectCategoryName = value!;
@@ -155,6 +156,10 @@ class ProductViewModel extends ChangeNotifier implements DbBase {
     _selectCategorySubName = value!;
     categoryModel.categorySubName = value;
     notifyListeners();
+  }
+
+  defaultProductAddView() {
+    _selectCategoryName = null;
   }
 
   //* KATEGORİLERİ VERİTABANINDAN VEYA LOCALDEN GETİRİR
