@@ -1,4 +1,5 @@
 Map<String, List<String>> categoryAllMap = {
+  'Tümü': ['Kategori Tümü Olamaz'],
   'Teknoloji Ürünleri': [
     'Akıllı Saatler',
     'Ateşölçer',

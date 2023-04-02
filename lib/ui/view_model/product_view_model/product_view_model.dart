@@ -29,12 +29,23 @@ class ProductViewModel extends ChangeNotifier implements DbBase {
 
   String totalPrice = '0,00';
   XFile? productImageFilePath;
+  bool allFetchProduct = false;
 
   // ******************************************SERVİS KATMANI
   //* STOKTA BULUNAN TÜM ÜRÜNLERİ GETİR
+  /// Verilen filtreye göre Kategorinin hepsini yada belirtilen kategoriyi getirir.
   @override
-  Future<List<BaseModel>> fetchProductByCategory(String categoryName) async {
-    return _productRepository.fetchProductByCategory(categoryName);
+  Future<List<BaseModel>> fetchProductByCategory(String categoryFilterName) async {
+    if (categoryFilterName == 'Tümü') {
+      return await fetchProductAll();
+    } else {
+      return await _productRepository.fetchProductByCategory(categoryFilterName);
+    }
+  }
+
+  @override
+  Future<List<BaseModel>> fetchProductAll() async {
+    return await _productRepository.fetchProductAll();
   }
 
   //* PRODUCT   EKLEME METHODU
@@ -120,10 +131,9 @@ class ProductViewModel extends ChangeNotifier implements DbBase {
       double _kdv = double.parse(kdv) / 100;
       double _stockPiece = double.parse(stockPiece);
 
-      double resultDouble = CalculationOperations.calculateNetPrice(
-          _unitPrice, _stockPiece, _kdv);
-      String resultString = CurrencyFormatter.instance()
-          .moneyValueCheck(resultDouble.toString().replaceAll('.', ','));
+      double resultDouble = CalculationOperations.calculateNetPrice(_unitPrice, _stockPiece, _kdv);
+      String resultString =
+          CurrencyFormatter.instance().moneyValueCheck(resultDouble.toString().convertFromDoubleToString());
 
       totalPrice = resultString;
       notifyListeners();
@@ -141,20 +151,20 @@ class ProductViewModel extends ChangeNotifier implements DbBase {
     notifyListeners();
   }
 
-  //* STOK DURUM SAYFASINDA KATEGORİ FİLTRELEME
-  String _selectFilterCategoryName = categoryAllMap.keys.first;
-  String? get selectFilterCategoryName => _selectFilterCategoryName;
-  set selectFilterCategoryName(String? value) {
-    _selectFilterCategoryName = value!;
-    notifyListeners();
-  }
-
   //* KATEGORİ LİSTESİNDE ALT BAŞLIKLAR
   String? _selectCategorySubName;
   String? get selectCategorySubName => _selectCategorySubName;
   set selectCategorySubName(String? value) {
     _selectCategorySubName = value!;
     categoryModel.categorySubName = value;
+    notifyListeners();
+  }
+
+  //* STOK DURUM SAYFASINDA KATEGORİ FİLTRELEME
+  String _selectFilterCategoryName = categoryAllMap.keys.first;
+  String? get selectFilterCategoryName => _selectFilterCategoryName;
+  set selectFilterCategoryName(String? value) {
+    _selectFilterCategoryName = value!;
     notifyListeners();
   }
 
@@ -165,6 +175,12 @@ class ProductViewModel extends ChangeNotifier implements DbBase {
   //* KATEGORİLERİ VERİTABANINDAN VEYA LOCALDEN GETİRİR
   List<String> fetchCategoryNameList() {
     return _categoryRepository.fetchCategoryNameList();
+  }
+
+  Future<void> refresh() async {
+    viewState = ProductViewState.BUSY;
+    //! YENİLE YAPIP YAPMADIĞI KONTROL EDİLECEK
+    viewState = ProductViewState.IDLE;
   }
 }
 

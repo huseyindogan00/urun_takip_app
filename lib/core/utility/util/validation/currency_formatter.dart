@@ -50,11 +50,6 @@ class CurrencyFormatter {
       }
     }
 
-    // virgülden sonraki rakam bir ise 0 ekle
-    if (newValue.split(',').last.length == 1) newValue = '${newValue}0';
-    // eğer virgül yok ise sonuna 00 ekle
-    if (!newValue.contains(',')) newValue.split('').insert(newValue.length, ',00');
-
     return newValue;
   }
 

@@ -10,22 +10,38 @@ extension StringExtension on String {
     while (valueList.contains('.')) {
       valueList.remove('.');
     }
+
     for (var element in valueList) {
       value += element;
     }
     return double.parse(value.replaceAll(',', '.'));
   }
 
-  /* /// double tipten para birimine çevir
-  String convertFromDoubleToTurkeyCurrency() {
-    String newValue = '';
-    //int length = this.lastIndexOf('.');
-    List<String> value = this.replaceAll('.', ',').split('');
-    for (var element in value) {
-      newValue += element;
+  /// Double değerin ondalık değerini virgül ile ayırır ve String olarak geri döner
+  /// 1023.12 => 1023,12
+  String convertFromDoubleToString() {
+    List<String> valueList;
+    String value = '';
+
+    // ondalıklı bir sayıysa
+    if (this.contains('.')) {
+      valueList = this.replaceAll('.', ',').split(''); // 1023,12
+
+      // eğer virgülden sonraki rakam bir ise 0 ekle
+      if (valueList.length - 1 - valueList.indexOf(',') == 1) {
+        valueList.insert(valueList.length, '0');
+      }
+    } else {
+      valueList = this.split('');
+      valueList.insert(valueList.length, ',00');
     }
-    return newValue;
-  } */
+
+    for (var element in valueList) {
+      value += element;
+    }
+
+    return value;
+  }
 
   /// Verilen fotoğraf adres yolunda fotoğraf ismini id ile değiştirir
   String createPhotoName(String id) {

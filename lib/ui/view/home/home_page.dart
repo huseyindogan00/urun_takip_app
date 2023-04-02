@@ -3,8 +3,8 @@ import 'package:urun_takip_app/core/constant/colors/const_application_colors.dar
 import 'package:urun_takip_app/core/constant/images/const_image.dart';
 import 'package:urun_takip_app/core/constant/text/app_text.dart';
 import 'package:urun_takip_app/ui/components/common/home_card_container.dart';
-import 'package:urun_takip_app/ui/view/product/product_add/product_add_view.dart';
-import 'package:urun_takip_app/ui/view/product/product_stock_status/product_stock_status.dart';
+import 'package:urun_takip_app/ui/view/product/product_add_view.dart';
+import 'package:urun_takip_app/ui/view/product/product_stock_status_view.dart';
 import 'package:urun_takip_app/ui/view/work/work_history_view.dart';
 
 class HomeView extends StatelessWidget {

@@ -43,6 +43,19 @@ class FirestoreDbService extends DbBase {
 
     return _productList;
   }
+
+  @override
+  Future<List<BaseModel>> fetchProductAll() async {
+    List<ProductModel> _productModel = [];
+    QuerySnapshot<Map<String, dynamic>> snapshot = await _firebaseFirestore
+        .collection(DbCollectionName.products.name)
+        .orderBy('createDate', descending: true)
+        .get();
+    for (var element in snapshot.docs) {
+      _productModel.add(ProductModel.fromMap(element.data()));
+    }
+    return _productModel;
+  }
 }
 
 enum DbCollectionName { products, categories, tokens, works }

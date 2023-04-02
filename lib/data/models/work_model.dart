@@ -11,6 +11,8 @@ class WorkModel implements BaseModel {
   ProductModel productModel; // ÜRÜN
   double productPiece; // ÜRÜN ADEDİ
   double totalPrice; // TOPLAM TUTAR
+  bool isCargoStatus; // KARGO DURUMU
+  String? cargoAddress; // KARGO ADRESİ
   dynamic orderDate; // SATIŞ TARİHİ
   WorkModel({
     this.id,
@@ -18,6 +20,8 @@ class WorkModel implements BaseModel {
     required this.productModel,
     required this.productPiece,
     required this.totalPrice,
+    required this.isCargoStatus,
+    this.cargoAddress,
     required this.orderDate,
   });
 
@@ -27,6 +31,8 @@ class WorkModel implements BaseModel {
     ProductModel? productModel,
     double? productPiece,
     double? totalPrice,
+    bool? isCargoStatus,
+    String? cargoAddress,
     dynamic? orderDate,
   }) {
     return WorkModel(
@@ -35,6 +41,8 @@ class WorkModel implements BaseModel {
       productModel: productModel ?? this.productModel,
       productPiece: productPiece ?? this.productPiece,
       totalPrice: totalPrice ?? this.totalPrice,
+      isCargoStatus: isCargoStatus ?? this.isCargoStatus,
+      cargoAddress: cargoAddress ?? this.cargoAddress,
       orderDate: orderDate ?? this.orderDate,
     );
   }
@@ -46,6 +54,8 @@ class WorkModel implements BaseModel {
       'productModel': productModel.toMap(),
       'productPiece': productPiece,
       'totalPrice': totalPrice,
+      'isCargoStatus': isCargoStatus,
+      'cargoAddress': cargoAddress,
       'orderDate': orderDate,
     };
   }
@@ -57,6 +67,8 @@ class WorkModel implements BaseModel {
       productModel: ProductModel.fromMap(map['productModel'] as Map<String, dynamic>),
       productPiece: map['productPiece'] as double,
       totalPrice: map['totalPrice'] as double,
+      isCargoStatus: map['isCargoStatus'] as bool,
+      cargoAddress: map['cargoAddress'] != null ? map['cargoAddress'] as String : null,
       orderDate: map['orderDate'] as dynamic,
     );
   }
@@ -67,7 +79,7 @@ class WorkModel implements BaseModel {
 
   @override
   String toString() {
-    return 'WorkModel(id: $id, companyName: $companyName, productModel: $productModel, productPiece: $productPiece, totalPrice: $totalPrice, orderDate: $orderDate)';
+    return 'WorkModel(id: $id, companyName: $companyName, productModel: $productModel, productPiece: $productPiece, totalPrice: $totalPrice, isCargoStatus: $isCargoStatus, cargoAddress: $cargoAddress, orderDate: $orderDate)';
   }
 
   @override
@@ -79,6 +91,8 @@ class WorkModel implements BaseModel {
         other.productModel == productModel &&
         other.productPiece == productPiece &&
         other.totalPrice == totalPrice &&
+        other.isCargoStatus == isCargoStatus &&
+        other.cargoAddress == cargoAddress &&
         other.orderDate == orderDate;
   }
 
@@ -89,6 +103,8 @@ class WorkModel implements BaseModel {
         productModel.hashCode ^
         productPiece.hashCode ^
         totalPrice.hashCode ^
+        isCargoStatus.hashCode ^
+        cargoAddress.hashCode ^
         orderDate.hashCode;
   }
 }

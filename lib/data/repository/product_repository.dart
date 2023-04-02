@@ -40,4 +40,9 @@ class ProductRepository extends DbBase {
   Future<List<BaseModel>> fetchProductByCategory(String categoryName) {
     return _firestoreDbService.fetchProductByCategory(categoryName);
   }
+
+  @override
+  Future<List<BaseModel>> fetchProductAll() async {
+    return await _firestoreDbService.fetchProductAll();
+  }
 }

@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:urun_takip_app/core/constant/images/const_image.dart';
 import 'package:urun_takip_app/core/constant/size/custom_size.dart';
 import 'package:urun_takip_app/core/constant/text/product_stock_status_text.dart';
+import 'package:urun_takip_app/core/utility/extension/string_extension.dart';
 import 'package:urun_takip_app/core/utility/util/validation/currency_formatter.dart';
 import 'package:urun_takip_app/data/models/product_model.dart';
 import 'package:urun_takip_app/ui/components/common/button/custom_elevated_button.dart';
-import 'package:urun_takip_app/ui/view/product/product_add/product_add_view.dart';
+import 'package:urun_takip_app/ui/view/product/product_add_view.dart';
+import 'package:urun_takip_app/ui/view/product/product_update_view.dart';
+import 'package:urun_takip_app/ui/widget/image_view_widget.dart';
 
 class ProductStockWidget extends StatelessWidget {
   ProductStockWidget({super.key, required this.productModel});
@@ -58,17 +61,21 @@ class ProductStockWidget extends StatelessWidget {
     );
   }
 
+  // GÜNCELLE VE İŞ YAP
   Row _buildUpdateAndDoWorkButton(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
         CustomElevatedButton(
           buttonStyle: ElevatedButton.styleFrom(
-              backgroundColor: Colors.grey.shade500,
-              textStyle: const TextStyle(color: Colors.black)),
+              backgroundColor: Colors.grey.shade500, textStyle: const TextStyle(color: Colors.black)),
           onPressed: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (contex) => ProductAddView()));
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (contex) => ProductUpdateView(productModel: productModel),
+              ),
+            );
           },
           text: 'Güncelle',
           height: 40,
@@ -76,8 +83,7 @@ class ProductStockWidget extends StatelessWidget {
         ),
         CustomElevatedButton(
           buttonStyle: ElevatedButton.styleFrom(
-              backgroundColor: Colors.grey.shade900,
-              textStyle: const TextStyle(color: Colors.black)),
+              backgroundColor: Colors.grey.shade900, textStyle: const TextStyle(color: Colors.black)),
           onPressed: () {},
           text: 'İş Yap',
           height: 40,
@@ -94,12 +100,27 @@ class ProductStockWidget extends StatelessWidget {
       ),
       height: 120,
       margin: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
-      child: productModel.photoURL != null
-          ? Image.network(
-              productModel.photoURL!,
-              fit: BoxFit.cover,
-            )
-          : Image.asset(ConstImage.defaultImagePlaceHolder),
+      child:
+          productModel.photoURL != null ? _buildOnTapPhoto(context) : Image.asset(ConstImage.defaultImagePlaceHolder),
+    );
+  }
+
+  InkWell _buildOnTapPhoto(BuildContext context) {
+    return InkWell(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ImageViewWidget(imagePath: productModel.photoURL!),
+          ),
+        );
+      },
+      child: Material(
+        child: Image.network(
+          productModel.photoURL!,
+          fit: BoxFit.cover,
+        ),
+      ),
     );
   }
 
@@ -137,15 +158,14 @@ class ProductStockWidget extends StatelessWidget {
         Row(
           children: [
             Text(ProductStockStatusText.adet, style: titleStyle),
-            Text(productModel.stockPiece.toInt().toString(),
-                style: contentStyle),
+            Text(productModel.stockPiece.toInt().toString(), style: contentStyle),
           ],
         ),
         Row(
           children: [
             Text(ProductStockStatusText.birimFiyati, style: titleStyle),
             Text(
-                '${CurrencyFormatter.instance().moneyValueCheck(productModel.unitPrice.toString().replaceAll('.', ','))} ₺',
+                '${CurrencyFormatter.instance().moneyValueCheck(productModel.unitPrice.toString().convertFromDoubleToString())} ₺',
                 style: contentStyle),
           ],
         ),
@@ -153,24 +173,20 @@ class ProductStockWidget extends StatelessWidget {
           children: [
             Text(ProductStockStatusText.netFiyat, style: titleStyle),
             Text(
-                '${CurrencyFormatter.instance().moneyValueCheck(productModel.totalPrice.toString().replaceAll('.', ','))} ₺',
+                '${CurrencyFormatter.instance().moneyValueCheck(productModel.totalPrice.toString().convertFromDoubleToString())} ₺',
                 style: contentStyle),
           ],
         ),
         Row(
           children: [
             Text(ProductStockStatusText.kdv, style: titleStyle),
-            Text(' % ${productModel.kdv.toInt().toString()}',
-                style: contentStyle),
+            Text(' % ${productModel.kdv.toInt().toString()}', style: contentStyle),
           ],
         ),
         Wrap(
           children: [
             Text(ProductStockStatusText.aciklama, style: titleStyle),
-            Text(productModel.title,
-                style: contentStyle,
-                overflow: TextOverflow.ellipsis,
-                maxLines: 2),
+            Text(productModel.title, style: contentStyle, overflow: TextOverflow.ellipsis, maxLines: 2),
           ],
         ),
       ],

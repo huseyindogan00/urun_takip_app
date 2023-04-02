@@ -19,16 +19,18 @@ class ProductStockStatusView extends StatefulWidget {
 class _ProductStockStatusViewState extends State<ProductStockStatusView> {
   late ProductViewModel _productViewModel;
   late final _controller;
+  bool fetchAllCategory = false;
 
   @override
   void initState() {
     super.initState();
-    _productViewModel = ProductViewModel();
+
     _controller = TextEditingController();
   }
 
   @override
   Widget build(BuildContext context) {
+    _productViewModel = Provider.of<ProductViewModel>(context);
     return Scaffold(
       appBar: CustomAppbarWidget(title: AppText.stokDurumu),
       body: Container(
@@ -36,25 +38,53 @@ class _ProductStockStatusViewState extends State<ProductStockStatusView> {
         color: const Color.fromARGB(255, 85, 85, 85),
         child: Column(
           children: [
-            CustomFilterDropdownWidget(),
             Expanded(
-              child: FutureBuilder<List<BaseModel>>(
-                future: _productViewModel.fetchProductByCategory(context
-                    .watch<ProductViewModel>()
-                    .selectFilterCategoryName!),
-                builder: (context, snapshot) {
-                  if (!snapshot.hasData ||
-                      snapshot.connectionState == ConnectionState.waiting) {
-                    return _buildProgress();
-                  } else {
-                    List<ProductModel> _productModel =
-                        snapshot.data as List<ProductModel>;
-                    if (_productModel.isEmpty) {
-                      return _buildProductEmpty(context);
-                    } else {
-                      return _buildListProduct(_productModel, context);
-                    }
-                  }
+              flex: 1,
+              child: Row(
+                children: [
+                  Expanded(child: CustomFilterDropdownWidget()),
+                  TextButton.icon(
+                      onPressed: () => context.read<ProductViewModel>().selectFilterCategoryName = 'Tümü',
+                      icon: const Icon(
+                        Icons.format_align_justify_outlined,
+                        color: Colors.green,
+                      ),
+                      label: Text(
+                        'Tüm\nKategori',
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyMedium!
+                            .copyWith(color: Colors.grey.shade200, fontWeight: FontWeight.bold),
+                      ))
+                ],
+              ),
+            ),
+            Expanded(
+              flex: 10,
+              child: Consumer<ProductViewModel>(
+                builder: (_, productController, child) {
+                  return _productViewModel.viewState == ProductViewState.BUSY
+                      ? CircularProgressIndicator(
+                          color: Colors.red,
+                          backgroundColor: Colors.amber,
+                        )
+                      : FutureBuilder<List<BaseModel>>(
+                          future: productController.fetchProductByCategory(productController.selectFilterCategoryName!),
+                          builder: (context, snapshot) {
+                            if (!snapshot.hasData || snapshot.connectionState == ConnectionState.waiting) {
+                              return _buildProgress();
+                            } else {
+                              List<ProductModel> _productModel = snapshot.data as List<ProductModel>;
+                              if (_productModel.isEmpty) {
+                                return _buildProductEmpty(context);
+                              } else {
+                                return RefreshIndicator(
+                                    onRefresh: () => _productViewModel.refresh(),
+                                    child: _buildListProduct(_productModel, context));
+                              }
+                            }
+                          },
+                        );
                 },
               ),
             ),
@@ -76,20 +106,17 @@ class _ProductStockStatusViewState extends State<ProductStockStatusView> {
     return Center(
       child: Text(
         'Ürün Listesi Boş',
-        style: Theme.of(context)
-            .textTheme
-            .headlineSmall!
-            .copyWith(color: Colors.grey.shade200),
+        style: Theme.of(context).textTheme.headlineSmall!.copyWith(color: Colors.grey.shade200),
       ),
     );
   }
 
-  ListView _buildListProduct(
-      List<ProductModel> _productModel, BuildContext context) {
+  Widget _buildListProduct(List<ProductModel> _productModel, BuildContext context) {
     return ListView.builder(
       physics: const AlwaysScrollableScrollPhysics(),
       itemCount: _productModel.length,
       itemBuilder: (_, index) {
+        print('yenilendi');
         return Dismissible(
             key: ValueKey(index),
             background: Container(

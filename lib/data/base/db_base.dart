@@ -5,4 +5,5 @@ abstract class DbBase {
   Future<bool> update(BaseModel model);
   Future<bool?> delete(String productId);
   Future<List<BaseModel>> fetchProductByCategory(String categoryName);
+  Future<List<BaseModel>> fetchProductAll();
 }
