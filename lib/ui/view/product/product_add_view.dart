@@ -101,15 +101,16 @@ class _ProductAddViewState extends State<ProductAddView> {
               _productViewModel.totalPrice = '0,00';
               Navigator.pop(context);
             },
-            icon: Icon(Icons.arrow_back_ios_new)),
+            icon: const Icon(Icons.arrow_back_ios_new)),
         title: AppText.urunEkle,
       ),
       body: SingleChildScrollView(
         controller: _scrollController,
         child: Form(
           key: _formKey,
-          child: Padding(
+          child: Container(
             padding: CustomPadding.paddinDefaultSymmetric,
+            color: Theme.of(context).canvasColor,
             child: Column(
               children: [
                 //KATEGORİLER

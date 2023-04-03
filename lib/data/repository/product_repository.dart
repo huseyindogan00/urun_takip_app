@@ -31,9 +31,16 @@ class ProductRepository extends DbBase {
   }
 
   @override
-  Future<bool> update(BaseModel model) {
-    // TODO: implement update
-    throw UnimplementedError();
+  Future<bool> update(BaseModel model) async {
+    String? _photoURL;
+    ProductModel? _productModel = (model is ProductModel) ? model : null;
+    if (_productModel != null) {
+      _photoURL = await _firebaseStorageServise.uploadFile(_productModel);
+      _productModel.photoURL = _photoURL;
+      return await _firestoreDbService.update(_productModel);
+    } else {
+      return false;
+    }
   }
 
   @override

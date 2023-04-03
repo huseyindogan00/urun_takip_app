@@ -35,7 +35,7 @@ class _ProductStockStatusViewState extends State<ProductStockStatusView> {
       appBar: CustomAppbarWidget(title: AppText.stokDurumu),
       body: Container(
         padding: const EdgeInsets.all(10.0),
-        color: const Color.fromARGB(255, 85, 85, 85),
+        color: Theme.of(context).scaffoldBackgroundColor,
         child: Column(
           children: [
             Expanded(
@@ -44,18 +44,19 @@ class _ProductStockStatusViewState extends State<ProductStockStatusView> {
                 children: [
                   Expanded(child: CustomFilterDropdownWidget()),
                   TextButton.icon(
-                      onPressed: () => context.read<ProductViewModel>().selectFilterCategoryName = 'Tümü',
-                      icon: const Icon(
-                        Icons.format_align_justify_outlined,
-                        color: Colors.green,
-                      ),
-                      label: Text(
-                        'Tüm\nKategori',
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyMedium!
-                            .copyWith(color: Colors.grey.shade200, fontWeight: FontWeight.bold),
-                      ))
+                    onPressed: () => context.read<ProductViewModel>().selectFilterCategoryName = 'Tümü',
+                    icon: const Icon(
+                      Icons.format_align_justify_outlined,
+                      color: Colors.green,
+                    ),
+                    label: Text(
+                      'Tüm\nKategori',
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium!
+                          .copyWith(color: Colors.grey.shade200, fontWeight: FontWeight.bold),
+                    ),
+                  )
                 ],
               ),
             ),
@@ -64,7 +65,7 @@ class _ProductStockStatusViewState extends State<ProductStockStatusView> {
               child: Consumer<ProductViewModel>(
                 builder: (_, productController, child) {
                   return _productViewModel.viewState == ProductViewState.BUSY
-                      ? CircularProgressIndicator(
+                      ? const CircularProgressIndicator(
                           color: Colors.red,
                           backgroundColor: Colors.amber,
                         )

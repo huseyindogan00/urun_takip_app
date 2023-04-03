@@ -60,16 +60,22 @@ class ProductViewModel extends ChangeNotifier implements DbBase {
     }
   }
 
-//* PRODUCT SİLME METHODU
+  //* PRODUCT SİLME METHODU
   @override
   Future<bool?> delete(String productId) async {
     await _productRepository.delete(productId);
   }
 
+  //* PRODUCT GÜNCELLEME METHODU
   @override
-  Future<bool> update(BaseModel model) {
-    // TODO: implement update
-    throw UnimplementedError();
+  Future<bool?> update(BaseModel model) async {
+    try {
+      viewState = ProductViewState.BUSY;
+      await _productRepository.update(model);
+    } catch (_) {
+    } finally {
+      viewState = ProductViewState.IDLE;
+    }
   }
 
   /// ****************************************************************************************************

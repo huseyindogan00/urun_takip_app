@@ -26,9 +26,17 @@ class FirestoreDbService extends DbBase {
   }
 
   @override
-  Future<bool> update(BaseModel model) {
-    // TODO: implement update
-    throw UnimplementedError();
+  Future<bool> update(BaseModel model) async {
+    ProductModel? _productModel = model is ProductModel ? model : null;
+
+    if (_productModel != null) {
+      await _firebaseFirestore
+          .collection(DbCollectionName.products.name)
+          .doc(_productModel.id)
+          .update(_productModel.toMap());
+      return true;
+    }
+    return false;
   }
 
   @override

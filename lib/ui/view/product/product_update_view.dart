@@ -91,6 +91,7 @@ class _ProductUpdateViewState extends State<ProductUpdateView> {
     //!sayfada görevini bitirmeden dispose olduğu için hata veriyor
     //_productViewModel.dispose();
     _productViewModel.productImageFilePath = null;
+    _productViewModel.totalPrice = '0,00';
     super.dispose();
   }
 
@@ -113,7 +114,8 @@ class _ProductUpdateViewState extends State<ProductUpdateView> {
         controller: _scrollController,
         child: Form(
           key: _formKey,
-          child: Padding(
+          child: Container(
+            color: Theme.of(context).canvasColor,
             padding: CustomPadding.paddinDefaultSymmetric,
             child: Column(
               children: [
@@ -294,8 +296,8 @@ class _ProductUpdateViewState extends State<ProductUpdateView> {
 
   Consumer<ProductViewModel> _buildViewPhoto(BuildContext context) {
     return Consumer<ProductViewModel>(
-      builder: (context, model, child) {
-        return _productModel.photoURL == null
+      builder: (context, viewModel, child) {
+        return viewModel.productImageFilePath == null
             ? child!
             : SizedBox(
                 width: CustomSize.kWidth(context),
@@ -303,38 +305,39 @@ class _ProductUpdateViewState extends State<ProductUpdateView> {
                   tag: 'product_image',
                   child: Material(
                     child: InkWell(
-                      onTap: () {
-                        if (_productModel.photoURL != null) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ImageViewWidget(imagePath: _productModel.photoURL!),
-                            ),
-                          );
-                        }
-                      },
-                      child: _productModel.photoURL == null
-                          ? Image(
-                              fit: BoxFit.cover,
-                              image: FileImage(
-                                File(model.productImageFilePath!.path),
+                        onTap: () {
+                          if (viewModel.productImageFilePath != null) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ImageViewWidget(imagePath: viewModel.productImageFilePath!.path),
                               ),
-                            )
-                          : Image.network(
-                              _productModel.photoURL!,
-                              fit: BoxFit.cover,
-                            ),
-                    ),
+                            );
+                          }
+                        },
+                        child: Image(
+                          fit: BoxFit.cover,
+                          image: FileImage(
+                            File(viewModel.productImageFilePath!.path),
+                          ),
+                        )),
                   ),
                 ),
               );
       },
-      child: SizedBox(
-        width: CustomSize.kWidth(context),
-        child: Image(
-          image: AssetImage(ConstImage.defaultImagePlaceHolder),
-        ),
-      ),
+      child: _productModel.photoURL == null
+          ? SizedBox(
+              width: CustomSize.kWidth(context),
+              child: Image(
+                image: AssetImage(ConstImage.defaultImagePlaceHolder),
+              ),
+            )
+          : SizedBox(
+              width: CustomSize.kWidth(context),
+              child: Image(
+                image: NetworkImage(_productModel.photoURL!),
+              ),
+            ),
     );
   }
 
@@ -408,7 +411,7 @@ class _ProductUpdateViewState extends State<ProductUpdateView> {
           if (_formKey.currentState!.validate()) {
             _formKey.currentState!.save();
             ProductModel productModel = ProductModel(
-              id: UuidManager().randomId(),
+              id: _productModel.id,
               stockCode: _stockCodeEditController.text,
               title: _commentEditController.text,
               category: _productViewModel.categoryModel,
@@ -416,10 +419,10 @@ class _ProductUpdateViewState extends State<ProductUpdateView> {
               unitPrice: _unitPriceEditController.text.convertFromStringToDouble(),
               kdv: _kdvEditController.text.convertFromStringToDouble(),
               totalPrice: _totalPriceEditController.text.convertFromStringToDouble(),
-              photoPath: _productViewModel.productImageFilePath?.path,
+              photoPath: _productViewModel.productImageFilePath?.path ?? _productModel.photoPath,
               createDate: DateTime.now(),
             );
-            await _productViewModel.addModel(productModel);
+            await _productViewModel.update(productModel);
 
             if (mounted) {
               _productViewModel.totalPrice = '0,00';
