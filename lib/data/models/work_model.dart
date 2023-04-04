@@ -33,7 +33,7 @@ class WorkModel implements BaseModel {
     double? totalPrice,
     bool? isCargoStatus,
     String? cargoAddress,
-    dynamic? orderDate,
+    dynamic orderDate,
   }) {
     return WorkModel(
       id: id ?? this.id,

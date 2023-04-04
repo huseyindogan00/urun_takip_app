@@ -64,28 +64,23 @@ class _ProductStockStatusViewState extends State<ProductStockStatusView> {
               flex: 10,
               child: Consumer<ProductViewModel>(
                 builder: (_, productController, child) {
-                  return _productViewModel.viewState == ProductViewState.BUSY
-                      ? const CircularProgressIndicator(
-                          color: Colors.red,
-                          backgroundColor: Colors.amber,
-                        )
-                      : FutureBuilder<List<BaseModel>>(
-                          future: productController.fetchProductByCategory(productController.selectFilterCategoryName!),
-                          builder: (context, snapshot) {
-                            if (!snapshot.hasData || snapshot.connectionState == ConnectionState.waiting) {
-                              return _buildProgress();
-                            } else {
-                              List<ProductModel> _productModel = snapshot.data as List<ProductModel>;
-                              if (_productModel.isEmpty) {
-                                return _buildProductEmpty(context);
-                              } else {
-                                return RefreshIndicator(
-                                    onRefresh: () => _productViewModel.refresh(),
-                                    child: _buildListProduct(_productModel, context));
-                              }
-                            }
-                          },
-                        );
+                  return FutureBuilder<List<BaseModel>>(
+                    future: productController.fetchProductByCategory(productController.selectFilterCategoryName!),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData || snapshot.connectionState == ConnectionState.waiting) {
+                        return _buildProgress();
+                      } else {
+                        List<ProductModel> _productModel = snapshot.data as List<ProductModel>;
+                        if (_productModel.isEmpty) {
+                          return _buildProductEmpty(context);
+                        } else {
+                          return RefreshIndicator(
+                              onRefresh: () => _productViewModel.refresh(),
+                              child: _buildListProduct(_productModel, context));
+                        }
+                      }
+                    },
+                  );
                 },
               ),
             ),
@@ -112,12 +107,12 @@ class _ProductStockStatusViewState extends State<ProductStockStatusView> {
     );
   }
 
-  Widget _buildListProduct(List<ProductModel> _productModel, BuildContext context) {
+  Widget _buildListProduct(List<ProductModel> productModel, BuildContext context) {
     return ListView.builder(
       physics: const AlwaysScrollableScrollPhysics(),
-      itemCount: _productModel.length,
+      itemCount: productModel.length,
       itemBuilder: (_, index) {
-        print('yenilendi');
+        print('build list product çalıştı');
         return Dismissible(
             key: ValueKey(index),
             background: Container(
@@ -136,12 +131,12 @@ class _ProductStockStatusViewState extends State<ProductStockStatusView> {
               ).show(context);
 
               if (result != null && result) {
-                await _productViewModel.delete(_productModel[index].id!);
+                await _productViewModel.delete(productModel[index].id!);
                 setState(() {});
               }
               return result;
             },
-            child: ProductStockWidget(productModel: _productModel[index]));
+            child: ProductStockWidget(productModel: productModel[index]));
       },
     );
   }
