@@ -9,5 +9,6 @@ class AppText {
   static const stokKodu = 'Stok Kodu';
   static const birimFiyat = 'Birim Fiyat';
   static const kdv = 'KDV';
-  static const netFiyat = 'Net Fiyat';
+  static const matrah = 'Matrah';
+  static const toplamTutar = 'Toplam Tutar';
 }

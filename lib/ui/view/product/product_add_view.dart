@@ -398,8 +398,7 @@ class _ProductAddViewState extends State<ProductAddView> {
               category: _productViewModel.categoryModel,
               stockPiece: _stockPieceEditController.text.convertFromStringToDouble(),
               unitPrice: _unitPriceEditController.text.convertFromStringToDouble(),
-              kdv: _kdvEditController.text.convertFromStringToDouble(),
-              totalPrice: _totalPriceEditController.text.convertFromStringToDouble(),
+              basePrice: _totalPriceEditController.text.convertFromStringToDouble(),
               photoPath: _productViewModel.productImageFilePath?.path,
               createDate: DateTime.now(),
             );

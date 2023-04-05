@@ -34,7 +34,8 @@ class FirebaseStorageServise extends StorageBase {
   @override
   Future<void> deleteFile(String productId) async {
     try {
-      var ref = await _firebaseStorage.ref().child(productId).child('productPhoto').child('$productId.jpeg').delete();
+      var ref =
+          await _firebaseStorage.ref().child('$productId/').child('productPhoto').child('$productId.jpeg').delete();
 
       return ref;
     } catch (_) {}
