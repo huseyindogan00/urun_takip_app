@@ -306,8 +306,9 @@ class _ProductUpdateViewState extends State<ProductUpdateView> {
 
   Consumer<ProductViewModel> _buildViewPhoto(BuildContext context) {
     return Consumer<ProductViewModel>(
-      builder: (context, viewModel, child) {
-        return viewModel.productImageFilePath == null
+      builder: (_, viewModel, child) {
+        return _productModel.photoURL == null &&
+                viewModel.productImageFilePath == null
             ? child!
             : SizedBox(
                 width: CustomSize.kWidth(context),
@@ -315,41 +316,39 @@ class _ProductUpdateViewState extends State<ProductUpdateView> {
                   tag: 'product_image',
                   child: Material(
                     child: InkWell(
-                        onTap: () {
-                          if (viewModel.productImageFilePath != null) {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ImageViewWidget(
-                                    imagePath:
-                                        viewModel.productImageFilePath!.path),
+                      onTap: () {
+                        if (_productModel.photoURL != null) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ImageViewWidget(
+                                  imagePath: _productModel.photoURL!),
+                            ),
+                          );
+                        } else {}
+                      },
+                      child: viewModel.productImageFilePath != null
+                          ? Image(
+                              fit: BoxFit.cover,
+                              image: FileImage(
+                                File(viewModel.productImageFilePath!.path),
                               ),
-                            );
-                          }
-                        },
-                        child: Image(
-                          fit: BoxFit.cover,
-                          image: FileImage(
-                            File(viewModel.productImageFilePath!.path),
-                          ),
-                        )),
+                            )
+                          : Image(
+                              fit: BoxFit.cover,
+                              image: NetworkImage(_productModel.photoURL!),
+                            ),
+                    ),
                   ),
                 ),
               );
       },
-      child: _productModel.photoURL == null
-          ? SizedBox(
-              width: CustomSize.kWidth(context),
-              child: Image(
-                image: AssetImage(ConstImage.defaultImagePlaceHolder),
-              ),
-            )
-          : SizedBox(
-              width: CustomSize.kWidth(context),
-              child: Image(
-                image: NetworkImage(_productModel.photoURL!),
-              ),
-            ),
+      child: SizedBox(
+        width: CustomSize.kWidth(context),
+        child: Image(
+          image: AssetImage(ConstImage.defaultImagePlaceHolder),
+        ),
+      ),
     );
   }
 
