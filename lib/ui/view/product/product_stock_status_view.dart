@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:urun_takip_app/core/constant/text/app_text.dart';
-import 'package:urun_takip_app/data/models/base_model.dart';
+import 'package:urun_takip_app/data/models/base/base_model.dart';
 import 'package:urun_takip_app/data/models/product_model.dart';
 import 'package:urun_takip_app/ui/components/common/custom_appbar_widget.dart';
 import 'package:urun_takip_app/ui/components/common/dialog/platform_sensitive_alert_dialog.dart';
@@ -44,17 +44,18 @@ class _ProductStockStatusViewState extends State<ProductStockStatusView> {
                 children: [
                   Expanded(child: CustomFilterDropdownWidget()),
                   TextButton.icon(
-                    onPressed: () => context.read<ProductViewModel>().selectFilterCategoryName = 'Tümü',
+                    onPressed: () => context
+                        .read<ProductViewModel>()
+                        .selectFilterCategoryName = 'Tümü',
                     icon: const Icon(
                       Icons.format_align_justify_outlined,
                       color: Colors.green,
                     ),
                     label: Text(
                       'Tüm\nKategori',
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyMedium!
-                          .copyWith(color: Colors.grey.shade200, fontWeight: FontWeight.bold),
+                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          color: Colors.grey.shade200,
+                          fontWeight: FontWeight.bold),
                     ),
                   )
                 ],
@@ -65,12 +66,15 @@ class _ProductStockStatusViewState extends State<ProductStockStatusView> {
               child: Consumer<ProductViewModel>(
                 builder: (_, productController, child) {
                   return FutureBuilder<List<BaseModel>>(
-                    future: productController.fetchProductByCategory(productController.selectFilterCategoryName!),
+                    future: productController.fetchProductByCategory(
+                        productController.selectFilterCategoryName!),
                     builder: (context, snapshot) {
-                      if (!snapshot.hasData || snapshot.connectionState == ConnectionState.waiting) {
+                      if (!snapshot.hasData ||
+                          snapshot.connectionState == ConnectionState.waiting) {
                         return _buildProgress();
                       } else {
-                        List<ProductModel> _productModel = snapshot.data as List<ProductModel>;
+                        List<ProductModel> _productModel =
+                            snapshot.data as List<ProductModel>;
                         if (_productModel.isEmpty) {
                           return _buildProductEmpty(context);
                         } else {
@@ -102,12 +106,16 @@ class _ProductStockStatusViewState extends State<ProductStockStatusView> {
     return Center(
       child: Text(
         'Ürün Listesi Boş',
-        style: Theme.of(context).textTheme.headlineSmall!.copyWith(color: Colors.grey.shade200),
+        style: Theme.of(context)
+            .textTheme
+            .headlineSmall!
+            .copyWith(color: Colors.grey.shade200),
       ),
     );
   }
 
-  Widget _buildListProduct(List<ProductModel> productModel, BuildContext context) {
+  Widget _buildListProduct(
+      List<ProductModel> productModel, BuildContext context) {
     return ListView.builder(
       physics: const AlwaysScrollableScrollPhysics(),
       itemCount: productModel.length,

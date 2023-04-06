@@ -153,7 +153,7 @@ class _ProductAddViewState extends State<ProductAddView> {
                         ConstImage.iconLiraBlackPath,
                         width: 20,
                       ),
-                      labelText: AppText.netFiyat,
+                      labelText: AppText.matrah,
                       onSaved: (newValue) {
                         _totalPriceEditController.text = newValue!;
                       },
@@ -192,7 +192,8 @@ class _ProductAddViewState extends State<ProductAddView> {
         controller: _stockCodeEditController,
         labelText: AppText.stokKodu,
         validator: (newValue) => Validation.generalValidation(newValue),
-        onSaved: (String? newValue) => _stockCodeEditController.text = newValue ?? '',
+        onSaved: (String? newValue) =>
+            _stockCodeEditController.text = newValue ?? '',
       ),
     );
   }
@@ -220,8 +221,8 @@ class _ProductAddViewState extends State<ProductAddView> {
         labelText: AppText.stokAdedi,
         onChanged: (value) {
           // PROVIDER İLE NET TUTAR DEĞERİNİ GÜNCELLİYOR
-          _productViewModel.calculateNetPrice(
-              _unitPriceEditController.text, _kdvEditController.text, _stockPieceEditController.text);
+          _productViewModel.calculateNetPrice(_unitPriceEditController.text,
+              _kdvEditController.text, _stockPieceEditController.text);
         },
         validator: (newValue) => Validation.generalValidation(newValue),
         onSaved: (newValue) => _stockPieceEditController.text = newValue ?? '',
@@ -241,15 +242,17 @@ class _ProductAddViewState extends State<ProductAddView> {
         validator: (newValue) => Validation.moneyValueCheck(newValue),
         onChanged: (String? value) {
           // Kullanıcının girdiği değeri TR para birimi formatına çevirir
-          _unitPriceEditController.text = CurrencyFormatter.instance().moneyValueCheck(value);
+          _unitPriceEditController.text =
+              CurrencyFormatter.instance().moneyValueCheck(value);
           //imleci satır sonuna getirme
-          _unitPriceEditController.selection =
-              TextSelection.fromPosition(TextPosition(offset: _unitPriceEditController.text.length));
+          _unitPriceEditController.selection = TextSelection.fromPosition(
+              TextPosition(offset: _unitPriceEditController.text.length));
           // PROVIDER İLE NET TUTAR DEĞERİNİ GÜNCELLİYOR
-          _productViewModel.calculateNetPrice(
-              _unitPriceEditController.text, _kdvEditController.text, _stockPieceEditController.text);
+          _productViewModel.calculateNetPrice(_unitPriceEditController.text,
+              _kdvEditController.text, _stockPieceEditController.text);
         },
-        onSaved: (String? newValue) => _unitPriceEditController.text = newValue ?? '',
+        onSaved: (String? newValue) =>
+            _unitPriceEditController.text = newValue ?? '',
       ),
     );
   }
@@ -261,7 +264,8 @@ class _ProductAddViewState extends State<ProductAddView> {
       child: CustomTextFormField(
         keyboardType: TextInputType.number,
         inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-        prefix: const Text('% ', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+        prefix: const Text('% ',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
         controller: _kdvEditController,
         labelText: AppText.kdv,
         validator: Validation.generalValidation,
@@ -297,7 +301,9 @@ class _ProductAddViewState extends State<ProductAddView> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => ImageViewWidget(imagePath: viewModel.productImageFilePath!.path),
+                              builder: (context) => ImageViewWidget(
+                                  imagePath:
+                                      viewModel.productImageFilePath!.path),
                             ),
                           );
                         }
@@ -386,7 +392,9 @@ class _ProductAddViewState extends State<ProductAddView> {
             _productViewModel.categoryModel.categorySubName == null ||
             _productViewModel.categoryModel.categoryName == 'Tümü') {
           await const PlatformSensitiveAlertDialog(
-                  content: 'Kategori seçiniz', title: 'Uyarı !', doneButtonTitle: 'tamam')
+                  content: 'Kategori seçiniz',
+                  title: 'Uyarı !',
+                  doneButtonTitle: 'tamam')
               .show(context);
         } else {
           if (_formKey.currentState!.validate()) {
@@ -396,11 +404,14 @@ class _ProductAddViewState extends State<ProductAddView> {
               stockCode: _stockCodeEditController.text,
               title: _commentEditController.text,
               category: _productViewModel.categoryModel,
-              stockPiece: _stockPieceEditController.text.convertFromStringToDouble(),
-              unitPrice: _unitPriceEditController.text.convertFromStringToDouble(),
-              basePrice: _totalPriceEditController.text.convertFromStringToDouble(),
+              stockPiece:
+                  _stockPieceEditController.text.convertFromStringToDouble(),
+              unitPrice:
+                  _unitPriceEditController.text.convertFromStringToDouble(),
+              basePrice:
+                  _totalPriceEditController.text.convertFromStringToDouble(),
               photoPath: _productViewModel.productImageFilePath?.path,
-              createDate: DateTime.now(),
+              stockEntryDate: DateTime.now(),
             );
             await _productViewModel.addModel(productModel);
 
@@ -428,7 +439,9 @@ class _ProductAddViewState extends State<ProductAddView> {
     bool? result = await _productViewModel.getPhotoFromGallery(context);
     if (mounted && (result == null || result)) {
       double end = _scrollController.position.maxScrollExtent;
-      _scrollController.animateTo(end, duration: const Duration(milliseconds: 1000), curve: Curves.easeInOut);
+      _scrollController.animateTo(end,
+          duration: const Duration(milliseconds: 1000),
+          curve: Curves.easeInOut);
       Navigator.pop(context);
     }
   }
@@ -437,7 +450,9 @@ class _ProductAddViewState extends State<ProductAddView> {
     bool? result = await _productViewModel.getPhotoFromCamera(context);
     if (mounted && (result == null || result)) {
       double end = _scrollController.position.maxScrollExtent;
-      _scrollController.animateTo(end, duration: const Duration(milliseconds: 1000), curve: Curves.easeInOut);
+      _scrollController.animateTo(end,
+          duration: const Duration(milliseconds: 1000),
+          curve: Curves.easeInOut);
       Navigator.pop(context);
     }
   }

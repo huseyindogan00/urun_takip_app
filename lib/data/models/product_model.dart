@@ -1,22 +1,21 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
-import 'package:urun_takip_app/data/models/base_model.dart';
+import 'package:urun_takip_app/data/models/base/base_model.dart';
 import 'package:urun_takip_app/data/models/category_model.dart';
 
 class ProductModel implements BaseModel {
   @override
   String? id; // ÜRÜN ID
   String title; // AÇIKLAMA
-  CategoryModel
-      category; // Kategorisi Map<String,List<String>> formatında olacak. category['saat'][0] şeklinde alınacak
+  CategoryModel category;
   String? stockCode; // STOK KODU
   double stockPiece; // STOK ADEDİ
   double unitPrice; // BİRİM FİYAT
   double basePrice; // MATRAH
   String? photoURL; // FOTOĞRAF URL ADRESİ
   String? photoPath;
-  dynamic createDate; // OLUŞTURMA TARİHİ
+  dynamic stockEntryDate; // OLUŞTURMA TARİHİ
   ProductModel({
     this.id,
     required this.title,
@@ -27,20 +26,20 @@ class ProductModel implements BaseModel {
     required this.basePrice,
     this.photoURL,
     this.photoPath,
-    required this.createDate,
+    required this.stockEntryDate,
   });
 
   ProductModel copyWith({
     String? id,
     String? title,
-    //? category,
+    CategoryModel? category,
     String? stockCode,
     double? stockPiece,
     double? unitPrice,
     double? basePrice,
     String? photoURL,
     String? photoPath,
-    dynamic? createDate,
+    dynamic? stockEntryDate,
   }) {
     return ProductModel(
       id: id ?? this.id,
@@ -52,7 +51,7 @@ class ProductModel implements BaseModel {
       basePrice: basePrice ?? this.basePrice,
       photoURL: photoURL ?? this.photoURL,
       photoPath: photoPath ?? this.photoPath,
-      createDate: createDate ?? this.createDate,
+      stockEntryDate: stockEntryDate ?? this.stockEntryDate,
     );
   }
 
@@ -67,7 +66,7 @@ class ProductModel implements BaseModel {
       'basePrice': basePrice,
       'photoURL': photoURL,
       'photoPath': photoPath,
-      'createDate': createDate,
+      'stockEntryDate': stockEntryDate,
     };
   }
 
@@ -82,17 +81,18 @@ class ProductModel implements BaseModel {
       basePrice: map['basePrice'] as double,
       photoURL: map['photoURL'] != null ? map['photoURL'] as String : null,
       photoPath: map['photoPath'] != null ? map['photoPath'] as String : null,
-      createDate: map['createDate'] as dynamic,
+      stockEntryDate: map['stockEntryDate'] as dynamic,
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory ProductModel.fromJson(String source) => ProductModel.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory ProductModel.fromJson(String source) =>
+      ProductModel.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
   String toString() {
-    return 'ProductModel(id: $id, title: $title, category: $category, stockCode: $stockCode, stockPiece: $stockPiece, unitPrice: $unitPrice, basePrice: $basePrice, photoURL: $photoURL, photoPath: $photoPath, createDate: $createDate)';
+    return 'ProductModel(id: $id, title: $title, category: $category, stockCode: $stockCode, stockPiece: $stockPiece, unitPrice: $unitPrice, basePrice: $basePrice, photoURL: $photoURL, photoPath: $photoPath, stockEntryDate: $stockEntryDate)';
   }
 
   @override
@@ -108,7 +108,7 @@ class ProductModel implements BaseModel {
         other.basePrice == basePrice &&
         other.photoURL == photoURL &&
         other.photoPath == photoPath &&
-        other.createDate == createDate;
+        other.stockEntryDate == stockEntryDate;
   }
 
   @override
@@ -122,6 +122,6 @@ class ProductModel implements BaseModel {
         basePrice.hashCode ^
         photoURL.hashCode ^
         photoPath.hashCode ^
-        createDate.hashCode;
+        stockEntryDate.hashCode;
   }
 }

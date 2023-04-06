@@ -1,4 +1,4 @@
-import 'package:urun_takip_app/data/models/base_model.dart';
+import 'package:urun_takip_app/data/models/base/base_model.dart';
 
 abstract class StorageBase {
   Future<String?> uploadFile(BaseModel? model);

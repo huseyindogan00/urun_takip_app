@@ -189,17 +189,17 @@ class ProductStockWidget extends StatelessWidget {
           children: [
             Text(ProductStockStatusText.netFiyat, style: titleStyle),
             Text(
-                '${CurrencyFormatter.instance().moneyValueCheck(productModel.totalPrice.toString().convertFromDoubleToString())} ₺',
+                '${CurrencyFormatter.instance().moneyValueCheck(productModel.basePrice.toString().convertFromDoubleToString())} ₺',
                 style: contentStyle),
           ],
         ),
-        Row(
+        /* Row(
           children: [
             Text(ProductStockStatusText.kdv, style: titleStyle),
             Text(' % ${productModel.kdv.toInt().toString()}',
                 style: contentStyle),
           ],
-        ),
+        ), */
         Wrap(
           children: [
             Text(ProductStockStatusText.aciklama, style: titleStyle),

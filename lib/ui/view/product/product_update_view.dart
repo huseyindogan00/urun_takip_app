@@ -155,7 +155,7 @@ class _ProductUpdateViewState extends State<ProductUpdateView> {
                     WidgetsBinding.instance.addPostFrameCallback((_) {
                       _totalPriceEditController.text = _firstValueTotalPrice
                           ? CurrencyFormatter.instance().moneyValueCheck(
-                              _productModel.totalPrice
+                              _productModel.basePrice
                                   .toString()
                                   .convertFromDoubleToString())
                           : model.totalPrice;
@@ -168,7 +168,7 @@ class _ProductUpdateViewState extends State<ProductUpdateView> {
                         ConstImage.iconLiraBlackPath,
                         width: 20,
                       ),
-                      labelText: AppText.netFiyat,
+                      labelText: AppText.matrah,
                       onSaved: (newValue) {
                         _totalPriceEditController.text = newValue!;
                       },
@@ -432,12 +432,11 @@ class _ProductUpdateViewState extends State<ProductUpdateView> {
                   _stockPieceEditController.text.convertFromStringToDouble(),
               unitPrice:
                   _unitPriceEditController.text.convertFromStringToDouble(),
-              kdv: _kdvEditController.text.convertFromStringToDouble(),
-              totalPrice:
+              basePrice:
                   _totalPriceEditController.text.convertFromStringToDouble(),
               photoPath: _productViewModel.productImageFilePath?.path ??
                   _productModel.photoPath,
-              createDate: DateTime.now(),
+              stockEntryDate: DateTime.now(),
             );
             await _productViewModel.update(productModel);
 
