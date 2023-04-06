@@ -8,7 +8,7 @@ import 'package:urun_takip_app/core/utility/util/manager/image_and_video_manager
 import 'package:urun_takip_app/core/utility/util/validation/currency_formatter.dart';
 import 'package:urun_takip_app/core/utility/util/validation/validation.dart';
 import 'package:urun_takip_app/data/base/db_base.dart';
-import 'package:urun_takip_app/data/models/base_model.dart';
+import 'package:urun_takip_app/data/models/base/base_model.dart';
 import 'package:urun_takip_app/data/repository/category_repository.dart';
 import 'package:urun_takip_app/data/models/category_json.dart';
 import 'package:urun_takip_app/data/repository/product_repository.dart';
@@ -35,11 +35,13 @@ class ProductViewModel extends ChangeNotifier implements DbBase {
   //* STOKTA BULUNAN TÜM ÜRÜNLERİ GETİR
   /// Verilen filtreye göre Kategorinin hepsini yada belirtilen kategoriyi getirir.
   @override
-  Future<List<BaseModel>> fetchProductByCategory(String categoryFilterName) async {
+  Future<List<BaseModel>> fetchProductByCategory(
+      String categoryFilterName) async {
     if (categoryFilterName == 'Tümü') {
       return await fetchProductAll();
     } else {
-      return await _productRepository.fetchProductByCategory(categoryFilterName);
+      return await _productRepository
+          .fetchProductByCategory(categoryFilterName);
     }
   }
 
@@ -137,9 +139,10 @@ class ProductViewModel extends ChangeNotifier implements DbBase {
       double _kdv = double.parse(kdv) / 100;
       double _stockPiece = double.parse(stockPiece);
 
-      double resultDouble = CalculationOperations.calculateNetPrice(_unitPrice, _stockPiece, _kdv);
-      String resultString =
-          CurrencyFormatter.instance().moneyValueCheck(resultDouble.toString().convertFromDoubleToString());
+      double resultDouble = CalculationOperations.calculateNetPrice(
+          _unitPrice, _stockPiece, _kdv);
+      String resultString = CurrencyFormatter.instance()
+          .moneyValueCheck(resultDouble.toString().convertFromDoubleToString());
 
       totalPrice = resultString;
       notifyListeners();
