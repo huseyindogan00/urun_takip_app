@@ -10,7 +10,7 @@ class Validation {
   /// Girilen miktarın ondalık olarak ayrımını yapar, verilen değer doğruysa `null` döner.
   /// Değerin içinde sayı ile nokta ve virgülün olup olmadığını kontrol eder.
   /// Farklı bir karakter varsa uyarı mesajı döner.
-  static String? moneyValueCheck(String? moneyValue) {
+  static String? moneyValueValidation(String? moneyValue) {
     if (moneyValue == null || moneyValue.isEmpty) {
       return 'Lütfen birim fiyatı giriniz';
     } else if (!moneyValue.contains(RegExp(r'[0-9]')) && !moneyValue.contains(RegExp('.,')) ||

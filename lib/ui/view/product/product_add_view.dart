@@ -34,7 +34,6 @@ class _ProductAddViewState extends State<ProductAddView> {
   late final TextEditingController _stockCodeEditController;
   late final TextEditingController _stockPieceEditController;
   late final TextEditingController _unitPriceEditController;
-  late final TextEditingController _kdvEditController;
   late final TextEditingController _totalPriceEditController;
   late final TextEditingController _photoPathEditController;
   late final TextEditingController _createDateEditController;
@@ -54,7 +53,6 @@ class _ProductAddViewState extends State<ProductAddView> {
     _unitPriceEditController = TextEditingController();
     // KDV GİBİ sabit değerleri daha sonra uygulama başlarken veritabanından getireceğiz.
     // Ayarlar menüsünden bu gibi sabit değerlere müdahale edilmeyecek
-    _kdvEditController = TextEditingController(text: '18');
     _totalPriceEditController = TextEditingController(text: '0,00');
     _photoPathEditController = TextEditingController();
     _createDateEditController = TextEditingController();
@@ -70,7 +68,6 @@ class _ProductAddViewState extends State<ProductAddView> {
     _stockCodeEditController.dispose();
     _stockPieceEditController.dispose();
     _unitPriceEditController.dispose();
-    _kdvEditController.dispose();
     _totalPriceEditController.dispose();
     _photoPathEditController.dispose();
     _createDateEditController.dispose();
@@ -123,9 +120,6 @@ class _ProductAddViewState extends State<ProductAddView> {
                   children: [
                     //* STOK KODU
                     _buildStockCode(),
-                    CustomSize.spacerDefaultFlex,
-                    //* KDV
-                    _buildKDV(),
                   ],
                 ),
                 CustomSize.betweenWidgetSize,
@@ -192,8 +186,7 @@ class _ProductAddViewState extends State<ProductAddView> {
         controller: _stockCodeEditController,
         labelText: AppText.stokKodu,
         validator: (newValue) => Validation.generalValidation(newValue),
-        onSaved: (String? newValue) =>
-            _stockCodeEditController.text = newValue ?? '',
+        onSaved: (String? newValue) => _stockCodeEditController.text = newValue ?? '',
       ),
     );
   }
@@ -221,8 +214,7 @@ class _ProductAddViewState extends State<ProductAddView> {
         labelText: AppText.stokAdedi,
         onChanged: (value) {
           // PROVIDER İLE NET TUTAR DEĞERİNİ GÜNCELLİYOR
-          _productViewModel.calculateNetPrice(_unitPriceEditController.text,
-              _kdvEditController.text, _stockPieceEditController.text);
+          _productViewModel.calculateBasePrice(_unitPriceEditController.text, _stockPieceEditController.text);
         },
         validator: (newValue) => Validation.generalValidation(newValue),
         onSaved: (newValue) => _stockPieceEditController.text = newValue ?? '',
@@ -239,40 +231,36 @@ class _ProductAddViewState extends State<ProductAddView> {
         controller: _unitPriceEditController,
         labelText: AppText.birimFiyat,
         suffix: Image.asset(ConstImage.iconLiraBlackPath, width: 20),
-        validator: (newValue) => Validation.moneyValueCheck(newValue),
+        validator: (newValue) => Validation.moneyValueValidation(newValue),
         onChanged: (String? value) {
           // Kullanıcının girdiği değeri TR para birimi formatına çevirir
-          _unitPriceEditController.text =
-              CurrencyFormatter.instance().moneyValueCheck(value);
+          _unitPriceEditController.text = CurrencyFormatter.instance().moneyValueCheck(value);
           //imleci satır sonuna getirme
-          _unitPriceEditController.selection = TextSelection.fromPosition(
-              TextPosition(offset: _unitPriceEditController.text.length));
+          _unitPriceEditController.selection =
+              TextSelection.fromPosition(TextPosition(offset: _unitPriceEditController.text.length));
           // PROVIDER İLE NET TUTAR DEĞERİNİ GÜNCELLİYOR
-          _productViewModel.calculateNetPrice(_unitPriceEditController.text,
-              _kdvEditController.text, _stockPieceEditController.text);
+          _productViewModel.calculateBasePrice(_unitPriceEditController.text, _stockPieceEditController.text);
         },
-        onSaved: (String? newValue) =>
-            _unitPriceEditController.text = newValue ?? '',
+        onSaved: (String? newValue) => _unitPriceEditController.text = newValue ?? '',
       ),
     );
   }
 
   //* KDV TUTARI
-  Expanded _buildKDV() {
+  /* Expanded _buildKDV() {
     return Expanded(
       flex: 3,
       child: CustomTextFormField(
         keyboardType: TextInputType.number,
         inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-        prefix: const Text('% ',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+        prefix: const Text('% ', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
         controller: _kdvEditController,
         labelText: AppText.kdv,
         validator: Validation.generalValidation,
         onSaved: (newValue) => _kdvEditController.text = newValue ?? '',
       ),
     );
-  }
+  } */
 
   CustomElevatedButton _buildCancel(BuildContext context) {
     return CustomElevatedButton(
@@ -301,9 +289,7 @@ class _ProductAddViewState extends State<ProductAddView> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => ImageViewWidget(
-                                  imagePath:
-                                      viewModel.productImageFilePath!.path),
+                              builder: (context) => ImageViewWidget(imagePath: viewModel.productImageFilePath!.path),
                             ),
                           );
                         }
@@ -392,9 +378,7 @@ class _ProductAddViewState extends State<ProductAddView> {
             _productViewModel.categoryModel.categorySubName == null ||
             _productViewModel.categoryModel.categoryName == 'Tümü') {
           await const PlatformSensitiveAlertDialog(
-                  content: 'Kategori seçiniz',
-                  title: 'Uyarı !',
-                  doneButtonTitle: 'tamam')
+                  content: 'Kategori seçiniz', title: 'Uyarı !', doneButtonTitle: 'tamam')
               .show(context);
         } else {
           if (_formKey.currentState!.validate()) {
@@ -404,12 +388,9 @@ class _ProductAddViewState extends State<ProductAddView> {
               stockCode: _stockCodeEditController.text,
               title: _commentEditController.text,
               category: _productViewModel.categoryModel,
-              stockPiece:
-                  _stockPieceEditController.text.convertFromStringToDouble(),
-              unitPrice:
-                  _unitPriceEditController.text.convertFromStringToDouble(),
-              basePrice:
-                  _totalPriceEditController.text.convertFromStringToDouble(),
+              stockPiece: _stockPieceEditController.text.convertFromStringToDouble(),
+              unitPrice: _unitPriceEditController.text.convertFromStringToDouble(),
+              basePrice: _totalPriceEditController.text.convertFromStringToDouble(),
               photoPath: _productViewModel.productImageFilePath?.path,
               stockEntryDate: DateTime.now(),
             );
@@ -439,9 +420,7 @@ class _ProductAddViewState extends State<ProductAddView> {
     bool? result = await _productViewModel.getPhotoFromGallery(context);
     if (mounted && (result == null || result)) {
       double end = _scrollController.position.maxScrollExtent;
-      _scrollController.animateTo(end,
-          duration: const Duration(milliseconds: 1000),
-          curve: Curves.easeInOut);
+      _scrollController.animateTo(end, duration: const Duration(milliseconds: 1000), curve: Curves.easeInOut);
       Navigator.pop(context);
     }
   }
@@ -450,9 +429,7 @@ class _ProductAddViewState extends State<ProductAddView> {
     bool? result = await _productViewModel.getPhotoFromCamera(context);
     if (mounted && (result == null || result)) {
       double end = _scrollController.position.maxScrollExtent;
-      _scrollController.animateTo(end,
-          duration: const Duration(milliseconds: 1000),
-          curve: Curves.easeInOut);
+      _scrollController.animateTo(end, duration: const Duration(milliseconds: 1000), curve: Curves.easeInOut);
       Navigator.pop(context);
     }
   }

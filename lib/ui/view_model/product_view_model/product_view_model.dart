@@ -35,13 +35,11 @@ class ProductViewModel extends ChangeNotifier implements DbBase {
   //* STOKTA BULUNAN TÜM ÜRÜNLERİ GETİR
   /// Verilen filtreye göre Kategorinin hepsini yada belirtilen kategoriyi getirir.
   @override
-  Future<List<BaseModel>> fetchProductByCategory(
-      String categoryFilterName) async {
+  Future<List<BaseModel>> fetchProductByCategory(String categoryFilterName) async {
     if (categoryFilterName == 'Tümü') {
       return await fetchProductAll();
     } else {
-      return await _productRepository
-          .fetchProductByCategory(categoryFilterName);
+      return await _productRepository.fetchProductByCategory(categoryFilterName);
     }
   }
 
@@ -125,24 +123,22 @@ class ProductViewModel extends ChangeNotifier implements DbBase {
   }
 
   //* HESAPLAMA YAPAR VE GERİYE DEĞERİ STRİNG OLARAK DÖNER
-  String? calculateNetPrice(String unitPrice, String kdv, String stockPiece) {
+  String? calculateBasePrice(String unitPrice, String stockPiece) {
     // eğer gönderilen birimfiyat veya stok adedi boş ise işlem yapmaz
-    if (unitPrice.isEmpty || stockPiece.isEmpty || kdv.isEmpty) {
+    if (unitPrice.isEmpty || stockPiece.isEmpty) {
       totalPrice = '0,00';
       notifyListeners();
-    } else if (Validation.moneyValueCheck(unitPrice) == null &&
+    } else if (Validation.moneyValueValidation(unitPrice) == null &&
         Validation.generalValidation(stockPiece) == null &&
         (unitPrice.contains(RegExp(',')) || unitPrice.contains(RegExp('.'))) &&
         !unitPrice.contains(RegExp('[a-zA-Z]'))) {
       // Verilen birim fiyatı convertFromStringToDouble ile TR para birimini String tipden double tipe çevirir 1.023,12 => 1023.12
       double _unitPrice = unitPrice.convertFromStringToDouble();
-      double _kdv = double.parse(kdv) / 100;
       double _stockPiece = double.parse(stockPiece);
 
-      double resultDouble = CalculationOperations.calculateNetPrice(
-          _unitPrice, _stockPiece, _kdv);
-      String resultString = CurrencyFormatter.instance()
-          .moneyValueCheck(resultDouble.toString().convertFromDoubleToString());
+      double resultDouble = CalculationOperations.calculateBasePrice(_unitPrice, _stockPiece);
+      String resultString =
+          CurrencyFormatter.instance().moneyValueCheck(resultDouble.toString().convertFromDoubleToString());
 
       totalPrice = resultString;
       notifyListeners();

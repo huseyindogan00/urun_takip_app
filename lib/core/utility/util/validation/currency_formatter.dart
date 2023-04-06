@@ -9,7 +9,8 @@ class CurrencyFormatter {
     return _instance;
   }
 
-  /// Kullanıcıdan yeni alınan String tipindeki TR para biriminin nokta ve virgüllerini ayırarak tekrar hesaplar ve String tipinde değeri döndürür.
+  /// Kullanıcıdan alınan String tipindeki TR para biriminin nokta ve virgüllerini
+  /// ayırarak tekrar hesaplar ve String tipinde değeri döndürür.
   ///
   /// Örneğin:
   ///
@@ -17,13 +18,13 @@ class CurrencyFormatter {
   /// var result = moneyValueCheck(value);
   /// result -> 123.456
   /// -------------------------
-  /// String value = '123456,1234'
+  /// String value = '123456,12'
   /// var result = moneyValueCheck(value);
   /// result -> 123.456,12
   /// -------------------------
-  /// String value = '123456'
+  /// String value = '12345,6'
   /// var result = moneyValueCheck(value);
-  /// result -> 123.456,00
+  /// result -> 12.345,6
   String moneyValueCheck(String? moneyValue) {
     String newValue = '';
     List<String> moneyValueList;

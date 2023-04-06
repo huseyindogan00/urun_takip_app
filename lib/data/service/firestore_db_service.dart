@@ -7,10 +7,7 @@ class FirestoreDbService extends DbBase {
   final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
   @override
   Future<bool?> delete(String productId) async {
-    await _firebaseFirestore
-        .collection(DbCollectionName.products.name)
-        .doc(productId)
-        .delete();
+    await _firebaseFirestore.collection(DbCollectionName.products.name).doc(productId).delete();
     return true;
   }
 
@@ -45,10 +42,8 @@ class FirestoreDbService extends DbBase {
   @override
   Future<List<BaseModel>> fetchProductByCategory(String categoryName) async {
     List<ProductModel> _productList = [];
-    QuerySnapshot<Map<String, dynamic>> snapshot = await _firebaseFirestore
-        .collection('products')
-        .where('category.categoryName', isEqualTo: categoryName)
-        .get();
+    QuerySnapshot<Map<String, dynamic>> snapshot =
+        await _firebaseFirestore.collection('products').where('category.categoryName', isEqualTo: categoryName).get();
 
     for (var element in snapshot.docs) {
       _productList.add(ProductModel.fromMap(element.data()));
@@ -62,7 +57,7 @@ class FirestoreDbService extends DbBase {
     List<ProductModel> _productModel = [];
     QuerySnapshot<Map<String, dynamic>> snapshot = await _firebaseFirestore
         .collection(DbCollectionName.products.name)
-        .orderBy('createDate', descending: true)
+        .orderBy('stockEntryDate', descending: true)
         .get();
     for (var element in snapshot.docs) {
       _productModel.add(ProductModel.fromMap(element.data()));
