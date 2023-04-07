@@ -6,34 +6,34 @@ import 'package:urun_takip_app/data/models/product_model.dart';
 
 class WorkInProgressModel implements WorkBaseModel {
   @override
-  double KDV;
-
-  @override
-  String businessCase;
-
-  @override
-  String? companyName;
-
-  @override
   String? id;
 
   @override
   String? personID;
 
   @override
-  ProductModel productModel;
+  String? companyName; // FİRMA ADI
 
   @override
-  double productPiece;
+  ProductModel productModel; // ÜRÜN
 
   @override
-  String shippingPlace;
+  double productPiece; // ÜRÜN ADEDİ
 
   @override
-  double totalPrice;
+  double KDV;
 
   @override
-  dynamic workDate;
+  double totalPrice; // TOPLAM NET TUTAR
+
+  @override
+  String businessCase; // İŞ DURUMU
+
+  @override
+  String shippingPlace; // KARGO YERİ - ŞEHİR İÇİ/DIŞI
+
+  @override
+  dynamic workDate; // OLUŞTURULMA ZAMANI
   WorkInProgressModel({
     required this.KDV,
     required this.businessCase,

@@ -24,7 +24,6 @@ class _ProductStockStatusViewState extends State<ProductStockStatusView> {
   @override
   void initState() {
     super.initState();
-
     _controller = TextEditingController();
   }
 

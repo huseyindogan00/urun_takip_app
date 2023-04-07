@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:urun_takip_app/core/constant/enum/enumerations.dart';
 import 'package:urun_takip_app/core/init/locator/global_locator.dart';
 import 'package:urun_takip_app/core/utility/extension/string_extension.dart';
 import 'package:urun_takip_app/core/utility/util/calc/calculation_operations.dart';
@@ -9,9 +10,10 @@ import 'package:urun_takip_app/core/utility/util/validation/currency_formatter.d
 import 'package:urun_takip_app/core/utility/util/validation/validation.dart';
 import 'package:urun_takip_app/data/base/db_base.dart';
 import 'package:urun_takip_app/data/models/base/base_model.dart';
+import 'package:urun_takip_app/data/models/base/work_model.dart';
 import 'package:urun_takip_app/data/repository/category_repository.dart';
 import 'package:urun_takip_app/data/models/category_json.dart';
-import 'package:urun_takip_app/data/repository/product_repository.dart';
+import 'package:urun_takip_app/data/repository/repository.dart';
 import 'package:urun_takip_app/ui/components/common/dialog/platform_sensitive_alert_dialog.dart';
 import 'package:urun_takip_app/data/models/category_model.dart';
 
@@ -34,30 +36,34 @@ class ProductViewModel extends ChangeNotifier implements DbBase {
   // ******************************************SERVİS KATMANI
   //* STOKTA BULUNAN TÜM ÜRÜNLERİ GETİR
   /// Verilen filtreye göre Kategorinin hepsini yada belirtilen kategoriyi getirir.
-  @override
-  Future<List<BaseModel>> fetchProductByCategory(String categoryFilterName) async {
+  Future<List<BaseModel>> fetchProductByCategory(
+      String categoryFilterName) async {
     if (categoryFilterName == 'Tümü') {
-      return await fetchProductAll();
+      return await fetchAll(DBCollectionName.products);
     } else {
-      return await _productRepository.fetchProductByCategory(categoryFilterName);
+      return await _productRepository
+          .fetchProductByCategory(categoryFilterName);
     }
   }
 
   @override
-  Future<List<BaseModel>> fetchProductAll() async {
-    return await _productRepository.fetchProductAll();
+  Future<List<BaseModel>> fetchAll(DBCollectionName dbCollectionName) async {
+    return await _productRepository.fetchAll(dbCollectionName);
   }
 
   //* PRODUCT   EKLEME METHODU
   @override
-  Future<bool?> addModel(BaseModel model) async {
+  Future<bool?> add(BaseModel model) async {
+    bool result = false;
     try {
       viewState = ProductViewState.BUSY;
-      bool result = await _productRepository.addModel(model);
+      result = await _productRepository.add(model);
     } on Exception catch (_) {
+      return false;
     } finally {
       viewState = ProductViewState.IDLE;
     }
+    return result;
   }
 
   //* PRODUCT SİLME METHODU
@@ -71,7 +77,7 @@ class ProductViewModel extends ChangeNotifier implements DbBase {
   Future<bool?> update(BaseModel model) async {
     try {
       viewState = ProductViewState.BUSY;
-      await _productRepository.update(model);
+      return await _productRepository.update(model);
     } catch (_) {
     } finally {
       viewState = ProductViewState.IDLE;
@@ -136,9 +142,10 @@ class ProductViewModel extends ChangeNotifier implements DbBase {
       double _unitPrice = unitPrice.convertFromStringToDouble();
       double _stockPiece = double.parse(stockPiece);
 
-      double resultDouble = CalculationOperations.calculateBasePrice(_unitPrice, _stockPiece);
-      String resultString =
-          CurrencyFormatter.instance().moneyValueCheck(resultDouble.toString().convertFromDoubleToString());
+      double resultDouble =
+          CalculationOperations.calculateBasePrice(_unitPrice, _stockPiece);
+      String resultString = CurrencyFormatter.instance()
+          .moneyValueCheck(resultDouble.toString().convertFromDoubleToString());
 
       totalPrice = resultString;
       notifyListeners();
@@ -173,7 +180,7 @@ class ProductViewModel extends ChangeNotifier implements DbBase {
     notifyListeners();
   }
 
-  defaultProductAddView() {
+  void defaultProductAddView() {
     _selectCategoryName = null;
   }
 
@@ -186,6 +193,15 @@ class ProductViewModel extends ChangeNotifier implements DbBase {
     viewState = ProductViewState.BUSY;
     //! YENİLE YAPIP YAPMADIĞI KONTROL EDİLECEK
     viewState = ProductViewState.IDLE;
+  }
+
+  //**************************** WORK İŞLEMLERİ ********************************
+
+  // WORK EKLEME MOTHODU
+  @override
+  Future<bool?> addWork(WorkBaseModel model) {
+    // TODO: implement addWork
+    throw UnimplementedError();
   }
 }
 

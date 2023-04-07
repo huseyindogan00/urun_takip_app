@@ -14,8 +14,8 @@ class ProductStockWidget extends StatelessWidget {
   ProductStockWidget({super.key, required this.productModel});
 
   final ProductModel productModel;
-  late final TextStyle titleStyle;
-  late final TextStyle contentStyle;
+  late TextStyle? titleStyle;
+  late TextStyle? contentStyle;
 
   final _decoration = const BoxDecoration(
     borderRadius: BorderRadius.all(Radius.circular(5)),
