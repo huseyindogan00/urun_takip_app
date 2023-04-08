@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
@@ -11,6 +12,8 @@ import 'package:urun_takip_app/core/utility/util/validation/validation.dart';
 import 'package:urun_takip_app/data/base/db_base.dart';
 import 'package:urun_takip_app/data/models/base/base_model.dart';
 import 'package:urun_takip_app/data/models/base/work_model.dart';
+import 'package:urun_takip_app/data/models/product_model.dart';
+import 'package:urun_takip_app/data/models/result_message_model.dart';
 import 'package:urun_takip_app/data/repository/category_repository.dart';
 import 'package:urun_takip_app/data/models/category_json.dart';
 import 'package:urun_takip_app/data/repository/repository.dart';
@@ -36,13 +39,11 @@ class ProductViewModel extends ChangeNotifier implements DbBase {
   // ******************************************SERVİS KATMANI
   //* STOKTA BULUNAN TÜM ÜRÜNLERİ GETİR
   /// Verilen filtreye göre Kategorinin hepsini yada belirtilen kategoriyi getirir.
-  Future<List<BaseModel>> fetchProductByCategory(
-      String categoryFilterName) async {
+  Future<List<BaseModel>> fetchProductByCategory(String categoryFilterName) async {
     if (categoryFilterName == 'Tümü') {
       return await fetchAll(DBCollectionName.products);
     } else {
-      return await _productRepository
-          .fetchProductByCategory(categoryFilterName);
+      return await _productRepository.fetchProductByCategory(categoryFilterName);
     }
   }
 
@@ -53,23 +54,23 @@ class ProductViewModel extends ChangeNotifier implements DbBase {
 
   //* PRODUCT   EKLEME METHODU
   @override
-  Future<bool?> add(BaseModel model) async {
-    bool result = false;
+  Future<ResultMessageModel?> add(BaseModel model) async {
+    late ResultMessageModel resultMessage;
     try {
       viewState = ProductViewState.BUSY;
-      result = await _productRepository.add(model);
+      resultMessage = await _productRepository.add(model);
     } on Exception catch (_) {
-      return false;
+      return ResultMessageModel(isSuccessful: false, message: 'Eklerken pvm de hataya düştü');
     } finally {
       viewState = ProductViewState.IDLE;
     }
-    return result;
+    return resultMessage;
   }
 
   //* PRODUCT SİLME METHODU
   @override
-  Future<bool?> delete(String productId) async {
-    await _productRepository.delete(productId);
+  Future<bool?> delete(BaseModel product) async {
+    await _productRepository.delete(product);
   }
 
   //* PRODUCT GÜNCELLEME METHODU
@@ -118,11 +119,9 @@ class ProductViewModel extends ChangeNotifier implements DbBase {
 
       notifyListeners();
     } on PlatformException catch (error) {
-      bool? result = await PlatformSensitiveAlertDialog(
-        content: error.message.toString(),
-        title: 'Kameraya bağlanırken hata oluştu',
-        doneButtonTitle: 'Tamam',
-      ).show(context);
+      bool? result =
+          await showDialogCustom(context, error.message.toString(), 'Kameraya bağlanırken hata oluştu', 'Tamam');
+
       return result;
     }
     return true;
@@ -142,10 +141,9 @@ class ProductViewModel extends ChangeNotifier implements DbBase {
       double _unitPrice = unitPrice.convertFromStringToDouble();
       double _stockPiece = double.parse(stockPiece);
 
-      double resultDouble =
-          CalculationOperations.calculateBasePrice(_unitPrice, _stockPiece);
-      String resultString = CurrencyFormatter.instance()
-          .moneyValueCheck(resultDouble.toString().convertFromDoubleToString());
+      double resultDouble = CalculationOperations.calculateBasePrice(_unitPrice, _stockPiece);
+      String resultString =
+          CurrencyFormatter.instance().moneyValueCheck(resultDouble.toString().convertFromDoubleToString());
 
       totalPrice = resultString;
       notifyListeners();
@@ -202,6 +200,16 @@ class ProductViewModel extends ChangeNotifier implements DbBase {
   Future<bool?> addWork(WorkBaseModel model) {
     // TODO: implement addWork
     throw UnimplementedError();
+  }
+
+  Future<bool?> showDialogCustom(BuildContext context, String content, String title, String doneButtonTitle) async {
+    bool? result = await PlatformSensitiveAlertDialog(
+      content: content,
+      title: title,
+      doneButtonTitle: doneButtonTitle,
+    ).show(context);
+
+    return result;
   }
 }
 

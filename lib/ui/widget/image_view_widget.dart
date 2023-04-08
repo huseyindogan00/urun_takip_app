@@ -21,25 +21,27 @@ class ImageViewWidget extends StatelessWidget {
           onPressed: () => Navigator.pop(context),
         ),
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Hero(
-            tag: 'product_image',
-            child: SizedBox(
-              width: MediaQuery.of(context).size.width,
-              child: _isInternetToPhoto
-                  ? Image(
-                      fit: BoxFit.fitWidth,
-                      image: NetworkImage(imagePath),
-                    )
-                  : Image(
-                      fit: BoxFit.contain,
-                      image: FileImage(File(imagePath)),
-                    ),
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Hero(
+              tag: 'product_image',
+              child: SizedBox(
+                width: MediaQuery.of(context).size.width,
+                child: _isInternetToPhoto
+                    ? Image(
+                        fit: BoxFit.fitWidth,
+                        image: NetworkImage(imagePath),
+                      )
+                    : Image(
+                        fit: BoxFit.contain,
+                        image: FileImage(File(imagePath)),
+                      ),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

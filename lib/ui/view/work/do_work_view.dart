@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:urun_takip_app/core/constant/images/const_image.dart';
 import 'package:urun_takip_app/data/models/product_model.dart';
 import 'package:urun_takip_app/ui/components/common/custom_appbar_widget.dart';
 
 class DoWorkView extends StatefulWidget {
   const DoWorkView({super.key, required this.productModel});
-
   final ProductModel productModel;
-
   @override
   State<DoWorkView> createState() => _DoWorkViewState();
 }
@@ -20,7 +19,6 @@ class _DoWorkViewState extends State<DoWorkView> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _companyNameController = TextEditingController();
     _productModel = widget.productModel;
@@ -31,12 +29,35 @@ class _DoWorkViewState extends State<DoWorkView> {
     return Scaffold(
       appBar: CustomAppbarWidget(title: 'İş Yap'),
       body: Container(
-        color: Colors.white,
+        color: Colors.grey.shade300,
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
         child: Column(
           children: [
+            Container(
+              height: 120,
+              decoration: BoxDecoration(color: Colors.blue.shade400),
+              child: Row(
+                children: [
+                  Column(
+                    children: [
+                      Expanded(
+                        child: Container(
+                          child: _productModel.photoURL != null
+                              ? Image.network(
+                                  _productModel.photoURL!,
+                                  fit: BoxFit.fitWidth,
+                                )
+                              : Image.asset(ConstImage.defaultImagePlaceHolder),
+                        ),
+                      )
+                    ],
+                  )
+                ],
+              ),
+            ),
             Expanded(
               child: Stepper(
-                controlsBuilder: (context, details) {
+                controlsBuilder: (context, _) {
                   return Container(
                     margin: const EdgeInsets.symmetric(vertical: 20),
                     child: Row(
@@ -83,35 +104,39 @@ class _DoWorkViewState extends State<DoWorkView> {
                 }),
                 currentStep: currentStep,
                 elevation: 5,
-                steps: [
-                  Step(
-                    state: StepState.editing,
-                    isActive: isActive,
-                    label: const Text('label adı'),
-                    title: const Text('Alıcı Firma Adı'),
-                    content: TextField(controller: _companyNameController),
-                  ),
-                  Step(
-                    state: StepState.indexed,
-                    isActive: isActive,
-                    label: const Text('label adı'),
-                    title: const Text('Alıcı Firma Adı'),
-                    content: TextField(controller: _companyNameController),
-                  ),
-                  Step(
-                    state: StepState.indexed,
-                    isActive: isActive,
-                    label: const Text('label adı'),
-                    title: const Text('Alıcı Firma Adı'),
-                    content: TextField(controller: _companyNameController),
-                  ),
-                ],
+                steps: _buildStepList(),
               ),
             ),
           ],
         ),
       ),
     );
+  }
+
+  List<Step> _buildStepList() {
+    return [
+      Step(
+        state: StepState.editing,
+        isActive: isActive,
+        label: const Text('label adı'),
+        title: const Text('Alıcı Firma Adı'),
+        content: TextField(controller: _companyNameController),
+      ),
+      Step(
+        state: StepState.indexed,
+        isActive: isActive,
+        label: const Text('label adı'),
+        title: const Text('Alıcı Firma Adı'),
+        content: TextField(controller: _companyNameController),
+      ),
+      Step(
+        state: StepState.indexed,
+        isActive: isActive,
+        label: const Text('label adı'),
+        title: const Text('Alıcı Firma Adı'),
+        content: TextField(controller: _companyNameController),
+      ),
+    ];
   }
 
   _buildStepController(StepEnum whichStep) {
@@ -136,4 +161,4 @@ enum StepEnum {
   CONTINUE,
 }
 
-enum StepStateEnum { COMPLATE, EDITING, INDEXED }
+enum StepStateEnum { COMPLATED, EDITING, INDEXED }

@@ -13,6 +13,7 @@ import 'package:urun_takip_app/core/utility/util/validation/currency_formatter.d
 import 'package:urun_takip_app/core/utility/util/validation/validation.dart';
 import 'package:urun_takip_app/data/models/category_json.dart';
 import 'package:urun_takip_app/data/models/product_model.dart';
+import 'package:urun_takip_app/data/models/result_message_model.dart';
 import 'package:urun_takip_app/ui/components/common/button/custom_elevated_button.dart';
 import 'package:urun_takip_app/ui/components/common/button/custom_elevated_icon_button.dart';
 import 'package:urun_takip_app/ui/components/common/custom_appbar_widget.dart';
@@ -186,8 +187,7 @@ class _ProductAddViewState extends State<ProductAddView> {
         controller: _stockCodeEditController,
         labelText: AppText.stokKodu,
         validator: (newValue) => Validation.generalValidation(newValue),
-        onSaved: (String? newValue) =>
-            _stockCodeEditController.text = newValue ?? '',
+        onSaved: (String? newValue) => _stockCodeEditController.text = newValue ?? '',
       ),
     );
   }
@@ -215,8 +215,7 @@ class _ProductAddViewState extends State<ProductAddView> {
         labelText: AppText.stokAdedi,
         onChanged: (value) {
           // PROVIDER İLE NET TUTAR DEĞERİNİ GÜNCELLİYOR
-          _productViewModel.calculateBasePrice(
-              _unitPriceEditController.text, _stockPieceEditController.text);
+          _productViewModel.calculateBasePrice(_unitPriceEditController.text, _stockPieceEditController.text);
         },
         validator: (newValue) => Validation.generalValidation(newValue),
         onSaved: (newValue) => _stockPieceEditController.text = newValue ?? '',
@@ -236,17 +235,14 @@ class _ProductAddViewState extends State<ProductAddView> {
         validator: (newValue) => Validation.moneyValueValidation(newValue),
         onChanged: (String? value) {
           // Kullanıcının girdiği değeri TR para birimi formatına çevirir
-          _unitPriceEditController.text =
-              CurrencyFormatter.instance().moneyValueCheck(value);
+          _unitPriceEditController.text = CurrencyFormatter.instance().moneyValueCheck(value);
           //imleci satır sonuna getirme
-          _unitPriceEditController.selection = TextSelection.fromPosition(
-              TextPosition(offset: _unitPriceEditController.text.length));
+          _unitPriceEditController.selection =
+              TextSelection.fromPosition(TextPosition(offset: _unitPriceEditController.text.length));
           // PROVIDER İLE NET TUTAR DEĞERİNİ GÜNCELLİYOR
-          _productViewModel.calculateBasePrice(
-              _unitPriceEditController.text, _stockPieceEditController.text);
+          _productViewModel.calculateBasePrice(_unitPriceEditController.text, _stockPieceEditController.text);
         },
-        onSaved: (String? newValue) =>
-            _unitPriceEditController.text = newValue ?? '',
+        onSaved: (String? newValue) => _unitPriceEditController.text = newValue ?? '',
       ),
     );
   }
@@ -294,9 +290,7 @@ class _ProductAddViewState extends State<ProductAddView> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => ImageViewWidget(
-                                  imagePath:
-                                      viewModel.productImageFilePath!.path),
+                              builder: (context) => ImageViewWidget(imagePath: viewModel.productImageFilePath!.path),
                             ),
                           );
                         }
@@ -384,11 +378,7 @@ class _ProductAddViewState extends State<ProductAddView> {
         if (_productViewModel.categoryModel.categoryName == null ||
             _productViewModel.categoryModel.categorySubName == null ||
             _productViewModel.categoryModel.categoryName == 'Tümü') {
-          await const PlatformSensitiveAlertDialog(
-                  content: 'Kategori seçiniz',
-                  title: 'Uyarı !',
-                  doneButtonTitle: 'tamam')
-              .show(context);
+          await _productViewModel.showDialogCustom(context, 'Kategori Seçiniz', 'Uyarı', 'Tamam');
         } else {
           if (_formKey.currentState!.validate()) {
             _formKey.currentState!.save();
@@ -397,25 +387,34 @@ class _ProductAddViewState extends State<ProductAddView> {
               stockCode: _stockCodeEditController.text,
               title: _commentEditController.text,
               category: _productViewModel.categoryModel,
-              stockPiece:
-                  _stockPieceEditController.text.convertFromStringToDouble(),
-              unitPrice:
-                  _unitPriceEditController.text.convertFromStringToDouble(),
-              basePrice:
-                  _totalPriceEditController.text.convertFromStringToDouble(),
+              stockPiece: _stockPieceEditController.text.convertFromStringToDouble(),
+              unitPrice: _unitPriceEditController.text.convertFromStringToDouble(),
+              basePrice: _totalPriceEditController.text.convertFromStringToDouble(),
               photoPath: _productViewModel.productImageFilePath?.path,
               stockEntryDate: DateTime.now(),
             );
-            bool? result = await _productViewModel.add(productModel);
+            ResultMessageModel? resultMessageModel = await _productViewModel.add(productModel);
 
-            if (mounted) {
-              await PlatformSensitiveAlertDialog(
-                content: result! ? 'Ürün Eklendi' : 'Ürün ekleme başarısız',
-                title: 'Bilgi',
-                doneButtonTitle: 'Tamam',
-              ).show(context);
-              _productViewModel.totalPrice = '0,00';
-              if (mounted) Navigator.pop(context);
+            if (resultMessageModel!.isSuccessful) {
+              if (mounted) {
+                await _productViewModel.showDialogCustom(
+                  context,
+                  resultMessageModel.message!,
+                  'Bilgi',
+                  'Tamam',
+                );
+                _productViewModel.totalPrice = '0,00';
+                if (mounted) Navigator.pop(context);
+              }
+            } else {
+              if (mounted) {
+                await _productViewModel.showDialogCustom(
+                  context,
+                  resultMessageModel.message!,
+                  'Uyarı',
+                  'Tamam',
+                );
+              }
             }
           }
         }
@@ -437,9 +436,7 @@ class _ProductAddViewState extends State<ProductAddView> {
     bool? result = await _productViewModel.getPhotoFromGallery(context);
     if (mounted && (result == null || result)) {
       double end = _scrollController.position.maxScrollExtent;
-      _scrollController.animateTo(end,
-          duration: const Duration(milliseconds: 1000),
-          curve: Curves.easeInOut);
+      _scrollController.animateTo(end, duration: const Duration(milliseconds: 1000), curve: Curves.easeInOut);
       Navigator.pop(context);
     }
   }
@@ -448,9 +445,7 @@ class _ProductAddViewState extends State<ProductAddView> {
     bool? result = await _productViewModel.getPhotoFromCamera(context);
     if (mounted && (result == null || result)) {
       double end = _scrollController.position.maxScrollExtent;
-      _scrollController.animateTo(end,
-          duration: const Duration(milliseconds: 1000),
-          curve: Curves.easeInOut);
+      _scrollController.animateTo(end, duration: const Duration(milliseconds: 1000), curve: Curves.easeInOut);
       Navigator.pop(context);
     }
   }

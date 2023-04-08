@@ -5,6 +5,7 @@ import 'package:urun_takip_app/data/base/db_base.dart';
 import 'package:urun_takip_app/data/models/base/base_model.dart';
 import 'package:urun_takip_app/data/models/completed_work_model.dart';
 import 'package:urun_takip_app/data/models/product_model.dart';
+import 'package:urun_takip_app/data/models/result_message_model.dart';
 import 'package:urun_takip_app/data/models/work_in_progress_model.dart';
 import 'package:urun_takip_app/data/service/firebase_storage_service.dart';
 import 'package:urun_takip_app/data/service/product_db_service.dart';
@@ -13,38 +14,46 @@ import 'package:urun_takip_app/data/service/work_firestore_service.dart';
 class ProductRepository extends DbBase {
   final ProductDBService _productDbService = locator<ProductDBService>();
   final WorkDBService _workDbService = locator<WorkDBService>();
-  final FirebaseStorageServise _firebaseStorageServise =
-      FirebaseStorageServise();
+  final FirebaseStorageServise _firebaseStorageServise = FirebaseStorageServise();
 
   late ProductModel? _productModel;
   late CompletedWorkModel? _completedWorkModel;
   late WorkInProgressModel? _workInProgressModel;
   @override
-  Future<bool> delete(String productId) async {
-    await _firebaseStorageServise.deleteFile(productId);
-    await _productDbService.delete(productId);
+  Future<bool> delete(BaseModel product) async {
+    if (product is ProductModel) {
+      if (product.photoURL != null) {
+        await _firebaseStorageServise.deleteFile(product.id!, product.photoPath!.split('.').last);
+      }
+
+      await _productDbService.delete(product);
+    }
 
     return true;
   }
 
   @override
-  Future<bool> add(BaseModel model) async {
-    String? _photoURL;
-    bool result = false;
+  Future<ResultMessageModel> add(BaseModel model) async {
+    late String? _photoURL;
+    ResultMessageModel resultMessage = ResultMessageModel(isSuccessful: false);
 
     if (model is ProductModel) {
       _productModel = model;
-      _photoURL = await _firebaseStorageServise.uploadFile(_productModel);
-      _productModel!.photoURL = _photoURL;
-      result = await _productDbService.add(_productModel!);
+      resultMessage = await _productDbService.stockControl(_productModel!.stockCode!);
+      if (resultMessage.isSuccessful) {
+        _photoURL = await _firebaseStorageServise.uploadFile(_productModel);
+        _productModel!.photoURL = _photoURL;
+        resultMessage = await _productDbService.add(_productModel!);
+      }
+      return resultMessage;
     } else if (model is CompletedWorkModel) {
       _completedWorkModel = model;
     } else if (model is WorkInProgressModel) {
       _workInProgressModel = model;
     } else {
-      result = false;
+      resultMessage.isSuccessful = false;
     }
-    return result;
+    return resultMessage;
   }
 
   @override

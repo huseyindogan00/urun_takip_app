@@ -10,21 +10,24 @@ import 'package:urun_takip_app/data/models/product_model.dart';
 import 'package:urun_takip_app/data/models/work_in_progress_model.dart';
 
 class FirebaseStorageServise extends StorageBase {
-  final FirebaseStorage _firebaseStorage = FirebaseStorage.instance;
+  final _firebaseStorageRef = FirebaseStorage.instance.ref();
 
   @override
   Future<String?> uploadFile(BaseModel? model) async {
     if (model != null) {
       if (model is ProductModel) {
         try {
-          Reference ref = _firebaseStorage
+          final ref = _firebaseStorageRef
+              .child('${model.id!}/productPhoto/${model.photoPath.toString().createPhotoName(model.id.toString())}');
+
+          TaskSnapshot taskSnapshot = await ref.putFile(File(model.photoPath!));
+
+          /*  Reference ref = _firebaseStorage
               .ref()
               .child(model.id!)
               .child('productPhoto')
-              .child(model.photoPath
-                  .toString()
-                  .createPhotoName(model.id.toString()));
-          TaskSnapshot taskSnapshot = await ref.putFile(File(model.photoPath!));
+              .child(model.photoPath.toString().createPhotoName(model.id.toString()));
+          TaskSnapshot taskSnapshot = await ref.putFile(File(model.photoPath!)); */
           String url = await taskSnapshot.ref.getDownloadURL();
           return url;
         } catch (e) {
@@ -38,12 +41,12 @@ class FirebaseStorageServise extends StorageBase {
   }
 
   @override
-  Future<void> deleteFile(String productId) async {
+  Future<void> deleteFile(String productID, String fileExtension) async {
     try {
       //var ref = await _firebaseStorage.ref().child('$productId/productPhoto/$productId.jpeg').delete();
-      var ref = await _firebaseStorage.ref().child('$productId/').delete();
+      var ref = _firebaseStorageRef.child('$productID/productPhoto/$productID.$fileExtension');
 
-      return ref;
+      ref.delete();
     } catch (_) {}
   }
 }
