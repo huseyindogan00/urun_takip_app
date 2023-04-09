@@ -69,12 +69,14 @@ class ProductStockWidget extends StatelessWidget {
       children: [
         CustomElevatedButton(
           buttonStyle: ElevatedButton.styleFrom(
-              backgroundColor: Colors.grey.shade500, textStyle: const TextStyle(color: Colors.black)),
+              backgroundColor: Colors.grey.shade500,
+              textStyle: const TextStyle(color: Colors.black)),
           onPressed: () {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (contex) => ProductUpdateView(productModel: productModel),
+                builder: (contex) =>
+                    ProductUpdateView(productModel: productModel),
               ),
             );
           },
@@ -84,7 +86,8 @@ class ProductStockWidget extends StatelessWidget {
         ),
         CustomElevatedButton(
           buttonStyle: ElevatedButton.styleFrom(
-              backgroundColor: Colors.grey.shade900, textStyle: const TextStyle(color: Colors.black)),
+              backgroundColor: Colors.grey.shade900,
+              textStyle: const TextStyle(color: Colors.black)),
           onPressed: () {
             Navigator.push(
               context,
@@ -108,8 +111,9 @@ class ProductStockWidget extends StatelessWidget {
       ),
       height: 120,
       margin: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
-      child:
-          productModel.photoURL != null ? _buildOnTapPhoto(context) : Image.asset(ConstImage.defaultImagePlaceHolder),
+      child: productModel.photoURL != null && productModel.photoURL!.isNotEmpty
+          ? _buildOnTapPhoto(context)
+          : Image.asset(ConstImage.defaultImagePlaceHolder),
     );
   }
 
@@ -119,7 +123,8 @@ class ProductStockWidget extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => ImageViewWidget(imagePath: productModel.photoURL!),
+            builder: (context) =>
+                ImageViewWidget(imagePath: productModel.photoURL!),
           ),
         );
       },
@@ -166,7 +171,8 @@ class ProductStockWidget extends StatelessWidget {
         Row(
           children: [
             Text(ProductStockStatusText.adet, style: titleStyle),
-            Text(productModel.stockPiece.toInt().toString(), style: contentStyle),
+            Text(productModel.stockPiece.toInt().toString(),
+                style: contentStyle),
           ],
         ),
         Row(
@@ -179,7 +185,7 @@ class ProductStockWidget extends StatelessWidget {
         ),
         Row(
           children: [
-            Text(ProductStockStatusText.netFiyat, style: titleStyle),
+            Text(ProductStockStatusText.matrah, style: titleStyle),
             Text(
                 '${CurrencyFormatter.instance().moneyValueCheck(productModel.basePrice.toString().convertFromDoubleToString())} ₺',
                 style: contentStyle),
@@ -195,7 +201,10 @@ class ProductStockWidget extends StatelessWidget {
         Wrap(
           children: [
             Text(ProductStockStatusText.aciklama, style: titleStyle),
-            Text(productModel.title, style: contentStyle, overflow: TextOverflow.ellipsis, maxLines: 2),
+            Text(productModel.title,
+                style: contentStyle,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 2),
           ],
         ),
       ],

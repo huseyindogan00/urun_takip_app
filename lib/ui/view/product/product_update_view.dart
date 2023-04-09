@@ -51,16 +51,19 @@ class _ProductUpdateViewState extends State<ProductUpdateView> {
     _productModel = widget.productModel;
     _firstValueTotalPrice = true;
     _commentEditController = TextEditingController(text: _productModel.title);
-    _stockCodeEditController = TextEditingController(text: _productModel.stockCode);
-    _stockPieceEditController = TextEditingController(text: _productModel.stockPiece.toInt().toString());
+    _stockCodeEditController =
+        TextEditingController(text: _productModel.stockCode);
+    _stockPieceEditController = TextEditingController(
+        text: _productModel.stockPiece.toInt().toString());
     _unitPriceEditController = TextEditingController(
-      text:
-          CurrencyFormatter.instance().moneyValueCheck(_productModel.unitPrice.toString().convertFromDoubleToString()),
+      text: CurrencyFormatter.instance().moneyValueCheck(
+          _productModel.unitPrice.toString().convertFromDoubleToString()),
     );
     // KDV GİBİ sabit değerleri daha sonra uygulama başlarken veritabanından getireceğiz.
     // Ayarlar menüsünden bu gibi sabit değerlere müdahale edilmeyecek
     _totalPriceEditController = TextEditingController();
-    _photoPathEditController = TextEditingController(text: _productModel.photoPath);
+    _photoPathEditController =
+        TextEditingController(text: _productModel.photoPath);
     //_createDateEditController = TextEditingController(text: _productModel.createDate);
 
     _scrollController = ScrollController();
@@ -69,8 +72,10 @@ class _ProductUpdateViewState extends State<ProductUpdateView> {
     // SAYFA YÜKLENDİKTEN SONRA ATAMALARI YAP
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       _productViewModel = Provider.of<ProductViewModel>(context, listen: false);
-      _productViewModel.selectCategoryName = _productModel.category.categoryName!;
-      _productViewModel.selectCategorySubName = _productModel.category.categorySubName;
+      _productViewModel.selectCategoryName =
+          _productModel.category.categoryName!;
+      _productViewModel.selectCategorySubName =
+          _productModel.category.categorySubName;
     });
   }
 
@@ -143,8 +148,10 @@ class _ProductUpdateViewState extends State<ProductUpdateView> {
                   builder: (_, model, child) {
                     WidgetsBinding.instance.addPostFrameCallback((_) {
                       _totalPriceEditController.text = _firstValueTotalPrice
-                          ? CurrencyFormatter.instance()
-                              .moneyValueCheck(_productModel.basePrice.toString().convertFromDoubleToString())
+                          ? CurrencyFormatter.instance().moneyValueCheck(
+                              _productModel.basePrice
+                                  .toString()
+                                  .convertFromDoubleToString())
                           : model.totalPrice;
                     });
                     return CustomTextFormField(
@@ -194,7 +201,8 @@ class _ProductUpdateViewState extends State<ProductUpdateView> {
         controller: _stockCodeEditController,
         labelText: AppText.stokKodu,
         validator: (newValue) => Validation.generalValidation(newValue),
-        onSaved: (String? newValue) => _stockCodeEditController.text = newValue ?? '',
+        onSaved: (String? newValue) =>
+            _stockCodeEditController.text = newValue ?? '',
       ),
     );
   }
@@ -224,7 +232,8 @@ class _ProductUpdateViewState extends State<ProductUpdateView> {
           // sayfa ilk açıldığında veritabınındaki değeri aldıktan sonra burdaki değer false yapılır ve viewmodel üzerinden totalprice alınır
           _firstValueTotalPrice = false;
           // PROVIDER İLE NET TUTAR DEĞERİNİ GÜNCELLİYOR
-          _productViewModel.calculateBasePrice(_unitPriceEditController.text, _stockPieceEditController.text);
+          _productViewModel.calculateBasePrice(
+              _unitPriceEditController.text, _stockPieceEditController.text);
         },
         validator: (newValue) => Validation.generalValidation(newValue),
         onSaved: (newValue) => _stockPieceEditController.text = newValue ?? '',
@@ -246,14 +255,17 @@ class _ProductUpdateViewState extends State<ProductUpdateView> {
           // sayfa ilk açıldığında veritabınındaki değeri aldıktan sonra burdaki değer false yapılır ve viewmodel üzerinden totalprice alınır
           _firstValueTotalPrice = false;
           // Kullanıcının girdiği değeri TR para birimi formatına çevirir
-          _unitPriceEditController.text = CurrencyFormatter.instance().moneyValueCheck(value);
+          _unitPriceEditController.text =
+              CurrencyFormatter.instance().moneyValueCheck(value);
           //imleci satır sonuna getirme
-          _unitPriceEditController.selection =
-              TextSelection.fromPosition(TextPosition(offset: _unitPriceEditController.text.length));
+          _unitPriceEditController.selection = TextSelection.fromPosition(
+              TextPosition(offset: _unitPriceEditController.text.length));
           // PROVIDER İLE NET TUTAR DEĞERİNİ GÜNCELLİYOR
-          _productViewModel.calculateBasePrice(_unitPriceEditController.text, _stockPieceEditController.text);
+          _productViewModel.calculateBasePrice(
+              _unitPriceEditController.text, _stockPieceEditController.text);
         },
-        onSaved: (String? newValue) => _unitPriceEditController.text = newValue ?? '',
+        onSaved: (String? newValue) =>
+            _unitPriceEditController.text = newValue ?? '',
       ),
     );
   }
@@ -272,7 +284,9 @@ class _ProductUpdateViewState extends State<ProductUpdateView> {
   Consumer<ProductViewModel> _buildViewPhoto(BuildContext context) {
     return Consumer<ProductViewModel>(
       builder: (_, viewModel, child) {
-        return _productModel.photoURL == null && viewModel.productImageFilePath == null
+        return (_productModel.photoURL == null ||
+                    _productModel.photoURL!.isEmpty) &&
+                viewModel.productImageFilePath == null
             ? child!
             : SizedBox(
                 width: CustomSize.kWidth(context),
@@ -285,7 +299,8 @@ class _ProductUpdateViewState extends State<ProductUpdateView> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => ImageViewWidget(imagePath: _productModel.photoURL!),
+                              builder: (context) => ImageViewWidget(
+                                  imagePath: _productModel.photoURL!),
                             ),
                           );
                         } else {}
@@ -378,7 +393,8 @@ class _ProductUpdateViewState extends State<ProductUpdateView> {
         if (_productViewModel.categoryModel.categoryName == null ||
             _productViewModel.categoryModel.categorySubName == null ||
             _productViewModel.categoryModel.categoryName == 'Tümü') {
-          await _productViewModel.showDialogCustom(context, 'Kategori Seçiniz', 'Uyarı', 'Tamam');
+          await _productViewModel.showDialogCustom(
+              context, 'Kategori Seçiniz', 'Uyarı', 'Tamam');
         } else {
           if (_formKey.currentState!.validate()) {
             _formKey.currentState!.save();
@@ -387,10 +403,14 @@ class _ProductUpdateViewState extends State<ProductUpdateView> {
               stockCode: _stockCodeEditController.text,
               title: _commentEditController.text,
               category: _productViewModel.categoryModel,
-              stockPiece: _stockPieceEditController.text.convertFromStringToDouble(),
-              unitPrice: _unitPriceEditController.text.convertFromStringToDouble(),
-              basePrice: _totalPriceEditController.text.convertFromStringToDouble(),
-              photoPath: _productViewModel.productImageFilePath?.path ?? _productModel.photoPath,
+              stockPiece:
+                  _stockPieceEditController.text.convertFromStringToDouble(),
+              unitPrice:
+                  _unitPriceEditController.text.convertFromStringToDouble(),
+              basePrice:
+                  _totalPriceEditController.text.convertFromStringToDouble(),
+              photoPath: _productViewModel.productImageFilePath?.path ??
+                  _productModel.photoPath,
               photoURL: _productModel.photoURL,
               stockEntryDate: DateTime.now(),
             );
@@ -398,7 +418,10 @@ class _ProductUpdateViewState extends State<ProductUpdateView> {
 
             if (mounted) {
               await _productViewModel.showDialogCustom(
-                  context, result! ? 'Güncelleme başarılı' : 'Güncelleme başarısız', 'Bilgi', 'Tamam');
+                  context,
+                  result! ? 'Güncelleme başarılı' : 'Güncelleme başarısız',
+                  'Bilgi',
+                  'Tamam');
 
               _productViewModel.totalPrice = '0,00';
               if (mounted) Navigator.pop(context);
@@ -423,7 +446,9 @@ class _ProductUpdateViewState extends State<ProductUpdateView> {
     bool? result = await _productViewModel.getPhotoFromGallery(context);
     if (mounted && (result == null || result)) {
       double end = _scrollController.position.maxScrollExtent;
-      _scrollController.animateTo(end, duration: const Duration(milliseconds: 1000), curve: Curves.easeInOut);
+      _scrollController.animateTo(end,
+          duration: const Duration(milliseconds: 1000),
+          curve: Curves.easeInOut);
       Navigator.pop(context);
     }
   }
@@ -432,7 +457,9 @@ class _ProductUpdateViewState extends State<ProductUpdateView> {
     bool? result = await _productViewModel.getPhotoFromCamera(context);
     if (mounted && (result == null || result)) {
       double end = _scrollController.position.maxScrollExtent;
-      _scrollController.animateTo(end, duration: const Duration(milliseconds: 1000), curve: Curves.easeInOut);
+      _scrollController.animateTo(end,
+          duration: const Duration(milliseconds: 1000),
+          curve: Curves.easeInOut);
       Navigator.pop(context);
     }
   }
