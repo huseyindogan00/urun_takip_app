@@ -4,7 +4,16 @@ import 'dart:convert';
 import 'package:urun_takip_app/data/models/base/work_model.dart';
 import 'package:urun_takip_app/data/models/product_model.dart';
 
-class WorkInProgressModel implements WorkBaseModel {
+class WorkModel implements WorkBaseModel {
+  @override
+  double KDV;
+
+  @override
+  String businessCase;
+
+  @override
+  String? companyName;
+
   @override
   String? id;
 
@@ -12,30 +21,20 @@ class WorkInProgressModel implements WorkBaseModel {
   String? personID;
 
   @override
-  String? companyName; // FİRMA ADI
+  ProductModel productModel;
 
   @override
-  ProductModel productModel; // ÜRÜN
+  double productPiece;
 
   @override
-  double productPiece; // ÜRÜN ADEDİ
+  String shippingPlace;
 
   @override
-  double KDV;
+  double totalPrice;
 
   @override
-  double totalPrice; // TOPLAM NET TUTAR
-
-  @override
-  String businessCase; // İŞ DURUMU
-
-  @override
-  String shippingPlace; // KARGO YERİ - ŞEHİR İÇİ/DIŞI
-
-  @override
-  dynamic workDate; // OLUŞTURULMA ZAMANI
-
-  WorkInProgressModel({
+  dynamic workDate;
+  WorkModel({
     required this.KDV,
     required this.businessCase,
     this.companyName,
@@ -48,7 +47,7 @@ class WorkInProgressModel implements WorkBaseModel {
     required this.workDate,
   });
 
-  WorkInProgressModel copyWith({
+  WorkModel copyWith({
     double? KDV,
     String? businessCase,
     String? companyName,
@@ -60,7 +59,7 @@ class WorkInProgressModel implements WorkBaseModel {
     double? totalPrice,
     dynamic? workDate,
   }) {
-    return WorkInProgressModel(
+    return WorkModel(
       KDV: KDV ?? this.KDV,
       businessCase: businessCase ?? this.businessCase,
       companyName: companyName ?? this.companyName,
@@ -89,8 +88,8 @@ class WorkInProgressModel implements WorkBaseModel {
     };
   }
 
-  factory WorkInProgressModel.fromMap(Map<String, dynamic> map) {
-    return WorkInProgressModel(
+  factory WorkModel.fromMap(Map<String, dynamic> map) {
+    return WorkModel(
       KDV: map['KDV'] as double,
       businessCase: map['businessCase'] as String,
       companyName: map['companyName'] != null ? map['companyName'] as String : null,
@@ -106,16 +105,15 @@ class WorkInProgressModel implements WorkBaseModel {
 
   String toJson() => json.encode(toMap());
 
-  factory WorkInProgressModel.fromJson(String source) =>
-      WorkInProgressModel.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory WorkModel.fromJson(String source) => WorkModel.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
   String toString() {
-    return 'WorkInProgressModel(KDV: $KDV, businessCase: $businessCase, companyName: $companyName, id: $id, personID: $personID, productModel: $productModel, productPiece: $productPiece, shippingPlace: $shippingPlace, totalPrice: $totalPrice, workDate: $workDate)';
+    return 'WorkModel(KDV: $KDV, businessCase: $businessCase, companyName: $companyName, id: $id, personID: $personID, productModel: $productModel, productPiece: $productPiece, shippingPlace: $shippingPlace, totalPrice: $totalPrice, workDate: $workDate)';
   }
 
   @override
-  bool operator ==(covariant WorkInProgressModel other) {
+  bool operator ==(covariant WorkModel other) {
     if (identical(this, other)) return true;
 
     return other.KDV == KDV &&

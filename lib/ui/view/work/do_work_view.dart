@@ -1,4 +1,7 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
+import 'package:urun_takip_app/core/constant/enum/enumerations.dart';
 import 'package:urun_takip_app/core/constant/images/const_image.dart';
 import 'package:urun_takip_app/core/constant/size/custom_size.dart';
 import 'package:urun_takip_app/core/constant/text/product_stock_status_text.dart';
@@ -19,7 +22,7 @@ class _DoWorkViewState extends State<DoWorkView> {
   late TextEditingController _companyNameController; //ALICI FİRMA ADI
   late TextEditingController _productPieceController; // ÜRÜN ADEDİ
   late TextEditingController _shippingPlaceController; // GÖNDERİM YERİ
-  late TextEditingController _workStateController; //İŞ DURUMU
+  late TextEditingController _businessStateController; //İŞ DURUMU
   late TextEditingController _totalPriceController; // TOPLAM NET TUTAR
   late TextStyle? titleStyle;
   late TextStyle? contentStyle;
@@ -30,10 +33,15 @@ class _DoWorkViewState extends State<DoWorkView> {
     boxShadow: [BoxShadow(color: Color.fromARGB(255, 2, 8, 12), blurRadius: 5)],
   );
   final stepDecoration = const InputDecoration(
+    border: InputBorder.none,
     filled: true,
     fillColor: Colors.white,
     contentPadding: EdgeInsets.all(5),
   );
+
+  final _dropdownColor = Colors.white;
+  final _dropdownDecoration =
+      const BoxDecoration(color: Colors.white, borderRadius: BorderRadius.all(Radius.circular(10)));
 
   final _companyNameKey = GlobalKey<FormFieldState>();
   final _productPieceKey = GlobalKey<FormFieldState>();
@@ -45,6 +53,11 @@ class _DoWorkViewState extends State<DoWorkView> {
   bool isActive = false;
   int tapped = 0;
   int currentIndex = 0;
+  late int stockPiece;
+
+  late List<DropdownMenuItem> shippingDropdownItem;
+
+  late List<DropdownMenuItem> businessCaseItem;
 
   late Widget textStock;
   late Widget iconStock;
@@ -54,15 +67,43 @@ class _DoWorkViewState extends State<DoWorkView> {
     super.initState();
     _companyNameController = TextEditingController();
     _productPieceController = TextEditingController();
-    _shippingPlaceController = TextEditingController();
-    _workStateController = TextEditingController();
-    _totalPriceController = TextEditingController();
-
+    _totalPriceController = TextEditingController(text: '0');
+    _shippingPlaceController = TextEditingController(text: 'Şehir Dışı');
+    _businessStateController = TextEditingController(text: 'İş Tamamlandı');
     _productModel = widget.productModel;
+    stockPiece = _productModel.stockPiece.toInt();
+
+    businessCaseItem = BusinessCase.values.map((businessEnum) {
+      if (businessEnum == BusinessCase.COMPLATED) {
+        return const DropdownMenuItem(
+          value: 'İş Tamamlandı',
+          child: Text('İş tamamlandı'),
+        );
+      } else {
+        return const DropdownMenuItem(
+          value: 'İş Devam Ediyor',
+          child: Text('İş devam ediyor'),
+        );
+      }
+    }).toList();
+
+    shippingDropdownItem = ShippingPlace.values.map((shippingEnum) {
+      if (shippingEnum == ShippingPlace.LOCAL) {
+        return const DropdownMenuItem(
+          value: 'Şehir Dışı',
+          child: Text('Şehir Dışı'),
+        );
+      } else {
+        return const DropdownMenuItem(
+          value: 'Şehir İçi',
+          child: Text('Şehir İçi'),
+        );
+      }
+    }).toList();
 
     textStock = _productModel.stockPiece > 0
-        ? Text('Stokta var', style: TextStyle(color: Colors.green.shade700, fontWeight: FontWeight.bold))
-        : Text('Stokta Yok', style: TextStyle(color: Colors.red.shade700, fontWeight: FontWeight.bold));
+        ? Text('Stokta var', style: TextStyle(color: Colors.green.shade700, fontWeight: FontWeight.bold, fontSize: 17))
+        : Text('Stokta Yok', style: TextStyle(color: Colors.red.shade700, fontWeight: FontWeight.bold, fontSize: 17));
     iconStock = _productModel.stockPiece > 0
         ? Icon(Icons.done, color: Colors.green.shade800, size: 30)
         : const Icon(Icons.dangerous_outlined, color: Colors.red);
@@ -74,7 +115,7 @@ class _DoWorkViewState extends State<DoWorkView> {
     _companyNameController.dispose();
     _productPieceController.dispose();
     _shippingPlaceController.dispose();
-    _workStateController.dispose();
+    _businessStateController.dispose();
     _totalPriceController.dispose();
 
     super.dispose();
@@ -87,7 +128,7 @@ class _DoWorkViewState extends State<DoWorkView> {
     return Scaffold(
       appBar: CustomAppbarWidget(title: 'İş Yap'),
       body: Container(
-        color: Colors.grey.shade300,
+        color: const Color.fromARGB(255, 240, 240, 240),
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
         child: Column(
           children: [
@@ -103,100 +144,177 @@ class _DoWorkViewState extends State<DoWorkView> {
 
   Stepper buildStepper() {
     return Stepper(
+      currentStep: currentIndex,
+      steps: [
+        _buildStep(0, 'Alıcı Firma Adı', controller: _companyNameController, key: _companyNameKey),
+        _buildStep(1, 'Yapılan İş Adedi', controller: _productPieceController, key: _productPieceKey),
+        _buildStep(2, 'Gönderim Yeri', controller: _shippingPlaceController, key: _shippingPlaceKey),
+        _buildStep(3, 'İş Durumu', controller: _businessStateController, key: _workStateKey),
+        _buildStep(4, 'İşi Onayla'),
+      ],
       controlsBuilder: (context, _) {
         if (currentIndex == 4) {
           return Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              _buildBack(context),
-              Container(
-                width: 100,
-                height: 40,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
-                  onPressed: () {},
-                  child: const Text('ONAY'),
-                ),
-              ),
+              _buildBackButton(context),
+              _buildConfirmButton(context),
             ],
           );
         } else {
           return Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              currentIndex == 0 ? const SizedBox() : _buildBack(context),
-              _buildForward(context),
+              currentIndex == 0 ? const SizedBox() : _buildBackButton(context),
+              _buildForwardButton(context),
             ],
           );
         }
       },
-      currentStep: currentIndex,
-      steps: [
-        _buildStep(0, 'Alıcı Firma Adı', _companyNameController, _companyNameKey),
-        _buildStep(1, 'Yapılan İş Adedi', _productPieceController, _productPieceKey),
-        _buildStep(2, 'Gönderim Yeri', _shippingPlaceController, _shippingPlaceKey),
-        _buildStep(3, 'İş Durumu', _workStateController, _workStateKey),
-        _buildConfirm(4, 'İşi Onayla'),
-      ],
     );
   }
 
-  Container _buildForward(BuildContext context) {
+  Container _buildConfirmButton(BuildContext context) {
+    return Container(
+      width: 105,
+      height: 40,
+      child: ElevatedButton(
+        style:
+            ElevatedButton.styleFrom(backgroundColor: Colors.green, shadowColor: Colors.green.shade800, elevation: 6),
+        onPressed: () {},
+        child: Text(
+          'Onayla',
+          style: Theme.of(context).textTheme.headlineSmall!.copyWith(color: Colors.white),
+        ),
+      ),
+    );
+  }
+
+  Container _buildForwardButton(BuildContext context) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 20),
-      width: 100,
+      width: 105,
       height: 40,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.grey.shade600, shadowColor: Colors.grey.shade800, elevation: 5),
+            backgroundColor: Colors.grey.shade800, shadowColor: Colors.grey.shade900, elevation: 5),
         onPressed: () {
           _buildStepController(StepEnum.CONTINUE);
         },
-        child: Text('İleri', style: Theme.of(context).textTheme.headlineSmall),
+        child: Text('İleri', style: Theme.of(context).textTheme.headlineSmall!.copyWith(color: Colors.white)),
       ),
     );
   }
 
-  Container _buildBack(BuildContext context) {
+  Container _buildBackButton(BuildContext context) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 20),
-      width: 100,
+      width: 105,
       height: 40,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.grey.shade300, shadowColor: Colors.grey.shade900, elevation: 5),
+            backgroundColor: Colors.grey.shade500, shadowColor: Colors.grey.shade900, elevation: 5),
         onPressed: () {
           _buildStepController(StepEnum.CANCEL);
         },
-        child: Text('Geri', style: Theme.of(context).textTheme.headlineSmall),
+        child: Text('Geri', style: Theme.of(context).textTheme.headlineSmall!.copyWith(color: Colors.white)),
       ),
     );
   }
 
-  Step _buildConfirm(int index, String title) {
-    return Step(
-      state: currentIndex == index ? StepState.complete : StepState.indexed,
-      isActive: currentIndex == index ? true : false,
-      title: Text(title),
-      content: const Text('data'),
-    );
-  }
+  Step _buildStep(int index, String title, {TextEditingController? controller, GlobalKey? key}) {
+    switch (index) {
+      case 0:
+      case 1:
+        return Step(
+          state: currentIndex == index
+              ? StepState.editing
+              : currentIndex > index
+                  ? StepState.complete
+                  : StepState.indexed,
+          isActive: currentIndex == index ? true : false,
+          title: Text(title),
+          content: Container(
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: Colors.red),
+            child: TextField(
+              key: key,
+              controller: controller,
+              decoration: stepDecoration,
+            ),
+          ),
+        );
+      case 2:
+        return Step(
+          state: currentIndex == index
+              ? StepState.editing
+              : currentIndex > index
+                  ? StepState.complete
+                  : StepState.indexed,
+          isActive: currentIndex == index ? true : false,
+          title: Text(title),
+          content: Container(
+            padding: const EdgeInsets.only(left: 10),
+            decoration: _dropdownDecoration,
+            child: DropdownButton(
+              dropdownColor: _dropdownColor,
+              isExpanded: true,
+              items: shippingDropdownItem,
+              value: _shippingPlaceController.text,
+              underline: const SizedBox(),
+              onChanged: (value) {
+                setState(() {
+                  _shippingPlaceController.text = value;
+                });
+              },
+            ),
+          ),
+        );
+      case 3:
+        return Step(
+          state: currentIndex == index
+              ? StepState.editing
+              : currentIndex > index
+                  ? StepState.complete
+                  : StepState.indexed,
+          isActive: currentIndex == index ? true : false,
+          title: Text(title),
+          content: Container(
+            padding: const EdgeInsets.only(left: 10),
+            decoration: _dropdownDecoration,
+            child: DropdownButton(
+                dropdownColor: _dropdownColor,
+                isExpanded: true,
+                items: businessCaseItem,
+                value: _businessStateController.text,
+                onChanged: (value) {
+                  setState(() {
+                    _businessStateController.text = value;
+                  });
+                }),
+          ),
+        );
 
-  Step _buildStep(int index, String title, TextEditingController controller, GlobalKey key) {
-    return Step(
-      state: currentIndex == index
-          ? StepState.editing
-          : currentIndex > index
-              ? StepState.complete
-              : StepState.indexed,
-      isActive: currentIndex == index ? true : false,
-      title: Text(title),
-      content: TextFormField(
-        key: key,
-        controller: controller,
-        decoration: stepDecoration,
-      ),
-    );
+      case 4:
+        return Step(
+          state: currentIndex == index ? StepState.complete : StepState.indexed,
+          isActive: currentIndex == index ? true : false,
+          title: Text(title),
+          content: Builder(
+            builder: (context) {
+              print(_businessStateController.text);
+              print(_shippingPlaceController.text);
+              if (_productPieceController.text.isNotEmpty) {
+                return Text(
+                    'Yapılan Adet: ${_productPieceController.text} Kalan Adet: ${(_productModel.stockPiece.toInt() - int.parse(_productPieceController.text))}');
+              }
+              return const Text('Yapılan iş adedini giriniz');
+            },
+          ),
+        );
+
+      default:
+        return const Step(title: Text('boş title'), content: Text('boş content'));
+    }
   }
 
   _buildStepController(StepEnum whichStep) {
