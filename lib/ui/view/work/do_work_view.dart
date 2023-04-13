@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:urun_takip_app/core/constant/enum/enumerations.dart';
@@ -51,8 +49,8 @@ class _DoWorkViewState extends State<DoWorkView> {
   );
 
   final _dropdownColor = Colors.white;
-  final _dropdownDecoration =
-      const BoxDecoration(color: Colors.white, borderRadius: BorderRadius.all(Radius.circular(10)));
+  final _dropdownDecoration = const BoxDecoration(
+      color: Colors.white, borderRadius: BorderRadius.all(Radius.circular(10)));
 
   final _companyNameKey = GlobalKey<FormFieldState>();
   final _productPieceKey = GlobalKey<FormFieldState>();
@@ -118,8 +116,16 @@ class _DoWorkViewState extends State<DoWorkView> {
       }
     }).toList();
     textStock = _productModel.stockPiece > 0
-        ? Text('Stokta var', style: TextStyle(color: Colors.green.shade700, fontWeight: FontWeight.bold, fontSize: 17))
-        : Text('Stokta Yok', style: TextStyle(color: Colors.red.shade700, fontWeight: FontWeight.bold, fontSize: 17));
+        ? Text('Stokta var',
+            style: TextStyle(
+                color: Colors.green.shade700,
+                fontWeight: FontWeight.bold,
+                fontSize: 17))
+        : Text('Stokta Yok',
+            style: TextStyle(
+                color: Colors.red.shade700,
+                fontWeight: FontWeight.bold,
+                fontSize: 17));
     iconStock = _productModel.stockPiece > 0
         ? Icon(Icons.done, color: Colors.green.shade800, size: 30)
         : const Icon(Icons.dangerous_outlined, color: Colors.red);
@@ -143,7 +149,10 @@ class _DoWorkViewState extends State<DoWorkView> {
         Theme.of(context).textTheme.titleLarge!.copyWith(color: Colors.blue.shade700, fontWeight: FontWeight.bold);
     _smallTextStyle = Theme.of(context).textTheme.titleSmall!.copyWith(color: Colors.grey.shade700);
     titleStyle = Theme.of(context).textTheme.labelLarge!.copyWith(fontSize: 14);
-    contentStyle = Theme.of(context).textTheme.labelLarge!.copyWith(fontSize: 14, color: Colors.black);
+    contentStyle = Theme.of(context)
+        .textTheme
+        .labelLarge!
+        .copyWith(fontSize: 14, color: Colors.black);
     return Scaffold(
       appBar: CustomAppbarWidget(title: 'İş Yap'),
       body: Container(
@@ -165,11 +174,23 @@ class _DoWorkViewState extends State<DoWorkView> {
     return Stepper(
       currentStep: currentIndex,
       steps: [
+<<<<<<< HEAD
         _buildStep(0, WorkStepText.step0, controller: _companyNameController, key: _companyNameKey),
         _buildStep(1, WorkStepText.step1, controller: _productPieceController, key: _productPieceKey),
         _buildStep(2, WorkStepText.step2, controller: _shippingPlaceController, key: _shippingPlaceKey),
         _buildStep(3, WorkStepText.step3, controller: _businessStateController, key: _workStateKey),
         _buildStep(4, WorkStepText.step4),
+=======
+        _buildStep(0, 'Alıcı Firma Adı',
+            controller: _companyNameController, key: _companyNameKey),
+        _buildStep(1, 'Yapılan İş Adedi',
+            controller: _productPieceController, key: _productPieceKey),
+        _buildStep(2, 'Gönderim Yeri',
+            controller: _shippingPlaceController, key: _shippingPlaceKey),
+        _buildStep(3, 'İş Durumu',
+            controller: _businessStateController, key: _workStateKey),
+        _buildStep(4, 'İşi Onayla'),
+>>>>>>> 4b78ff28931e315f8f0292dc9922ece1c3711280
       ],
       controlsBuilder: (context, _) {
         if (currentIndex == 4) {
@@ -195,15 +216,26 @@ class _DoWorkViewState extends State<DoWorkView> {
 
   Container _buildConfirmButton(BuildContext context) {
     return Container(
-      width: 105,
+      width: 110,
       height: 40,
       child: ElevatedButton(
+<<<<<<< HEAD
         style:
             ElevatedButton.styleFrom(backgroundColor: Colors.green, shadowColor: Colors.green.shade800, elevation: 6),
         onPressed: () => _buildSubmit(),
+=======
+        style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.green,
+            shadowColor: Colors.green.shade800,
+            elevation: 6),
+        onPressed: () {},
+>>>>>>> 4b78ff28931e315f8f0292dc9922ece1c3711280
         child: Text(
           'Onayla',
-          style: Theme.of(context).textTheme.headlineSmall!.copyWith(color: Colors.white),
+          style: Theme.of(context)
+              .textTheme
+              .headlineSmall!
+              .copyWith(color: Colors.white),
         ),
       ),
     );
@@ -214,15 +246,22 @@ class _DoWorkViewState extends State<DoWorkView> {
   Container _buildForwardButton(BuildContext context) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 20),
-      width: 105,
+      width: 110,
       height: 40,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.grey.shade800, shadowColor: Colors.grey.shade900, elevation: 5),
+          backgroundColor: Colors.grey.shade800,
+          shadowColor: Colors.grey.shade900,
+          elevation: 5,
+        ),
         onPressed: () {
           _buildStepController(StepEnum.CONTINUE);
         },
-        child: Text('İleri', style: Theme.of(context).textTheme.headlineSmall!.copyWith(color: Colors.white)),
+        child: Text('İleri',
+            style: Theme.of(context)
+                .textTheme
+                .headlineSmall!
+                .copyWith(color: Colors.white)),
       ),
     );
   }
@@ -234,16 +273,23 @@ class _DoWorkViewState extends State<DoWorkView> {
       height: 40,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.grey.shade500, shadowColor: Colors.grey.shade900, elevation: 5),
+            backgroundColor: Colors.grey.shade500,
+            shadowColor: Colors.grey.shade900,
+            elevation: 5),
         onPressed: () {
           _buildStepController(StepEnum.CANCEL);
         },
-        child: Text('Geri', style: Theme.of(context).textTheme.headlineSmall!.copyWith(color: Colors.white)),
+        child: Text('Geri',
+            style: Theme.of(context)
+                .textTheme
+                .headlineSmall!
+                .copyWith(color: Colors.white)),
       ),
     );
   }
 
-  Step _buildStep(int index, String title, {TextEditingController? controller, GlobalKey? key}) {
+  Step _buildStep(int index, String title,
+      {TextEditingController? controller, GlobalKey? key}) {
     switch (index) {
       case 0:
         return Step(
@@ -279,7 +325,8 @@ class _DoWorkViewState extends State<DoWorkView> {
             style: currentIndex == index ? _largeTextStyle : _smallTextStyle,
           ),
           content: Container(
-            decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: Colors.red),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20), color: Colors.red),
             child: TextField(
               key: key,
               controller: controller,
@@ -367,7 +414,8 @@ class _DoWorkViewState extends State<DoWorkView> {
         );
 
       default:
-        return const Step(title: Text('boş title'), content: Text('boş content'));
+        return const Step(
+            title: Text('boş title'), content: Text('boş content'));
     }
   }
 
@@ -432,12 +480,13 @@ class _DoWorkViewState extends State<DoWorkView> {
         border: Border.all(color: Colors.grey.shade500, width: 0.01),
       ),
       margin: const EdgeInsets.only(left: 5, right: 10),
-      child: _productModel.photoURL != null && _productModel.photoURL!.isNotEmpty
-          ? Image.network(
-              _productModel.photoURL!,
-              fit: BoxFit.fitWidth,
-            )
-          : Image.asset(ConstImage.defaultImagePlaceHolder),
+      child:
+          _productModel.photoURL != null && _productModel.photoURL!.isNotEmpty
+              ? Image.network(
+                  _productModel.photoURL!,
+                  fit: BoxFit.fitWidth,
+                )
+              : Image.asset(ConstImage.defaultImagePlaceHolder),
     );
   }
 
@@ -478,7 +527,9 @@ class _DoWorkViewState extends State<DoWorkView> {
             Text(
               _productModel.stockPiece.toInt().toString(),
               style: contentStyle!.copyWith(
-                color: _productModel.stockPiece > 0 ? Colors.green.shade900 : Colors.red.shade700,
+                color: _productModel.stockPiece > 0
+                    ? Colors.green.shade900
+                    : Colors.red.shade700,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -503,7 +554,10 @@ class _DoWorkViewState extends State<DoWorkView> {
         Wrap(
           children: [
             Text(ProductStockStatusText.aciklama, style: titleStyle),
-            Text(_productModel.title, style: contentStyle, overflow: TextOverflow.ellipsis, maxLines: 2),
+            Text(_productModel.title,
+                style: contentStyle,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 2),
           ],
         ),
       ],
