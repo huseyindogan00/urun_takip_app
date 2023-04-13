@@ -11,7 +11,7 @@ import 'package:urun_takip_app/core/utility/util/validation/currency_formatter.d
 import 'package:urun_takip_app/core/utility/util/validation/validation.dart';
 import 'package:urun_takip_app/data/base/db_base.dart';
 import 'package:urun_takip_app/data/models/base/base_model.dart';
-import 'package:urun_takip_app/data/models/base/work_model.dart';
+import 'package:urun_takip_app/data/models/base/base_work_model.dart';
 import 'package:urun_takip_app/data/models/product_model.dart';
 import 'package:urun_takip_app/data/models/result_message_model.dart';
 import 'package:urun_takip_app/data/repository/category_repository.dart';
@@ -197,7 +197,7 @@ class ProductViewModel extends ChangeNotifier implements DbBase {
 
   // WORK EKLEME MOTHODU
   @override
-  Future<bool?> addWork(WorkBaseModel model) {
+  Future<bool?> addWork(BaseWorkModel model) {
     // TODO: implement addWork
     throw UnimplementedError();
   }

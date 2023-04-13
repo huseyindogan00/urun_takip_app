@@ -1,14 +1,20 @@
 import 'dart:ffi';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:urun_takip_app/core/constant/enum/enumerations.dart';
 import 'package:urun_takip_app/core/constant/images/const_image.dart';
 import 'package:urun_takip_app/core/constant/size/custom_size.dart';
+import 'package:urun_takip_app/core/constant/text/app_text.dart';
 import 'package:urun_takip_app/core/constant/text/product_stock_status_text.dart';
 import 'package:urun_takip_app/core/utility/extension/string_extension.dart';
 import 'package:urun_takip_app/core/utility/util/validation/currency_formatter.dart';
+import 'package:urun_takip_app/data/models/base/base_work_model.dart';
 import 'package:urun_takip_app/data/models/product_model.dart';
+import 'package:urun_takip_app/data/models/work_model.dart';
 import 'package:urun_takip_app/ui/components/common/custom_appbar_widget.dart';
+import 'package:urun_takip_app/ui/view_model/work_view_model/do_work_view_model.dart';
+import 'package:urun_takip_app/ui/widget/work_card_widget.dart';
 
 class DoWorkView extends StatefulWidget {
   const DoWorkView({super.key, required this.productModel});
@@ -26,6 +32,11 @@ class _DoWorkViewState extends State<DoWorkView> {
   late TextEditingController _totalPriceController; // TOPLAM NET TUTAR
   late TextStyle? titleStyle;
   late TextStyle? contentStyle;
+  late BaseWorkModel? workModel;
+  late DoWorkViewModel _doWorkViewModel;
+
+  late TextStyle _largeTextStyle;
+  late TextStyle _smallTextStyle;
 
   final _decoration = const BoxDecoration(
     borderRadius: BorderRadius.all(Radius.circular(5)),
@@ -72,11 +83,17 @@ class _DoWorkViewState extends State<DoWorkView> {
     _businessStateController = TextEditingController(text: 'İş Tamamlandı');
     _productModel = widget.productModel;
     stockPiece = _productModel.stockPiece.toInt();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      _doWorkViewModel = Provider.of<DoWorkViewModel>(context, listen: false);
+    });
+    _initialize();
+  }
 
+  void _initialize() {
     businessCaseItem = BusinessCase.values.map((businessEnum) {
       if (businessEnum == BusinessCase.COMPLATED) {
         return const DropdownMenuItem(
-          value: 'İş Tamamlandı',
+          value: BusinessCaseText.completed,
           child: Text('İş tamamlandı'),
         );
       } else {
@@ -100,7 +117,6 @@ class _DoWorkViewState extends State<DoWorkView> {
         );
       }
     }).toList();
-
     textStock = _productModel.stockPiece > 0
         ? Text('Stokta var', style: TextStyle(color: Colors.green.shade700, fontWeight: FontWeight.bold, fontSize: 17))
         : Text('Stokta Yok', style: TextStyle(color: Colors.red.shade700, fontWeight: FontWeight.bold, fontSize: 17));
@@ -123,6 +139,9 @@ class _DoWorkViewState extends State<DoWorkView> {
 
   @override
   Widget build(BuildContext context) {
+    _largeTextStyle =
+        Theme.of(context).textTheme.titleLarge!.copyWith(color: Colors.blue.shade700, fontWeight: FontWeight.bold);
+    _smallTextStyle = Theme.of(context).textTheme.titleSmall!.copyWith(color: Colors.grey.shade700);
     titleStyle = Theme.of(context).textTheme.labelLarge!.copyWith(fontSize: 14);
     contentStyle = Theme.of(context).textTheme.labelLarge!.copyWith(fontSize: 14, color: Colors.black);
     return Scaffold(
@@ -146,11 +165,11 @@ class _DoWorkViewState extends State<DoWorkView> {
     return Stepper(
       currentStep: currentIndex,
       steps: [
-        _buildStep(0, 'Alıcı Firma Adı', controller: _companyNameController, key: _companyNameKey),
-        _buildStep(1, 'Yapılan İş Adedi', controller: _productPieceController, key: _productPieceKey),
-        _buildStep(2, 'Gönderim Yeri', controller: _shippingPlaceController, key: _shippingPlaceKey),
-        _buildStep(3, 'İş Durumu', controller: _businessStateController, key: _workStateKey),
-        _buildStep(4, 'İşi Onayla'),
+        _buildStep(0, WorkStepText.step0, controller: _companyNameController, key: _companyNameKey),
+        _buildStep(1, WorkStepText.step1, controller: _productPieceController, key: _productPieceKey),
+        _buildStep(2, WorkStepText.step2, controller: _shippingPlaceController, key: _shippingPlaceKey),
+        _buildStep(3, WorkStepText.step3, controller: _businessStateController, key: _workStateKey),
+        _buildStep(4, WorkStepText.step4),
       ],
       controlsBuilder: (context, _) {
         if (currentIndex == 4) {
@@ -181,7 +200,7 @@ class _DoWorkViewState extends State<DoWorkView> {
       child: ElevatedButton(
         style:
             ElevatedButton.styleFrom(backgroundColor: Colors.green, shadowColor: Colors.green.shade800, elevation: 6),
-        onPressed: () {},
+        onPressed: () => _buildSubmit(),
         child: Text(
           'Onayla',
           style: Theme.of(context).textTheme.headlineSmall!.copyWith(color: Colors.white),
@@ -189,6 +208,8 @@ class _DoWorkViewState extends State<DoWorkView> {
       ),
     );
   }
+
+  void _buildSubmit() {}
 
   Container _buildForwardButton(BuildContext context) {
     return Container(
@@ -225,6 +246,26 @@ class _DoWorkViewState extends State<DoWorkView> {
   Step _buildStep(int index, String title, {TextEditingController? controller, GlobalKey? key}) {
     switch (index) {
       case 0:
+        return Step(
+          state: currentIndex == index
+              ? StepState.editing
+              : currentIndex > index
+                  ? StepState.complete
+                  : StepState.indexed,
+          isActive: currentIndex == index ? true : false,
+          title: Text(
+            title,
+            style: currentIndex == index ? _largeTextStyle : _smallTextStyle,
+          ),
+          content: Container(
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: Colors.red),
+            child: TextField(
+              key: key,
+              controller: controller,
+              decoration: stepDecoration,
+            ),
+          ),
+        );
       case 1:
         return Step(
           state: currentIndex == index
@@ -233,7 +274,10 @@ class _DoWorkViewState extends State<DoWorkView> {
                   ? StepState.complete
                   : StepState.indexed,
           isActive: currentIndex == index ? true : false,
-          title: Text(title),
+          title: Text(
+            title,
+            style: currentIndex == index ? _largeTextStyle : _smallTextStyle,
+          ),
           content: Container(
             decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: Colors.red),
             child: TextField(
@@ -251,7 +295,10 @@ class _DoWorkViewState extends State<DoWorkView> {
                   ? StepState.complete
                   : StepState.indexed,
           isActive: currentIndex == index ? true : false,
-          title: Text(title),
+          title: Text(
+            title,
+            style: currentIndex == index ? _largeTextStyle : _smallTextStyle,
+          ),
           content: Container(
             padding: const EdgeInsets.only(left: 10),
             decoration: _dropdownDecoration,
@@ -277,7 +324,7 @@ class _DoWorkViewState extends State<DoWorkView> {
                   ? StepState.complete
                   : StepState.indexed,
           isActive: currentIndex == index ? true : false,
-          title: Text(title),
+          title: Text(title, style: currentIndex == index ? _largeTextStyle : _smallTextStyle),
           content: Container(
             padding: const EdgeInsets.only(left: 10),
             decoration: _dropdownDecoration,
@@ -286,6 +333,7 @@ class _DoWorkViewState extends State<DoWorkView> {
                 isExpanded: true,
                 items: businessCaseItem,
                 value: _businessStateController.text,
+                underline: const SizedBox(),
                 onChanged: (value) {
                   setState(() {
                     _businessStateController.text = value;
@@ -298,14 +346,20 @@ class _DoWorkViewState extends State<DoWorkView> {
         return Step(
           state: currentIndex == index ? StepState.complete : StepState.indexed,
           isActive: currentIndex == index ? true : false,
-          title: Text(title),
+          title: Text(title, style: currentIndex == index ? _largeTextStyle : _smallTextStyle),
           content: Builder(
             builder: (context) {
-              print(_businessStateController.text);
-              print(_shippingPlaceController.text);
-              if (_productPieceController.text.isNotEmpty) {
-                return Text(
-                    'Yapılan Adet: ${_productPieceController.text} Kalan Adet: ${(_productModel.stockPiece.toInt() - int.parse(_productPieceController.text))}');
+              if (_productPieceController.text.isNotEmpty && _companyNameController.text.isNotEmpty) {
+                return WorkCardWidget(
+                    workModel: WorkModel(
+                        companyName: _companyNameController.text,
+                        KDV: 18,
+                        businessCase: BusinessCase.COMPLATED,
+                        productModel: _productModel,
+                        productPiece: 12,
+                        shippingPlace: ShippingPlace.LOCAL,
+                        totalPrice: 1200,
+                        workDate: DateTime.now()));
               }
               return const Text('Yapılan iş adedini giriniz');
             },

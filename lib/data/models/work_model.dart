@@ -1,15 +1,16 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
-import 'package:urun_takip_app/data/models/base/work_model.dart';
+import 'package:urun_takip_app/core/constant/enum/enumerations.dart';
+import 'package:urun_takip_app/data/models/base/base_work_model.dart';
 import 'package:urun_takip_app/data/models/product_model.dart';
 
-class WorkModel implements WorkBaseModel {
+class WorkModel implements BaseWorkModel {
   @override
   double KDV;
 
   @override
-  String businessCase;
+  BusinessCase businessCase;
 
   @override
   String? companyName;
@@ -27,7 +28,7 @@ class WorkModel implements WorkBaseModel {
   double productPiece;
 
   @override
-  String shippingPlace;
+  ShippingPlace shippingPlace;
 
   @override
   double totalPrice;
@@ -49,13 +50,13 @@ class WorkModel implements WorkBaseModel {
 
   WorkModel copyWith({
     double? KDV,
-    String? businessCase,
+    BusinessCase? businessCase,
     String? companyName,
     String? id,
     String? personID,
     ProductModel? productModel,
     double? productPiece,
-    String? shippingPlace,
+    ShippingPlace? shippingPlace,
     double? totalPrice,
     dynamic? workDate,
   }) {
@@ -91,13 +92,13 @@ class WorkModel implements WorkBaseModel {
   factory WorkModel.fromMap(Map<String, dynamic> map) {
     return WorkModel(
       KDV: map['KDV'] as double,
-      businessCase: map['businessCase'] as String,
+      businessCase: map['businessCase'] as BusinessCase,
       companyName: map['companyName'] != null ? map['companyName'] as String : null,
       id: map['id'] != null ? map['id'] as String : null,
       personID: map['personID'] != null ? map['personID'] as String : null,
       productModel: ProductModel.fromMap(map['productModel'] as Map<String, dynamic>),
       productPiece: map['productPiece'] as double,
-      shippingPlace: map['shippingPlace'] as String,
+      shippingPlace: map['shippingPlace'] as ShippingPlace,
       totalPrice: map['totalPrice'] as double,
       workDate: map['workDate'] as dynamic,
     );
