@@ -9,13 +9,14 @@ class AppText {
   static const stokKodu = 'Stok Kodu';
   static const birimFiyat = 'Birim Fiyat';
   static const kdv = 'KDV';
+  static const isAdedi = 'İş Adedi';
   static const matrah = 'Matrah';
   static const toplamTutar = 'Toplam Tutar';
 }
 
 class WorkStepText {
   static const step0 = 'Alıcı Firma Adı';
-  static const step1 = 'Yapılan İş Adedi';
+  static const step1 = 'Yapılan İş Adedi ve KDV Tutarı';
   static const step2 = 'Gönderim Yeri';
   static const step3 = 'İş Durumu';
   static const step4 = 'İşi Onayla';

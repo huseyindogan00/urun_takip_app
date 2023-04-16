@@ -27,6 +27,10 @@ Yapılacaklar
  
 ** para birimleri gösterme tamamlandı. Hepsinde doğru bir formatta gösteriyor.
 
+17 NİSAN 2023 
+-> Yapılan iş başarıyla ekleniyor. İş eklendikten sonra Stok Durumu sayfasına dönüldüğünde tekrar ekranın güncellenmesi gerek.
+-> İŞ YAP sayfasında ONAY butonuna basıldığında yükleme ekranı gösterilecek
+
 
 
 

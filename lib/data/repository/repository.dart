@@ -48,8 +48,12 @@ class ProductRepository extends DbBase {
       return resultMessage;
     } else if (model is CompletedWorkModel) {
       _completedWorkModel = model;
+      resultMessage = await _productDbService.add(_completedWorkModel!);
+      return resultMessage;
     } else if (model is WorkInProgressModel) {
       _workInProgressModel = model;
+      resultMessage = await _productDbService.add(_workInProgressModel!);
+      return resultMessage;
     } else {
       resultMessage.isSuccessful = false;
     }

@@ -5,12 +5,18 @@ import 'package:urun_takip_app/core/constant/images/const_image.dart';
 import 'package:urun_takip_app/core/constant/size/custom_size.dart';
 import 'package:urun_takip_app/core/constant/text/app_text.dart';
 import 'package:urun_takip_app/core/constant/text/product_stock_status_text.dart';
+import 'package:urun_takip_app/core/global/global_map.dart';
 import 'package:urun_takip_app/core/utility/extension/string_extension.dart';
+import 'package:urun_takip_app/core/utility/util/manager/uuid_manager.dart';
 import 'package:urun_takip_app/core/utility/util/validation/currency_formatter.dart';
 import 'package:urun_takip_app/data/models/base/base_work_model.dart';
+import 'package:urun_takip_app/data/models/completed_work_model.dart';
 import 'package:urun_takip_app/data/models/product_model.dart';
+import 'package:urun_takip_app/data/models/result_message_model.dart';
+import 'package:urun_takip_app/data/models/work_in_progress_model.dart';
 import 'package:urun_takip_app/data/models/work_model.dart';
 import 'package:urun_takip_app/ui/components/common/custom_appbar_widget.dart';
+import 'package:urun_takip_app/ui/components/common/dialog/platform_sensitive_alert_dialog.dart';
 import 'package:urun_takip_app/ui/view_model/work_view_model/do_work_view_model.dart';
 import 'package:urun_takip_app/ui/widget/work_card_widget.dart';
 
@@ -25,13 +31,15 @@ class _DoWorkViewState extends State<DoWorkView> {
   late final ProductModel _productModel;
   late TextEditingController _companyNameController; //ALICI FİRMA ADI
   late TextEditingController _productPieceController; // ÜRÜN ADEDİ
+  late TextEditingController _kdvController; // KDV
   late TextEditingController _shippingPlaceController; // GÖNDERİM YERİ
-  late TextEditingController _businessStateController; //İŞ DURUMU
+  late TextEditingController _businessCaseController; //İŞ DURUMU
   late TextEditingController _totalPriceController; // TOPLAM NET TUTAR
   late TextStyle? titleStyle;
   late TextStyle? contentStyle;
-  late BaseWorkModel? workModel;
+  //late BaseWorkModel? workModel;
   late DoWorkViewModel _doWorkViewModel;
+  bool _confirmButton = false;
 
   late TextStyle _largeTextStyle;
   late TextStyle _smallTextStyle;
@@ -43,30 +51,45 @@ class _DoWorkViewState extends State<DoWorkView> {
   );
   final stepDecoration = const InputDecoration(
     border: InputBorder.none,
+    errorStyle: TextStyle(color: Colors.red),
     filled: true,
     fillColor: Colors.white,
     contentPadding: EdgeInsets.all(5),
   );
-
+  final _productPieceDecoration = const InputDecoration(
+    label: Text(AppText.isAdedi),
+    labelStyle: TextStyle(color: Colors.blue, fontSize: 18),
+    errorStyle: TextStyle(color: Colors.red),
+    border: InputBorder.none,
+    filled: true,
+    fillColor: Colors.white,
+    contentPadding: EdgeInsets.all(5),
+  );
+  final _kdvDecoration = const InputDecoration(
+    prefix: Text('% ', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17)),
+    label: Text(AppText.kdv),
+    labelStyle: TextStyle(color: Colors.blue, fontSize: 18),
+    errorStyle: TextStyle(color: Colors.red),
+    border: InputBorder.none,
+    filled: true,
+    fillColor: Colors.white,
+    contentPadding: EdgeInsets.all(5),
+  );
+  final _containerMarginTopBottom = const EdgeInsets.all(10);
   final _dropdownColor = Colors.white;
   final _dropdownDecoration =
       const BoxDecoration(color: Colors.white, borderRadius: BorderRadius.all(Radius.circular(10)));
 
   final _companyNameKey = GlobalKey<FormFieldState>();
   final _productPieceKey = GlobalKey<FormFieldState>();
+  final _kdvKey = GlobalKey<FormFieldState>();
   final _shippingPlaceKey = GlobalKey<FormFieldState>();
   final _workStateKey = GlobalKey<FormFieldState>();
   final _totalPriceKey = GlobalKey<FormFieldState>();
 
-  final _containerMarginTopBottom = const EdgeInsets.all(10);
-  bool isActive = false;
-  int tapped = 0;
-  int currentIndex = 0;
-  late int stockPiece;
-
-  late List<DropdownMenuItem> shippingDropdownItem;
-
-  late List<DropdownMenuItem> businessCaseItem;
+  bool isActive = false; // stepin aktiflik kontrolü
+  int currentIndex = 0; //
+  //late int stockPiece;
 
   late Widget textStock;
   late Widget iconStock;
@@ -77,44 +100,22 @@ class _DoWorkViewState extends State<DoWorkView> {
     _companyNameController = TextEditingController();
     _productPieceController = TextEditingController();
     _totalPriceController = TextEditingController(text: '0');
-    _shippingPlaceController = TextEditingController(text: 'Şehir Dışı');
-    _businessStateController = TextEditingController(text: 'İş Tamamlandı');
+    _shippingPlaceController = TextEditingController(text: shippingPlaceMap.values.first);
+    _businessCaseController = TextEditingController(text: businessCaseMap.values.first);
+    _kdvController = TextEditingController();
+
     _productModel = widget.productModel;
-    stockPiece = _productModel.stockPiece.toInt();
+
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       _doWorkViewModel = Provider.of<DoWorkViewModel>(context, listen: false);
+      _doWorkViewModel.availableProductModel =
+          _productModel.copyWith(); // SEÇİLEN PRODUCT MODELİ VİEWMODELA GÖNDERİYORUZ
+      _doWorkViewModel.processedProductModel = _productModel.copyWith(); // ÜZERİNDE İŞLEM YAPILACAK PRODUCT MODEL
     });
     _initialize();
   }
 
   void _initialize() {
-    businessCaseItem = BusinessCase.values.map((businessEnum) {
-      if (businessEnum == BusinessCase.COMPLATED) {
-        return const DropdownMenuItem(
-          value: BusinessCaseText.completed,
-          child: Text('İş tamamlandı'),
-        );
-      } else {
-        return const DropdownMenuItem(
-          value: 'İş Devam Ediyor',
-          child: Text('İş devam ediyor'),
-        );
-      }
-    }).toList();
-
-    shippingDropdownItem = ShippingPlace.values.map((shippingEnum) {
-      if (shippingEnum == ShippingPlace.LOCAL) {
-        return const DropdownMenuItem(
-          value: 'Şehir Dışı',
-          child: Text('Şehir Dışı'),
-        );
-      } else {
-        return const DropdownMenuItem(
-          value: 'Şehir İçi',
-          child: Text('Şehir İçi'),
-        );
-      }
-    }).toList();
     textStock = _productModel.stockPiece > 0
         ? Text('Stokta var', style: TextStyle(color: Colors.green.shade700, fontWeight: FontWeight.bold, fontSize: 17))
         : Text('Stokta Yok', style: TextStyle(color: Colors.red.shade700, fontWeight: FontWeight.bold, fontSize: 17));
@@ -125,12 +126,12 @@ class _DoWorkViewState extends State<DoWorkView> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     _companyNameController.dispose();
     _productPieceController.dispose();
     _shippingPlaceController.dispose();
-    _businessStateController.dispose();
+    _businessCaseController.dispose();
     _totalPriceController.dispose();
+    _kdvController.dispose();
 
     super.dispose();
   }
@@ -143,16 +144,21 @@ class _DoWorkViewState extends State<DoWorkView> {
     titleStyle = Theme.of(context).textTheme.labelLarge!.copyWith(fontSize: 14);
     contentStyle = Theme.of(context).textTheme.labelLarge!.copyWith(fontSize: 14, color: Colors.black);
     return Scaffold(
-      appBar: CustomAppbarWidget(title: 'İş Yap'),
+      appBar: CustomAppbarWidget(
+        title: 'İş Yap',
+        leading: IconButton(
+          onPressed: () => Navigator.pop(context),
+          icon: const Icon(Icons.arrow_back_ios_new),
+        ),
+      ),
       body: Container(
         color: const Color.fromARGB(255, 240, 240, 240),
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
         child: Column(
           children: [
             _buildProductCard(context),
-            Expanded(
-              child: buildStepper(),
-            ),
+            Divider(color: Colors.grey.shade400, thickness: 1),
+            Expanded(child: buildStepper()),
           ],
         ),
       ),
@@ -166,7 +172,7 @@ class _DoWorkViewState extends State<DoWorkView> {
         _buildStep(0, WorkStepText.step0, controller: _companyNameController, key: _companyNameKey),
         _buildStep(1, WorkStepText.step1, controller: _productPieceController, key: _productPieceKey),
         _buildStep(2, WorkStepText.step2, controller: _shippingPlaceController, key: _shippingPlaceKey),
-        _buildStep(3, WorkStepText.step3, controller: _businessStateController, key: _workStateKey),
+        _buildStep(3, WorkStepText.step3, controller: _businessCaseController, key: _workStateKey),
         _buildStep(4, WorkStepText.step4),
       ],
       controlsBuilder: (context, _) {
@@ -191,6 +197,7 @@ class _DoWorkViewState extends State<DoWorkView> {
     );
   }
 
+  // ONAY BUTONU
   Container _buildConfirmButton(BuildContext context) {
     return Container(
       width: 110,
@@ -198,7 +205,7 @@ class _DoWorkViewState extends State<DoWorkView> {
       child: ElevatedButton(
         style:
             ElevatedButton.styleFrom(backgroundColor: Colors.green, shadowColor: Colors.green.shade800, elevation: 6),
-        onPressed: () => _buildSubmit(),
+        onPressed: () => _confirmButton ? _buildSubmit() : null,
         child: Text(
           'Onayla',
           style: Theme.of(context).textTheme.headlineSmall!.copyWith(color: Colors.white),
@@ -207,8 +214,17 @@ class _DoWorkViewState extends State<DoWorkView> {
     );
   }
 
-  void _buildSubmit() {}
+  void _buildSubmit() async {
+    ResultMessageModel? resultMessageModel = await _doWorkViewModel.add(_doWorkViewModel.workModel);
+    if (mounted) {
+      await PlatformSensitiveAlertDialog(
+              content: resultMessageModel!.message!, title: 'Bilgi', doneButtonTitle: 'Tamam')
+          .show(context);
+      if (mounted) Navigator.pop(context);
+    }
+  }
 
+  // İLERİ BUTONU
   Container _buildForwardButton(BuildContext context) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 20),
@@ -228,6 +244,7 @@ class _DoWorkViewState extends State<DoWorkView> {
     );
   }
 
+  // GERİ BUTONU
   Container _buildBackButton(BuildContext context) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 20),
@@ -244,8 +261,10 @@ class _DoWorkViewState extends State<DoWorkView> {
     );
   }
 
+  // STEPLERİN OLUŞTURULMASI
   Step _buildStep(int index, String title, {TextEditingController? controller, GlobalKey? key}) {
     switch (index) {
+      // ALICI FİRMA STEP
       case 0:
         return Step(
           state: currentIndex == index
@@ -258,15 +277,18 @@ class _DoWorkViewState extends State<DoWorkView> {
             title,
             style: currentIndex == index ? _largeTextStyle : _smallTextStyle,
           ),
-          content: Container(
-            decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: Colors.red),
-            child: TextField(
-              key: key,
-              controller: controller,
-              decoration: stepDecoration,
-            ),
+          content: TextFormField(
+            key: key,
+            controller: controller,
+            decoration: stepDecoration,
+            onSaved: (newValue) => controller!.text = newValue!,
+            validator: (value) {
+              if (value == null || value.isEmpty) return 'Bir değer giriniz';
+              return null;
+            },
           ),
         );
+      // YAPILAN İŞ ADEDİ VE KDV TUTARI
       case 1:
         return Step(
           state: currentIndex == index
@@ -279,15 +301,40 @@ class _DoWorkViewState extends State<DoWorkView> {
             title,
             style: currentIndex == index ? _largeTextStyle : _smallTextStyle,
           ),
-          content: Container(
-            decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: Colors.red),
-            child: TextField(
-              key: key,
-              controller: controller,
-              decoration: stepDecoration,
-            ),
+          content: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                flex: 2,
+                child: TextFormField(
+                  key: _productPieceKey,
+                  controller: _productPieceController,
+                  decoration: _productPieceDecoration,
+                  onSaved: (newValue) => _productPieceController.text = newValue!,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) return 'İş adedi giriniz';
+                    return null;
+                  },
+                ),
+              ),
+              const Spacer(flex: 1),
+              Expanded(
+                flex: 2,
+                child: TextFormField(
+                  key: _kdvKey,
+                  controller: _kdvController,
+                  decoration: _kdvDecoration,
+                  onSaved: (newValue) => _kdvController.text = newValue!,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) return 'KDV giriniz';
+                    return null;
+                  },
+                ),
+              )
+            ],
           ),
         );
+      // GÖNDERİM YERİ
       case 2:
         return Step(
           state: currentIndex == index
@@ -306,17 +353,20 @@ class _DoWorkViewState extends State<DoWorkView> {
             child: DropdownButton(
               dropdownColor: _dropdownColor,
               isExpanded: true,
-              items: shippingDropdownItem,
+              items: shippingPlaceMap.values.map((value) {
+                return DropdownMenuItem<String>(value: value, child: Text(value));
+              }).toList(),
               value: _shippingPlaceController.text,
               underline: const SizedBox(),
               onChanged: (value) {
                 setState(() {
-                  _shippingPlaceController.text = value;
+                  _shippingPlaceController.text = value!;
                 });
               },
             ),
           ),
         );
+      // İŞ DURUMU
       case 3:
         return Step(
           state: currentIndex == index
@@ -332,17 +382,19 @@ class _DoWorkViewState extends State<DoWorkView> {
             child: DropdownButton(
                 dropdownColor: _dropdownColor,
                 isExpanded: true,
-                items: businessCaseItem,
-                value: _businessStateController.text,
+                items: businessCaseMap.values.map((value) {
+                  return DropdownMenuItem(value: value, child: Text(value));
+                }).toList(),
+                value: _businessCaseController.text,
                 underline: const SizedBox(),
                 onChanged: (value) {
                   setState(() {
-                    _businessStateController.text = value;
+                    _businessCaseController.text = value!;
                   });
                 }),
           ),
         );
-
+      // İŞİ ONAYLAMA
       case 4:
         return Step(
           state: currentIndex == index ? StepState.complete : StepState.indexed,
@@ -350,19 +402,53 @@ class _DoWorkViewState extends State<DoWorkView> {
           title: Text(title, style: currentIndex == index ? _largeTextStyle : _smallTextStyle),
           content: Builder(
             builder: (context) {
-              if (_productPieceController.text.isNotEmpty && _companyNameController.text.isNotEmpty) {
-                return WorkCardWidget(
-                    workModel: WorkModel(
-                        companyName: _companyNameController.text,
-                        KDV: 18,
-                        businessCase: BusinessCase.COMPLATED,
-                        productModel: _productModel,
-                        productPiece: 12,
-                        shippingPlace: ShippingPlace.LOCAL,
-                        totalPrice: 1200,
-                        workDate: DateTime.now()));
+              if (currentIndex == 4) {
+                if ((_doWorkViewModel.availableProductModel!.stockPiece - double.parse(_productPieceController.text)) >=
+                    0) {
+                  _confirmButton = true;
+                  print('**************************************************');
+                  _doWorkViewModel.calculate(context, _productPieceController.text, _kdvController.text);
+
+                  if (_businessCaseController.text == BusinessCaseText.completed) {
+                    _doWorkViewModel.workModel = CompletedWorkModel(
+                      id: UuidManager().randomId(),
+                      companyName: _companyNameController.text,
+                      productModel: _doWorkViewModel.doWorkProductModel!,
+                      KDV: double.parse(_kdvController.text),
+                      totalPrice: _doWorkViewModel.newProductTotalPrice,
+                      businessCase: businessCaseMap[BusinessCase.COMPLATED]!,
+                      shippingPlace: shippingPlaceMap[_shippingPlaceController.text == ShippingPlaceText.local
+                          ? ShippingPlace.LOCAL
+                          : ShippingPlace.UPSTATE]!,
+                      workDate: DateTime.now(),
+                    );
+                  } else if (_businessCaseController.text == BusinessCaseText.continues) {
+                    _doWorkViewModel.workModel = WorkInProgressModel(
+                      id: UuidManager().randomId(),
+                      companyName: _companyNameController.text,
+                      productModel: _doWorkViewModel.doWorkProductModel!,
+                      KDV: double.parse(_kdvController.text),
+                      totalPrice: _doWorkViewModel.newProductTotalPrice,
+                      businessCase: businessCaseMap[BusinessCase.CONTINUES]!,
+                      shippingPlace: shippingPlaceMap[_shippingPlaceController.text == ShippingPlaceText.local
+                          ? ShippingPlace.LOCAL
+                          : ShippingPlace.UPSTATE]!,
+                      workDate: DateTime.now(),
+                    );
+                  }
+
+                  return WorkCardWidget(workModel: _doWorkViewModel.workModel);
+                } else {
+                  // eğer yapılan iş stoktan fazla ise
+                  _confirmButton = false;
+                  return const Text(
+                    'Yapılan iş mevcut stoktan fazla olamaz!!!',
+                    style: TextStyle(color: Colors.red, fontSize: 15),
+                  );
+                }
+              } else {
+                return const SizedBox();
               }
-              return const Text('Yapılan iş adedini giriniz');
             },
           ),
         );
@@ -372,26 +458,48 @@ class _DoWorkViewState extends State<DoWorkView> {
     }
   }
 
+  // STEP üzerinde index kontrolü yapılır
   _buildStepController(StepEnum whichStep) {
     switch (whichStep) {
       case StepEnum.CONTINUE:
-        setState(() {
-          if (currentIndex < 4) {
-            currentIndex++;
+        // FİRMA ADI KONTROLÜ
+        if (currentIndex == 0) {
+          if (_companyNameKey.currentState!.validate()) {
+            _companyNameKey.currentState!.save();
+            setState(() {
+              if (currentIndex < 4) currentIndex++;
+            });
           }
-        });
+        }
+        // YAPILAN İŞ ADEDİ VE KDV KONTROLÜ
+        else if (currentIndex == 1) {
+          if (_productPieceKey.currentState!.validate()) {
+            if (_kdvKey.currentState!.validate()) {
+              _productPieceKey.currentState!.save();
+              _kdvKey.currentState!.save();
+              setState(() {
+                if (currentIndex < 4) currentIndex++;
+              });
+            }
+          }
+        }
+        // GÖNDERİM YERİ
+        else {
+          setState(() {
+            if (currentIndex < 4) currentIndex++;
+          });
+        }
+
         break;
       case StepEnum.CANCEL:
         setState(() {
-          if (currentIndex > 0) {
-            currentIndex--;
-          }
+          if (currentIndex > 0) currentIndex--;
         });
-
         break;
     }
   }
 
+  // İŞLEM YAPILAN PRODUCTMODEL
   Container _buildProductCard(BuildContext context) {
     return Container(
       margin: _containerMarginTopBottom,
@@ -516,5 +624,3 @@ enum StepEnum {
   CANCEL,
   CONTINUE,
 }
-
-enum StepStateEnum { COMPLATED, EDITING, INDEXED }

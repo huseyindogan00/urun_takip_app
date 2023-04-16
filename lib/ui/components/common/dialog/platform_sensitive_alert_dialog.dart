@@ -54,7 +54,6 @@ class PlatformSensitiveAlertDialog extends BaseComponents {
 
   List<Widget> _buildActionButton(BuildContext context) {
     final allButton = <Widget>[];
-
     if (Platform.isIOS) {
       if (cancelButtonTitle != null) {
         allButton.add(

@@ -10,7 +10,7 @@ class WorkModel implements BaseWorkModel {
   double KDV;
 
   @override
-  BusinessCase businessCase;
+  String businessCase;
 
   @override
   String? companyName;
@@ -25,10 +25,7 @@ class WorkModel implements BaseWorkModel {
   ProductModel productModel;
 
   @override
-  double productPiece;
-
-  @override
-  ShippingPlace shippingPlace;
+  String shippingPlace;
 
   @override
   double totalPrice;
@@ -42,7 +39,6 @@ class WorkModel implements BaseWorkModel {
     this.id,
     this.personID,
     required this.productModel,
-    required this.productPiece,
     required this.shippingPlace,
     required this.totalPrice,
     required this.workDate,
@@ -50,13 +46,12 @@ class WorkModel implements BaseWorkModel {
 
   WorkModel copyWith({
     double? KDV,
-    BusinessCase? businessCase,
+    String? businessCase,
     String? companyName,
     String? id,
     String? personID,
     ProductModel? productModel,
-    double? productPiece,
-    ShippingPlace? shippingPlace,
+    String? shippingPlace,
     double? totalPrice,
     dynamic? workDate,
   }) {
@@ -67,7 +62,6 @@ class WorkModel implements BaseWorkModel {
       id: id ?? this.id,
       personID: personID ?? this.personID,
       productModel: productModel ?? this.productModel,
-      productPiece: productPiece ?? this.productPiece,
       shippingPlace: shippingPlace ?? this.shippingPlace,
       totalPrice: totalPrice ?? this.totalPrice,
       workDate: workDate ?? this.workDate,
@@ -82,7 +76,6 @@ class WorkModel implements BaseWorkModel {
       'id': id,
       'personID': personID,
       'productModel': productModel.toMap(),
-      'productPiece': productPiece,
       'shippingPlace': shippingPlace,
       'totalPrice': totalPrice,
       'workDate': workDate,
@@ -92,13 +85,12 @@ class WorkModel implements BaseWorkModel {
   factory WorkModel.fromMap(Map<String, dynamic> map) {
     return WorkModel(
       KDV: map['KDV'] as double,
-      businessCase: map['businessCase'] as BusinessCase,
+      businessCase: map['businessCase'] as String,
       companyName: map['companyName'] != null ? map['companyName'] as String : null,
       id: map['id'] != null ? map['id'] as String : null,
       personID: map['personID'] != null ? map['personID'] as String : null,
       productModel: ProductModel.fromMap(map['productModel'] as Map<String, dynamic>),
-      productPiece: map['productPiece'] as double,
-      shippingPlace: map['shippingPlace'] as ShippingPlace,
+      shippingPlace: map['shippingPlace'] as String,
       totalPrice: map['totalPrice'] as double,
       workDate: map['workDate'] as dynamic,
     );
@@ -110,7 +102,7 @@ class WorkModel implements BaseWorkModel {
 
   @override
   String toString() {
-    return 'WorkModel(KDV: $KDV, businessCase: $businessCase, companyName: $companyName, id: $id, personID: $personID, productModel: $productModel, productPiece: $productPiece, shippingPlace: $shippingPlace, totalPrice: $totalPrice, workDate: $workDate)';
+    return 'WorkModel(KDV: $KDV, businessCase: $businessCase, companyName: $companyName, id: $id, personID: $personID, productModel: $productModel, shippingPlace: $shippingPlace, totalPrice: $totalPrice, workDate: $workDate)';
   }
 
   @override
@@ -123,7 +115,6 @@ class WorkModel implements BaseWorkModel {
         other.id == id &&
         other.personID == personID &&
         other.productModel == productModel &&
-        other.productPiece == productPiece &&
         other.shippingPlace == shippingPlace &&
         other.totalPrice == totalPrice &&
         other.workDate == workDate;
@@ -137,7 +128,6 @@ class WorkModel implements BaseWorkModel {
         id.hashCode ^
         personID.hashCode ^
         productModel.hashCode ^
-        productPiece.hashCode ^
         shippingPlace.hashCode ^
         totalPrice.hashCode ^
         workDate.hashCode;

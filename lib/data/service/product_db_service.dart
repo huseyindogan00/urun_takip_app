@@ -2,8 +2,10 @@ import 'package:urun_takip_app/core/constant/enum/enumerations.dart';
 import 'package:urun_takip_app/data/base/db_base.dart';
 import 'package:urun_takip_app/data/models/base/base_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:urun_takip_app/data/models/completed_work_model.dart';
 import 'package:urun_takip_app/data/models/product_model.dart';
 import 'package:urun_takip_app/data/models/result_message_model.dart';
+import 'package:urun_takip_app/data/models/work_in_progress_model.dart';
 
 class ProductDBService extends DbBase {
   final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
@@ -19,6 +21,12 @@ class ProductDBService extends DbBase {
     if (model is ProductModel) {
       await _firebaseFirestore.collection(DBCollectionName.products.name).doc(model.id).set(model.toMap());
       return ResultMessageModel(isSuccessful: true, message: 'Ürün Eklendi');
+    } else if (model is CompletedWorkModel) {
+      await _firebaseFirestore.collection(DBCollectionName.completedWorks.name).doc(model.id).set(model.toMap());
+      return ResultMessageModel(isSuccessful: true, message: 'Biten iş eklendi');
+    } else if (model is WorkInProgressModel) {
+      await _firebaseFirestore.collection(DBCollectionName.worksInProgress.name).doc(model.id).set(model.toMap());
+      return ResultMessageModel(isSuccessful: true, message: 'Devam eden iş eklendi');
     }
     return ResultMessageModel(isSuccessful: false);
   }

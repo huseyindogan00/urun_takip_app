@@ -7,6 +7,7 @@ import 'package:urun_takip_app/core/init/locator/global_locator.dart';
 import 'package:urun_takip_app/firebase_options.dart';
 import 'package:urun_takip_app/ui/view_model/product_view_model/product_view_model.dart';
 import 'package:urun_takip_app/ui/view/splash/splash_view.dart';
+import 'package:urun_takip_app/ui/view_model/work_view_model/do_work_view_model.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,9 +24,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(
-          create: (context) => ProductViewModel(),
-        )
+        ChangeNotifierProvider(create: (context) => ProductViewModel()),
+        ChangeNotifierProvider(create: (context) => DoWorkViewModel()),
       ],
       child: MaterialApp(
         title: ConstAppbarText.appName,
