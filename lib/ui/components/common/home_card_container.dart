@@ -37,8 +37,14 @@ class HomeCardContainer extends StatelessWidget {
             child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Image.asset(iconPath),
-            Text(title),
+            Image(image: AssetImage(iconPath)),
+            Text(
+              title,
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyLarge!
+                  .copyWith(color: Colors.black, fontWeight: FontWeight.bold),
+            ),
           ],
         )),
       ),

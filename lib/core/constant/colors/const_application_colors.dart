@@ -9,5 +9,9 @@ class ConstApplicationColors {
   static Color homeWorkHistoryContainerColor =
       const Color.fromARGB(255, 104, 105, 109);
   static Color homeSettingsContainerColor =
-      const Color.fromARGB(255, 89, 86, 87);
+      const Color.fromARGB(255, 132, 131, 131);
+  static Color homeCompletedWorksContainerColor =
+      const Color.fromARGB(255, 154, 168, 150);
+  static Color homeWorksInProgressContainerColor =
+      const Color.fromARGB(255, 133, 156, 170);
 }

@@ -3,7 +3,8 @@ class AppText {
   static const urunEkle = 'Ürün Ekle';
   static const urunGuncelle = 'Ürün Güncelle';
   static const stokDurumu = 'Stok Durumu';
-  static const isGecmisi = 'İş Geçmişi';
+  static const tamamlananIsler = 'Tamamlanan İşler';
+  static const devamEdenIsler = 'Devam Eden İşler';
   static const ayarlar = 'Ayarlar';
   static const stokAdedi = 'Stok Adedi';
   static const stokKodu = 'Stok Kodu';

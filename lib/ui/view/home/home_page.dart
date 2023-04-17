@@ -8,24 +8,27 @@ import 'package:urun_takip_app/ui/view/product/product_stock_status_view.dart';
 import 'package:urun_takip_app/ui/view/work/work_history_view.dart';
 
 class HomeView extends StatelessWidget {
-  const HomeView({super.key});
+  HomeView({super.key});
+
+  double containerHeight = 130;
+  double containerWidth = 135;
+  double borderRadius = 20;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        child: const Text('İŞ\nYAP'),
-      ),
-      backgroundColor: Theme.of(context).primaryColor,
-      body: Column(
-        children: [
-          _buildLogo(flex: 3, context: context),
-          //_buildCustomDivider(),
-          _buildRowFirst(flex: 2, context: context),
-          _buildRowSecond(flex: 2, context: context),
-          const Spacer(flex: 1),
-        ],
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: Theme.of(context).primaryColor,
+        body: Column(
+          children: [
+            _buildLogo(flex: 4, context: context),
+            //_buildCustomDivider(),
+            _buildRowFirst(flex: 3, context: context),
+            _buildRowSecond(flex: 3, context: context),
+            _buildRowThird(flex: 3, context: context),
+            const Spacer(flex: 1),
+          ],
+        ),
       ),
     );
   }
@@ -62,14 +65,51 @@ class HomeView extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          _buildWorkHistoryContainer(context),
+          _buildCompletedWorksContainer(context),
+          _buildWorksInProgressContainer(context),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildRowThird({required int flex, required BuildContext context}) {
+    return Expanded(
+      flex: flex,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          //_buildWorkHistoryContainer(context),
           _buildSettingsContainer(context),
         ],
       ),
     );
   }
 
-  Container _buildCustomDivider() {
+  _buildCompletedWorksContainer(BuildContext context) {
+    return HomeCardContainer(
+      onTap: () {},
+      title: AppText.tamamlananIsler,
+      color: ConstApplicationColors.homeCompletedWorksContainerColor,
+      height: containerHeight,
+      width: containerWidth,
+      iconPath: ConstImage.completedworkPath,
+      borderRadius: borderRadius,
+    );
+  }
+
+  _buildWorksInProgressContainer(BuildContext context) {
+    return HomeCardContainer(
+      onTap: () {},
+      title: AppText.devamEdenIsler,
+      color: ConstApplicationColors.homeWorksInProgressContainerColor,
+      height: containerHeight,
+      width: containerWidth,
+      iconPath: ConstImage.workinprogressPath,
+      borderRadius: borderRadius,
+    );
+  }
+
+  /* Container _buildCustomDivider() {
     return Container(
       height: 5,
       width: 200,
@@ -79,7 +119,7 @@ class HomeView extends StatelessWidget {
         borderRadius: const BorderRadius.all(Radius.circular(20)),
       ),
     );
-  }
+  } */
 
   //* STOK DURUMU
   Widget _buildStockStatusContainer(BuildContext context) {
@@ -94,9 +134,9 @@ class HomeView extends StatelessWidget {
       },
       title: AppText.stokDurumu,
       color: ConstApplicationColors.homeStockStatusContainerColor,
-      height: 150,
-      width: 150,
-      borderRadius: 20,
+      height: containerHeight,
+      width: containerWidth,
+      borderRadius: borderRadius,
     );
   }
 
@@ -114,9 +154,9 @@ class HomeView extends StatelessWidget {
       },
       title: AppText.urunEkle,
       color: ConstApplicationColors.homeAddProductContainerColor,
-      height: 150,
-      width: 150,
-      borderRadius: 20,
+      height: containerHeight,
+      width: containerWidth,
+      borderRadius: borderRadius,
     );
   }
 
@@ -133,11 +173,11 @@ class HomeView extends StatelessWidget {
               builder: (context) => WorkHistoryView(),
             ));
       },
-      title: AppText.isGecmisi,
+      title: AppText.tamamlananIsler,
       color: ConstApplicationColors.homeWorkHistoryContainerColor,
-      height: 150,
-      width: 150,
-      borderRadius: 20,
+      height: containerHeight,
+      width: containerWidth,
+      borderRadius: borderRadius,
     );
   }
 
@@ -152,9 +192,9 @@ class HomeView extends StatelessWidget {
       },
       title: AppText.ayarlar,
       color: ConstApplicationColors.homeSettingsContainerColor,
-      height: 150,
-      width: 150,
-      borderRadius: 20,
+      height: containerHeight,
+      width: containerWidth,
+      borderRadius: borderRadius,
     );
   }
 }

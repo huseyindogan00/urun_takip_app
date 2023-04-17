@@ -12,3 +12,5 @@ enum DBCollectionName {
 }
 
 enum DBFilterName { stockEntryDate, empty }
+
+enum ViewState { IDLE, BUSY }

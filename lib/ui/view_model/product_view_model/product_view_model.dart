@@ -22,7 +22,7 @@ class ProductViewModel extends ChangeNotifier implements DbBase {
   final CategoryRepository _categoryRepository = locator<CategoryRepository>();
   final ProductRepository _productRepository = locator<ProductRepository>();
   late CategoryModel categoryModel = CategoryModel();
-  ProductViewState _viewState = ProductViewState.IDLE;
+  ViewState _viewState = ViewState.IDLE;
 
   get viewState => _viewState;
   set viewState(state) {
@@ -37,11 +37,13 @@ class ProductViewModel extends ChangeNotifier implements DbBase {
   // ******************************************SERVİS KATMANI
   //* STOKTA BULUNAN TÜM ÜRÜNLERİ GETİR
   /// Verilen filtreye göre Kategorinin hepsini yada belirtilen kategoriyi getirir.
-  Future<List<BaseModel>> fetchProductByCategory(String categoryFilterName) async {
+  Future<List<BaseModel>> fetchProductByCategory(
+      String categoryFilterName) async {
     if (categoryFilterName == 'Tümü') {
       return await fetchAll(DBCollectionName.products);
     } else {
-      return await _productRepository.fetchProductByCategory(categoryFilterName);
+      return await _productRepository
+          .fetchProductByCategory(categoryFilterName);
     }
   }
 
@@ -55,12 +57,13 @@ class ProductViewModel extends ChangeNotifier implements DbBase {
   Future<ResultMessageModel?> add(BaseModel model) async {
     late ResultMessageModel resultMessage;
     try {
-      viewState = ProductViewState.BUSY;
+      viewState = ViewState.BUSY;
       resultMessage = await _productRepository.add(model);
     } on Exception catch (_) {
-      return ResultMessageModel(isSuccessful: false, message: 'Eklerken pvm de hataya düştü');
+      return ResultMessageModel(
+          isSuccessful: false, message: 'Eklerken pvm de hataya düştü');
     } finally {
-      viewState = ProductViewState.IDLE;
+      viewState = ViewState.IDLE;
     }
     return resultMessage;
   }
@@ -75,11 +78,11 @@ class ProductViewModel extends ChangeNotifier implements DbBase {
   @override
   Future<bool?> update(BaseModel model) async {
     try {
-      viewState = ProductViewState.BUSY;
+      viewState = ViewState.BUSY;
       return await _productRepository.update(model);
     } catch (_) {
     } finally {
-      viewState = ProductViewState.IDLE;
+      viewState = ViewState.IDLE;
     }
   }
 
@@ -117,8 +120,8 @@ class ProductViewModel extends ChangeNotifier implements DbBase {
 
       notifyListeners();
     } on PlatformException catch (error) {
-      bool? result =
-          await showDialogCustom(context, error.message.toString(), 'Kameraya bağlanırken hata oluştu', 'Tamam');
+      bool? result = await showDialogCustom(context, error.message.toString(),
+          'Kameraya bağlanırken hata oluştu', 'Tamam');
 
       return result;
     }
@@ -139,9 +142,10 @@ class ProductViewModel extends ChangeNotifier implements DbBase {
       double _unitPrice = unitPrice.convertFromStringToDouble();
       double _stockPiece = double.parse(stockPiece);
 
-      double resultDouble = CalculationOperations.calculateBasePrice(_unitPrice, _stockPiece);
-      String resultString =
-          CurrencyFormatter.instance().moneyValueCheck(resultDouble.toString().convertFromDoubleToString());
+      double resultDouble =
+          CalculationOperations.calculateBasePrice(_unitPrice, _stockPiece);
+      String resultString = CurrencyFormatter.instance()
+          .moneyValueCheck(resultDouble.toString().convertFromDoubleToString());
 
       totalPrice = resultString;
       notifyListeners();
@@ -186,9 +190,9 @@ class ProductViewModel extends ChangeNotifier implements DbBase {
   }
 
   Future<void> refresh() async {
-    viewState = ProductViewState.BUSY;
+    viewState = ViewState.BUSY;
     //! YENİLE YAPIP YAPMADIĞI KONTROL EDİLECEK
-    viewState = ProductViewState.IDLE;
+    viewState = ViewState.IDLE;
   }
 
   //**************************** WORK İŞLEMLERİ ********************************
@@ -200,7 +204,8 @@ class ProductViewModel extends ChangeNotifier implements DbBase {
     throw UnimplementedError();
   }
 
-  Future<bool?> showDialogCustom(BuildContext context, String content, String title, String doneButtonTitle) async {
+  Future<bool?> showDialogCustom(BuildContext context, String content,
+      String title, String doneButtonTitle) async {
     bool? result = await PlatformSensitiveAlertDialog(
       content: content,
       title: title,
@@ -210,5 +215,3 @@ class ProductViewModel extends ChangeNotifier implements DbBase {
     return result;
   }
 }
-
-enum ProductViewState { IDLE, BUSY }

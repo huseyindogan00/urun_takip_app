@@ -8,4 +8,6 @@ class ConstImage {
   static String iconAddProductPath = 'assets/icons/product_add.png';
   static String iconSettingsPath = 'assets/icons/settings.png';
   static String iconLiraBlackPath = 'assets/icons/lira_black.png';
+  static String completedworkPath = 'assets/icons/completedwork.png';
+  static String workinprogressPath = 'assets/icons/workinprogress.png';
 }

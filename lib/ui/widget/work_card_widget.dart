@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:urun_takip_app/core/constant/enum/enumerations.dart';
 import 'package:urun_takip_app/core/constant/text/app_text.dart';
-import 'package:urun_takip_app/core/global/global_map.dart';
 import 'package:urun_takip_app/core/utility/extension/string_extension.dart';
 import 'package:urun_takip_app/core/utility/util/validation/currency_formatter.dart';
 import 'package:urun_takip_app/data/models/base/base_work_model.dart';
@@ -10,15 +8,20 @@ class WorkCardWidget extends StatelessWidget {
   WorkCardWidget({super.key, required this.workModel});
 
   BaseWorkModel workModel;
+  TextStyle firstColumnStyle =
+      const TextStyle(fontSize: 14, color: Colors.black);
+  TextStyle secondColumnStyle =
+      const TextStyle(fontSize: 14, color: Colors.blue);
 
   @override
   Widget build(BuildContext context) {
-    TextStyle style = const TextStyle(fontSize: 14);
     print('WordCardWidget Tetiklendi');
     return Container(
       decoration: BoxDecoration(
         boxShadow: const [BoxShadow(color: Colors.black)],
-        color: workModel.businessCase == BusinessCaseText.completed ? Colors.green.shade800 : Colors.red.shade500,
+        color: workModel.businessCase == BusinessCaseText.completed
+            ? Colors.green.shade800
+            : Colors.red.shade500,
         borderRadius: BorderRadius.circular(5),
       ),
       width: double.infinity,
@@ -33,44 +36,63 @@ class WorkCardWidget extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Firma Adı         : ', style: style),
-                      Text('Kategori           : ', style: style),
-                      Text('Alt Kategori     : ', style: style),
-                      Text('KDV                  : ', style: style),
-                      Text('Adet                  : ', style: style),
-                      Text('Net Fiyat          : ', style: style),
-                      Text('Gönderim Yeri : ', style: style),
-                      Text('İş Durumu        : ', style: style),
+                      Text('Firma Adı         : ', style: firstColumnStyle),
+                      Text('Kategori           : ', style: firstColumnStyle),
+                      Text('Alt Kategori     : ', style: firstColumnStyle),
+                      Text('KDV                  : ', style: firstColumnStyle),
+                      Text('Adet                  : ', style: firstColumnStyle),
+                      Text('Net Fiyat          : ', style: firstColumnStyle),
+                      Text('Gönderim Yeri : ', style: firstColumnStyle),
+                      Text('İş Durumu        : ', style: firstColumnStyle),
                     ],
                   ),
                   Flexible(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        // FİRMA ADI
                         Text(workModel.companyName!,
-                            style: style, softWrap: false, maxLines: 1, overflow: TextOverflow.ellipsis),
+                            style: secondColumnStyle,
+                            softWrap: false,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis),
+                        // KATEGORİ ADI
                         Text(
                           workModel.productModel.category.categoryName!,
-                          style: style,
+                          style: secondColumnStyle,
                           overflow: TextOverflow.ellipsis,
                         ),
-                        Text(workModel.productModel.category.categorySubName!, style: style),
-                        Text('% ${workModel.KDV.toInt().toString()}', style: style),
-                        Text(workModel.productModel.stockPiece.toInt().toString(), style: style),
+                        // ALT KATEGORİ ADI
                         Text(
-                            CurrencyFormatter.instance()
-                                .moneyValueCheck(workModel.totalPrice.toString().convertFromDoubleToString()),
-                            style: style),
+                          workModel.productModel.category.categorySubName!,
+                          style: secondColumnStyle,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        // KDV
+                        Text('% ${workModel.KDV.toInt().toString()}',
+                            style: secondColumnStyle),
+                        // ADET
+                        Text(
+                            workModel.productModel.stockPiece
+                                .toInt()
+                                .toString(),
+                            style: secondColumnStyle),
+                        // NET TUTAR
+                        Text(
+                            '${CurrencyFormatter.instance().moneyValueCheck(workModel.totalPrice.toString().convertFromDoubleToString())} ₺',
+                            style: secondColumnStyle),
+                        // GÖNDERİM YERİ
                         Text(
                             workModel.shippingPlace == ShippingPlaceText.local
                                 ? ShippingPlaceText.local
                                 : ShippingPlaceText.upstate,
-                            style: style),
+                            style: secondColumnStyle),
+                        // İŞ DURUMU
                         Text(
                             workModel.businessCase == BusinessCaseText.completed
                                 ? BusinessCaseText.completed
                                 : BusinessCaseText.continues,
-                            style: style),
+                            style: secondColumnStyle),
                       ],
                     ),
                   ),

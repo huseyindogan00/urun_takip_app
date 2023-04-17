@@ -88,8 +88,8 @@ class ProductStockWidget extends StatelessWidget {
           buttonStyle: ElevatedButton.styleFrom(
               backgroundColor: Colors.grey.shade900,
               textStyle: const TextStyle(color: Colors.black)),
-          onPressed: () {
-            Navigator.push(
+          onPressed: () async {
+            await Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (context) => DoWorkView(productModel: productModel),

@@ -12,6 +12,13 @@ import 'package:urun_takip_app/data/repository/repository.dart';
 class DoWorkViewModel extends ChangeNotifier implements DbBase {
   final ProductRepository _productRepository = locator<ProductRepository>();
 
+  ViewState _viewState = ViewState.IDLE;
+  ViewState get viewState => _viewState;
+  set viewState(ViewState value) {
+    _viewState = value;
+    notifyListeners();
+  }
+
   // MEVCUT PRODUCTTIN KOPYASI
   ProductModel? availableProductModel;
   // İŞLEM YAPILAN PRODUCT
@@ -22,14 +29,14 @@ class DoWorkViewModel extends ChangeNotifier implements DbBase {
   late BaseWorkModel workModel;
 
   // SEÇİLEN ÜRÜN ADEDİ
-  int _selectProductPiece = 0;
+  /* int _selectProductPiece = 0;
   int get productPiece => _selectProductPiece;
-  set productPiece(int value) => _selectProductPiece = value;
+  set productPiece(int value) => _selectProductPiece = value; */
 
   // YAPILAN İŞ ADEDİ
-  int _numberOfWorkDone = 0;
+  /* int _numberOfWorkDone = 0;
   int get numberOfWorkDone => _numberOfWorkDone;
-  set numberOfWorkDone(int value) => _numberOfWorkDone = value;
+  set numberOfWorkDone(int value) => _numberOfWorkDone = value; */
 
   // TOPLAM TUTAR
   /// calculate methodu çalıştırıldıktan sonra yeni toplam tutarı tutar
@@ -43,8 +50,10 @@ class DoWorkViewModel extends ChangeNotifier implements DbBase {
     double _doWorkPiece = double.parse(doWorkPiece);
     double _kdv = double.parse(kdv) / 100;
 
-    newProductTotalPrice = CalculationOperations.calculateNetPrice(_unitPrice, _doWorkPiece, _kdv);
-    double newMatrahPrice = CalculationOperations.calculateBasePrice(_unitPrice, _doWorkPiece);
+    newProductTotalPrice =
+        CalculationOperations.calculateNetPrice(_unitPrice, _doWorkPiece, _kdv);
+    double newMatrahPrice =
+        CalculationOperations.calculateBasePrice(_unitPrice, _doWorkPiece);
 
     doWorkProductModel = ProductModel(
       id: availableProductModel!.id,
@@ -59,22 +68,25 @@ class DoWorkViewModel extends ChangeNotifier implements DbBase {
       photoURL: availableProductModel!.photoURL ?? '',
     );
 
-    processedProductModel!.stockPiece = _availableProductStockPiece - _doWorkPiece;
-    processedProductModel!.basePrice =
-        CalculationOperations.calculateBasePrice(processedProductModel!.unitPrice, processedProductModel!.stockPiece);
+    processedProductModel!.stockPiece =
+        _availableProductStockPiece - _doWorkPiece;
+    processedProductModel!.basePrice = CalculationOperations.calculateBasePrice(
+        processedProductModel!.unitPrice, processedProductModel!.stockPiece);
   }
 
   @override
   Future<ResultMessageModel?> add(BaseModel model) async {
+    viewState = ViewState.BUSY;
     bool result = false;
-
     ResultMessageModel resultMessageModel = await _productRepository.add(model);
     if (resultMessageModel.isSuccessful) {
       result = await _productRepository.update(processedProductModel!);
     }
     if (result) {
-      resultMessageModel.message = '${resultMessageModel.message} ve mevcut ürün güncellendi';
+      resultMessageModel.message =
+          '${resultMessageModel.message} ve mevcut ürün güncellendi';
     }
+    viewState = ViewState.IDLE;
     return resultMessageModel;
   }
 

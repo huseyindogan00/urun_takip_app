@@ -43,17 +43,18 @@ class _ProductStockStatusViewState extends State<ProductStockStatusView> {
                 children: [
                   Expanded(child: CustomFilterDropdownWidget()),
                   TextButton.icon(
-                    onPressed: () => context.read<ProductViewModel>().selectFilterCategoryName = 'Tümü',
+                    onPressed: () => context
+                        .read<ProductViewModel>()
+                        .selectFilterCategoryName = 'Tümü',
                     icon: const Icon(
                       Icons.format_align_justify_outlined,
                       color: Colors.green,
                     ),
                     label: Text(
                       'Tüm\nKategori',
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyMedium!
-                          .copyWith(color: Colors.grey.shade200, fontWeight: FontWeight.bold),
+                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          color: Colors.grey.shade200,
+                          fontWeight: FontWeight.bold),
                     ),
                   )
                 ],
@@ -64,12 +65,15 @@ class _ProductStockStatusViewState extends State<ProductStockStatusView> {
               child: Consumer<ProductViewModel>(
                 builder: (_, productController, child) {
                   return FutureBuilder<List<BaseModel>>(
-                    future: productController.fetchProductByCategory(productController.selectFilterCategoryName!),
+                    future: productController.fetchProductByCategory(
+                        productController.selectFilterCategoryName!),
                     builder: (context, snapshot) {
-                      if (!snapshot.hasData || snapshot.connectionState == ConnectionState.waiting) {
+                      if (!snapshot.hasData ||
+                          snapshot.connectionState == ConnectionState.waiting) {
                         return _buildProgress();
                       } else {
-                        List<ProductModel> _productModel = snapshot.data as List<ProductModel>;
+                        List<ProductModel> _productModel =
+                            snapshot.data as List<ProductModel>;
                         if (_productModel.isEmpty) {
                           return _buildProductEmpty(context);
                         } else {
@@ -101,41 +105,46 @@ class _ProductStockStatusViewState extends State<ProductStockStatusView> {
     return Center(
       child: Text(
         'Ürün Listesi Boş',
-        style: Theme.of(context).textTheme.headlineSmall!.copyWith(color: Colors.grey.shade200),
+        style: Theme.of(context)
+            .textTheme
+            .headlineSmall!
+            .copyWith(color: Colors.grey.shade200),
       ),
     );
   }
 
-  Widget _buildListProduct(List<ProductModel> productModel, BuildContext context) {
+  Widget _buildListProduct(
+      List<ProductModel> productModel, BuildContext context) {
     return ListView.builder(
       physics: const AlwaysScrollableScrollPhysics(),
       itemCount: productModel.length,
       itemBuilder: (_, index) {
-        print('build list product çalıştı');
+        print('build list product çalıştı*********************************');
         return Dismissible(
-            key: ValueKey(index),
-            background: Container(
-                color: Colors.red,
-                child: const Icon(
-                  Icons.delete,
-                  size: 64,
-                )),
-            direction: DismissDirection.endToStart,
-            confirmDismiss: (direction) async {
-              bool? result = await const PlatformSensitiveAlertDialog(
-                content: 'Silmek istediğinizden emin misiniz?',
-                title: 'Uyarı!',
-                doneButtonTitle: 'Evet',
-                cancelButtonTitle: 'İptal',
-              ).show(context);
+          key: ValueKey(index),
+          background: Container(
+              color: Colors.red,
+              child: const Icon(
+                Icons.delete,
+                size: 64,
+              )),
+          direction: DismissDirection.endToStart,
+          confirmDismiss: (direction) async {
+            bool? result = await const PlatformSensitiveAlertDialog(
+              content: 'Silmek istediğinizden emin misiniz?',
+              title: 'Uyarı!',
+              doneButtonTitle: 'Evet',
+              cancelButtonTitle: 'İptal',
+            ).show(context);
 
-              if (result != null && result) {
-                await _productViewModel.delete(productModel[index]);
-                setState(() {});
-              }
-              return result;
-            },
-            child: ProductStockWidget(productModel: productModel[index]));
+            if (result != null && result) {
+              await _productViewModel.delete(productModel[index]);
+              setState(() {});
+            }
+            return result;
+          },
+          child: ProductStockWidget(productModel: productModel[index]),
+        );
       },
     );
   }

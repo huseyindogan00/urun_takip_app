@@ -29,7 +29,7 @@ class _SplashViewState extends State<SplashView> {
           context,
           MaterialPageRoute(
             //! provider ürün ekle menüsünde bulunamıyor
-            builder: (context) => const HomeView(),
+            builder: (context) => HomeView(),
           ),
         );
       }
@@ -54,12 +54,14 @@ class _SplashViewState extends State<SplashView> {
     );
   }
 
-  Widget _buildLogo() => Expanded(flex: 6, child: Image.asset(ConstImage.logoPath));
+  Widget _buildLogo() =>
+      Expanded(flex: 6, child: Image.asset(ConstImage.logoPath));
 
   Widget _buildAppName(BuildContext context) {
     return Expanded(
       flex: 1,
-      child: Text(ConstAppbarText.appName, style: Theme.of(context).textTheme.displayMedium),
+      child: Text(ConstAppbarText.appName,
+          style: Theme.of(context).textTheme.displayMedium),
     );
   }
 
