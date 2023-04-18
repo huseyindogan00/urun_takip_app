@@ -5,7 +5,9 @@ import 'package:urun_takip_app/core/constant/text/app_text.dart';
 import 'package:urun_takip_app/ui/components/common/home_card_container.dart';
 import 'package:urun_takip_app/ui/view/product/product_add_view.dart';
 import 'package:urun_takip_app/ui/view/product/product_stock_status_view.dart';
-import 'package:urun_takip_app/ui/view/work/work_history_view.dart';
+import 'package:urun_takip_app/ui/view/work/completed_work_view.dart';
+import 'package:urun_takip_app/ui/view/work/work_in_progress_view.dart';
+import 'package:urun_takip_app/ui/widget/completed_work_widget.dart';
 
 class HomeView extends StatelessWidget {
   HomeView({super.key});
@@ -87,7 +89,13 @@ class HomeView extends StatelessWidget {
 
   _buildCompletedWorksContainer(BuildContext context) {
     return HomeCardContainer(
-      onTap: () {},
+      onTap: () async {
+        await Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => CompletedWorkView(),
+            ));
+      },
       title: AppText.tamamlananIsler,
       color: ConstApplicationColors.homeCompletedWorksContainerColor,
       height: containerHeight,
@@ -99,7 +107,13 @@ class HomeView extends StatelessWidget {
 
   _buildWorksInProgressContainer(BuildContext context) {
     return HomeCardContainer(
-      onTap: () {},
+      onTap: () async {
+        await Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => WorkInProgressView(),
+            ));
+      },
       title: AppText.devamEdenIsler,
       color: ConstApplicationColors.homeWorksInProgressContainerColor,
       height: containerHeight,
@@ -154,27 +168,6 @@ class HomeView extends StatelessWidget {
       },
       title: AppText.urunEkle,
       color: ConstApplicationColors.homeAddProductContainerColor,
-      height: containerHeight,
-      width: containerWidth,
-      borderRadius: borderRadius,
-    );
-  }
-
-  //* SİPARİŞ GEÇMİŞİ
-  Widget _buildWorkHistoryContainer(
-    BuildContext context,
-  ) {
-    return HomeCardContainer(
-      iconPath: ConstImage.iconworkHistoryPath,
-      onTap: () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => WorkHistoryView(),
-            ));
-      },
-      title: AppText.tamamlananIsler,
-      color: ConstApplicationColors.homeWorkHistoryContainerColor,
       height: containerHeight,
       width: containerWidth,
       borderRadius: borderRadius,

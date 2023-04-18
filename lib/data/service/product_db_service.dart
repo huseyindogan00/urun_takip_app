@@ -57,14 +57,34 @@ class ProductDBService extends DbBase {
   @override
   Future<List<BaseModel>> fetchAll(DBCollectionName collectionName) async {
     List<ProductModel> _productModel = [];
+    List<WorkInProgressModel> _workInProgressModel = [];
+    List<CompletedWorkModel> _completedWorkModel = [];
+
     QuerySnapshot<Map<String, dynamic>> snapshot = await _firebaseFirestore
         .collection(collectionName.name)
-        .orderBy(DBFilterName.stockEntryDate.name, descending: true)
+        .orderBy(
+            collectionName == DBCollectionName.products ? DBFilterName.stockEntryDate.name : DBFilterName.workDate.name,
+            descending: true)
         .get();
-    for (var element in snapshot.docs) {
-      _productModel.add(ProductModel.fromMap(element.data()));
+    if (collectionName == DBCollectionName.products) {
+      for (var element in snapshot.docs) {
+        _productModel.add(ProductModel.fromMap(element.data()));
+      }
+    } else if (collectionName == DBCollectionName.worksInProgress) {
+      for (var element in snapshot.docs) {
+        _workInProgressModel.add(WorkInProgressModel.fromMap(element.data()));
+      }
+    } else if (collectionName == DBCollectionName.completedWorks) {
+      for (var element in snapshot.docs) {
+        _completedWorkModel.add(CompletedWorkModel.fromMap(element.data()));
+      }
     }
-    return _productModel;
+
+    return _productModel.isNotEmpty
+        ? _productModel
+        : _workInProgressModel.isNotEmpty
+            ? _workInProgressModel
+            : _completedWorkModel;
   }
 
   Future<ResultMessageModel> stockControl(String stockCode) async {

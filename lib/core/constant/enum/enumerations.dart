@@ -11,6 +11,6 @@ enum DBCollectionName {
   personel,
 }
 
-enum DBFilterName { stockEntryDate, empty }
+enum DBFilterName { stockEntryDate, workDate, empty }
 
 enum ViewState { IDLE, BUSY }

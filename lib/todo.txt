@@ -18,14 +18,13 @@ Yapılacaklar
 2.  (YAPILDI) ProductModel nesnesi veritabanına kaydedilecek
 3.  (YAPILDI) Eklenen ProductModel nesnelerini Stokta gösterme yapılacak
 4.  (YAPILDI) Firebase bağlantıları yapılacak
-5.  GÜNCELLE sayfası eklenecek
-6.  Girilen işlerin durumunu gösteren sayfa yapılacak
+5.  (YAPILDI) GÜNCELLE sayfası eklenecek
+6.  (YAPILDI) Girilen işlerin durumunu gösteren sayfa yapılacak
 7.  AYARLAR sayfası eklenecek
 8.  İnternet kontrolü yapılacak ve tüm sayfalardan dinlenebilecek
-9.  SAYILARIN DÖNÜŞÜMÜ YAPILACAK
+9.  (YAPILDI) SAYILARIN DÖNÜŞÜMÜ YAPILACAK
 10. 
- 
-** para birimleri gösterme tamamlandı. Hepsinde doğru bir formatta gösteriyor.
+  
 
 17 NİSAN 2023 
 -> Yapılan iş başarıyla ekleniyor. İş eklendikten sonra Stok Durumu sayfasına dönüldüğünde tekrar ekranın güncellenmesi gerek.

@@ -88,11 +88,12 @@ class ProductRepository extends DbBase {
   Future<List<BaseModel>> fetchAll(DBCollectionName collectionName) async {
     switch (collectionName) {
       case DBCollectionName.products:
-        return await _productDbService.fetchAll(DBCollectionName.products);
+        return await _productDbService.fetchAll(collectionName);
       case DBCollectionName.completedWorks:
-        break;
+        return await _productDbService.fetchAll(collectionName);
       case DBCollectionName.worksInProgress:
-        break;
+        return await _productDbService.fetchAll(collectionName);
+
       default:
     }
     return <BaseModel>[];
