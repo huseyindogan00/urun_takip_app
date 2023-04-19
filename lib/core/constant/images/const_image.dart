@@ -10,4 +10,5 @@ class ConstImage {
   static String iconLiraBlackPath = 'assets/icons/lira_black.png';
   static String completedworkPath = 'assets/icons/completedwork.png';
   static String workinprogressPath = 'assets/icons/workinprogress.png';
+  static String pinPath = 'assets/icons/clip.png';
 }
