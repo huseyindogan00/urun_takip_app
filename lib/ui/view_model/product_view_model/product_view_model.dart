@@ -17,8 +17,9 @@ import 'package:urun_takip_app/data/models/category_json.dart';
 import 'package:urun_takip_app/data/repository/repository.dart';
 import 'package:urun_takip_app/ui/components/common/dialog/platform_sensitive_alert_dialog.dart';
 import 'package:urun_takip_app/data/models/category_model.dart';
+import 'package:urun_takip_app/ui/view_model/base_view_model.dart';
 
-class ProductViewModel extends ChangeNotifier implements DbBase {
+class ProductViewModel extends ChangeNotifier implements IBaseViewModel {
   final CategoryRepository _categoryRepository = locator<CategoryRepository>();
   final ProductRepository _productRepository = locator<ProductRepository>();
   late CategoryModel categoryModel = CategoryModel();
@@ -37,13 +38,11 @@ class ProductViewModel extends ChangeNotifier implements DbBase {
   // ******************************************SERVİS KATMANI
   //* STOKTA BULUNAN TÜM ÜRÜNLERİ GETİR
   /// Verilen filtreye göre Kategorinin hepsini yada belirtilen kategoriyi getirir.
-  Future<List<BaseModel>> fetchProductByCategory(
-      String categoryFilterName) async {
+  Future<List<BaseModel>> fetchProductByCategory(String categoryFilterName) async {
     if (categoryFilterName == 'Tümü') {
       return await fetchAll(DBCollectionName.products);
     } else {
-      return await _productRepository
-          .fetchProductByCategory(categoryFilterName);
+      return await _productRepository.fetchProductByCategory(categoryFilterName);
     }
   }
 
@@ -60,8 +59,7 @@ class ProductViewModel extends ChangeNotifier implements DbBase {
       viewState = ViewState.BUSY;
       resultMessage = await _productRepository.add(model);
     } on Exception catch (_) {
-      return ResultMessageModel(
-          isSuccessful: false, message: 'Eklerken pvm de hataya düştü');
+      return ResultMessageModel(isSuccessful: false, message: 'Eklerken pvm de hataya düştü');
     } finally {
       viewState = ViewState.IDLE;
     }
@@ -120,8 +118,8 @@ class ProductViewModel extends ChangeNotifier implements DbBase {
 
       notifyListeners();
     } on PlatformException catch (error) {
-      bool? result = await showDialogCustom(context, error.message.toString(),
-          'Kameraya bağlanırken hata oluştu', 'Tamam');
+      bool? result =
+          await showDialogCustom(context, error.message.toString(), 'Kameraya bağlanırken hata oluştu', 'Tamam');
 
       return result;
     }
@@ -142,10 +140,9 @@ class ProductViewModel extends ChangeNotifier implements DbBase {
       double _unitPrice = unitPrice.convertFromStringToDouble();
       double _stockPiece = double.parse(stockPiece);
 
-      double resultDouble =
-          CalculationOperations.calculateBasePrice(_unitPrice, _stockPiece);
-      String resultString = CurrencyFormatter.instance()
-          .moneyValueCheck(resultDouble.toString().convertFromDoubleToString());
+      double resultDouble = CalculationOperations.calculateBasePrice(_unitPrice, _stockPiece);
+      String resultString =
+          CurrencyFormatter.instance().moneyValueCheck(resultDouble.toString().convertFromDoubleToString());
 
       totalPrice = resultString;
       notifyListeners();
@@ -189,23 +186,15 @@ class ProductViewModel extends ChangeNotifier implements DbBase {
     return _categoryRepository.fetchCategoryNameList();
   }
 
+  @override
   Future<void> refresh() async {
     viewState = ViewState.BUSY;
     //! YENİLE YAPIP YAPMADIĞI KONTROL EDİLECEK
     viewState = ViewState.IDLE;
   }
 
-  //**************************** WORK İŞLEMLERİ ********************************
-
-  // WORK EKLEME MOTHODU
   @override
-  Future<bool?> addWork(BaseWorkModel model) {
-    // TODO: implement addWork
-    throw UnimplementedError();
-  }
-
-  Future<bool?> showDialogCustom(BuildContext context, String content,
-      String title, String doneButtonTitle) async {
+  Future<bool?> showDialogCustom(BuildContext context, String content, String title, String doneButtonTitle) async {
     bool? result = await PlatformSensitiveAlertDialog(
       content: content,
       title: title,

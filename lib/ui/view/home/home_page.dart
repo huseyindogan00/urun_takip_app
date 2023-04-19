@@ -7,7 +7,6 @@ import 'package:urun_takip_app/ui/view/product/product_add_view.dart';
 import 'package:urun_takip_app/ui/view/product/product_stock_status_view.dart';
 import 'package:urun_takip_app/ui/view/work/completed_work_view.dart';
 import 'package:urun_takip_app/ui/view/work/work_in_progress_view.dart';
-import 'package:urun_takip_app/ui/widget/completed_work_widget.dart';
 
 class HomeView extends StatelessWidget {
   HomeView({super.key});

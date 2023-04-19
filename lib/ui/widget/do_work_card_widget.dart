@@ -4,14 +4,12 @@ import 'package:urun_takip_app/core/utility/extension/string_extension.dart';
 import 'package:urun_takip_app/core/utility/util/validation/currency_formatter.dart';
 import 'package:urun_takip_app/data/models/base/base_work_model.dart';
 
-class WorkCardWidget extends StatelessWidget {
-  WorkCardWidget({super.key, required this.workModel});
+class DoWorkCardWidget extends StatelessWidget {
+  DoWorkCardWidget({super.key, required this.workModel});
 
   BaseWorkModel workModel;
-  TextStyle firstColumnStyle =
-      const TextStyle(fontSize: 14, color: Colors.black);
-  TextStyle secondColumnStyle =
-      const TextStyle(fontSize: 14, color: Colors.blue);
+  TextStyle firstColumnStyle = const TextStyle(fontSize: 14, color: Colors.black);
+  TextStyle secondColumnStyle = const TextStyle(fontSize: 14, color: Colors.blue);
 
   @override
   Widget build(BuildContext context) {
@@ -19,9 +17,7 @@ class WorkCardWidget extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         boxShadow: const [BoxShadow(color: Colors.black)],
-        color: workModel.businessCase == BusinessCaseText.completed
-            ? Colors.green.shade800
-            : Colors.red.shade500,
+        color: workModel.businessCase == BusinessCaseText.completed ? Colors.green.shade800 : Colors.red.shade500,
         borderRadius: BorderRadius.circular(5),
       ),
       width: double.infinity,
@@ -52,10 +48,7 @@ class WorkCardWidget extends StatelessWidget {
                       children: [
                         // FİRMA ADI
                         Text(workModel.companyName!,
-                            style: secondColumnStyle,
-                            softWrap: false,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis),
+                            style: secondColumnStyle, softWrap: false, maxLines: 1, overflow: TextOverflow.ellipsis),
                         // KATEGORİ ADI
                         Text(
                           workModel.productModel.category.categoryName!,
@@ -69,14 +62,9 @@ class WorkCardWidget extends StatelessWidget {
                           overflow: TextOverflow.ellipsis,
                         ),
                         // KDV
-                        Text('% ${workModel.KDV.toInt().toString()}',
-                            style: secondColumnStyle),
+                        Text('% ${workModel.KDV.toInt().toString()}', style: secondColumnStyle),
                         // ADET
-                        Text(
-                            workModel.productModel.stockPiece
-                                .toInt()
-                                .toString(),
-                            style: secondColumnStyle),
+                        Text(workModel.productModel.stockPiece.toInt().toString(), style: secondColumnStyle),
                         // NET TUTAR
                         Text(
                             '${CurrencyFormatter.instance().moneyValueCheck(workModel.totalPrice.toString().convertFromDoubleToString())} ₺',
