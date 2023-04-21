@@ -56,9 +56,9 @@ class ProductDBService extends DbBase {
 
   @override
   Future<List<BaseModel>> fetchAll(DBCollectionName collectionName) async {
-    List<ProductModel> _productModel = [];
-    List<WorkInProgressModel> _workInProgressModel = [];
-    List<CompletedWorkModel> _completedWorkModel = [];
+    List<ProductModel>? _productModel;
+    List<WorkInProgressModel>? _workInProgressModel;
+    List<CompletedWorkModel>? _completedWorkModel;
 
     QuerySnapshot<Map<String, dynamic>> snapshot = await _firebaseFirestore
         .collection(collectionName.name)
@@ -66,25 +66,34 @@ class ProductDBService extends DbBase {
             collectionName == DBCollectionName.products ? DBFilterName.stockEntryDate.name : DBFilterName.workDate.name,
             descending: true)
         .get();
+
     if (collectionName == DBCollectionName.products) {
+      _productModel = [];
       for (var element in snapshot.docs) {
         _productModel.add(ProductModel.fromMap(element.data()));
       }
     } else if (collectionName == DBCollectionName.worksInProgress) {
+      _workInProgressModel = [];
       for (var element in snapshot.docs) {
         _workInProgressModel.add(WorkInProgressModel.fromMap(element.data()));
       }
     } else if (collectionName == DBCollectionName.completedWorks) {
+      _completedWorkModel = [];
       for (var element in snapshot.docs) {
         _completedWorkModel.add(CompletedWorkModel.fromMap(element.data()));
       }
     }
 
-    return _productModel.isNotEmpty
+    // ignore: prefer_if_null_operators
+    return _productModel != null
         ? _productModel
-        : _workInProgressModel.isNotEmpty
+        // ignore: prefer_if_null_operators
+        : _workInProgressModel != null
             ? _workInProgressModel
-            : _completedWorkModel;
+            // ignore: prefer_if_null_operators
+            : _completedWorkModel != null
+                ? _completedWorkModel
+                : [];
   }
 
   Future<ResultMessageModel> stockControl(String stockCode) async {

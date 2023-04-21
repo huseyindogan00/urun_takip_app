@@ -8,9 +8,7 @@ import 'package:urun_takip_app/core/utility/util/calc/calculation_operations.dar
 import 'package:urun_takip_app/core/utility/util/manager/image_and_video_manager.dart';
 import 'package:urun_takip_app/core/utility/util/validation/currency_formatter.dart';
 import 'package:urun_takip_app/core/utility/util/validation/validation.dart';
-import 'package:urun_takip_app/data/base/db_base.dart';
 import 'package:urun_takip_app/data/models/base/base_model.dart';
-import 'package:urun_takip_app/data/models/base/base_work_model.dart';
 import 'package:urun_takip_app/data/models/result_message_model.dart';
 import 'package:urun_takip_app/data/repository/category_repository.dart';
 import 'package:urun_takip_app/data/models/category_json.dart';

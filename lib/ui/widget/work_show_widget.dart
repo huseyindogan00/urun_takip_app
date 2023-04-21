@@ -30,28 +30,36 @@ class _WorkShowWidgetState<T extends BaseWorkModel> extends State<WorkShowWidget
   @override
   Widget build(BuildContext context) {
     //viewModel = Provider.of<IBaseViewModel>(context);
-    return FutureBuilder<List<BaseModel>>(
-      future: viewModel.fetchAll(dbCollectionName),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData || snapshot.connectionState == ConnectionState.waiting) {
-          return _buildProgress();
-        } else {
-          List<T> list = snapshot.data as List<T>;
-
-          if (list.isEmpty) {
-            return _buildWorkInProgressModelEmpty(context);
+    return RefreshIndicator(
+      edgeOffset: 2,
+      onRefresh: () {
+        setState(() {});
+        return Future.delayed(const Duration(milliseconds: 250));
+      },
+      child: FutureBuilder<List<BaseModel>>(
+        future: viewModel.fetchAll(dbCollectionName),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData || snapshot.connectionState == ConnectionState.waiting) {
+            return _buildProgress();
           } else {
-            return ListView.builder(
-              itemCount: list.length,
-              itemBuilder: (context, index) {
-                T model = list[index];
-                return Stack(
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.only(top: 20),
-                      child: Card(
-                        elevation: 15,
-                        color: Colors.amber.shade200,
+            List<T> list = snapshot.data as List<T>;
+
+            if (list.isEmpty) {
+              return _buildWorkInProgressModelEmpty(context);
+            } else {
+              return ListView.builder(
+                itemCount: list.length,
+                itemBuilder: (context, index) {
+                  T model = list[index];
+                  return Stack(
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Colors.amber.shade200,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        margin: const EdgeInsets.all(15),
+                        padding: const EdgeInsets.all(10),
                         child: ListBody(
                           children: [
                             ListTile(
@@ -61,7 +69,10 @@ class _WorkShowWidgetState<T extends BaseWorkModel> extends State<WorkShowWidget
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text('Firma Adı: ${model.companyName}'),
-                                  Text('Kategori: ${model.productModel.category.categoryName}'),
+                                  Text(
+                                    'Kategori: ${model.productModel.category.categoryName}',
+                                    style: TextStyle(color: Colors.black),
+                                  ),
                                   Text('Alt Kategori: ${model.productModel.category.categorySubName}'),
                                   Text('Toplam Yapılan Adet: ${model.productModel.stockPiece}'),
                                   Text('Toplam Tutar: ${model.totalPrice.toString().convertFromDoubleToString()}'),
@@ -82,24 +93,24 @@ class _WorkShowWidgetState<T extends BaseWorkModel> extends State<WorkShowWidget
                           ],
                         ),
                       ),
-                    ),
-                    Positioned(
-                      height: 45,
-                      top: 18.5,
-                      right: 20,
-                      child: Image(
-                        color: Colors.red.shade900,
-                        image: AssetImage(ConstImage.pinPath),
-                        fit: BoxFit.fitHeight,
+                      Positioned(
+                        height: 45,
+                        top: 10,
+                        right: 30,
+                        child: Image(
+                          color: Colors.red.shade900,
+                          image: AssetImage(ConstImage.pinPath),
+                          fit: BoxFit.fitHeight,
+                        ),
                       ),
-                    ),
-                  ],
-                );
-              },
-            );
+                    ],
+                  );
+                },
+              );
+            }
           }
-        }
-      },
+        },
+      ),
     );
   }
 
