@@ -12,7 +12,7 @@ import 'package:urun_takip_app/data/models/base/base_model.dart';
 import 'package:urun_takip_app/data/models/result_message_model.dart';
 import 'package:urun_takip_app/data/repository/category_repository.dart';
 import 'package:urun_takip_app/data/models/category_json.dart';
-import 'package:urun_takip_app/data/repository/repository.dart';
+import 'package:urun_takip_app/data/repository/product_repository.dart';
 import 'package:urun_takip_app/ui/components/common/dialog/platform_sensitive_alert_dialog.dart';
 import 'package:urun_takip_app/data/models/category_model.dart';
 import 'package:urun_takip_app/ui/view_model/base_view_model.dart';

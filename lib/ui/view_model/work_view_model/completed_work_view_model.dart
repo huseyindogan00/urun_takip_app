@@ -3,7 +3,7 @@ import 'package:urun_takip_app/core/constant/enum/enumerations.dart';
 import 'package:urun_takip_app/core/init/locator/global_locator.dart';
 import 'package:urun_takip_app/data/models/base/base_model.dart';
 import 'package:urun_takip_app/data/models/result_message_model.dart';
-import 'package:urun_takip_app/data/repository/repository.dart';
+import 'package:urun_takip_app/data/repository/product_repository.dart';
 import 'package:urun_takip_app/ui/view_model/base_view_model.dart';
 
 class CompletedWorkViewModel extends IBaseViewModel {
@@ -15,9 +15,9 @@ class CompletedWorkViewModel extends IBaseViewModel {
   }
 
   @override
-  Future<bool?> delete(BaseModel product) {
-    // TODO: implement delete
-    throw UnimplementedError();
+  Future<bool?> delete(BaseModel product) async {
+    bool result = await _repository.delete(product);
+    print('silinme durumu $result');
   }
 
   @override
@@ -26,9 +26,8 @@ class CompletedWorkViewModel extends IBaseViewModel {
   }
 
   @override
-  Future<bool?> update(BaseModel model) {
-    // TODO: implement update
-    throw UnimplementedError();
+  Future<bool?> update(BaseModel model) async {
+    return await _repository.update(model);
   }
 
   @override

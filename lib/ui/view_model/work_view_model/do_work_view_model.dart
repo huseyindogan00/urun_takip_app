@@ -7,7 +7,7 @@ import 'package:urun_takip_app/data/models/base/base_model.dart';
 import 'package:urun_takip_app/data/models/base/base_work_model.dart';
 import 'package:urun_takip_app/data/models/product_model.dart';
 import 'package:urun_takip_app/data/models/result_message_model.dart';
-import 'package:urun_takip_app/data/repository/repository.dart';
+import 'package:urun_takip_app/data/repository/product_repository.dart';
 
 class DoWorkViewModel extends ChangeNotifier implements DbBase {
   final ProductRepository _productRepository = locator<ProductRepository>();
@@ -50,10 +50,8 @@ class DoWorkViewModel extends ChangeNotifier implements DbBase {
     double _doWorkPiece = double.parse(doWorkPiece);
     double _kdv = double.parse(kdv) / 100;
 
-    newProductTotalPrice =
-        CalculationOperations.calculateNetPrice(_unitPrice, _doWorkPiece, _kdv);
-    double newMatrahPrice =
-        CalculationOperations.calculateBasePrice(_unitPrice, _doWorkPiece);
+    newProductTotalPrice = CalculationOperations.calculateNetPrice(_unitPrice, _doWorkPiece, _kdv);
+    double newMatrahPrice = CalculationOperations.calculateBasePrice(_unitPrice, _doWorkPiece);
 
     doWorkProductModel = ProductModel(
       id: availableProductModel!.id,
@@ -68,10 +66,9 @@ class DoWorkViewModel extends ChangeNotifier implements DbBase {
       photoURL: availableProductModel!.photoURL ?? '',
     );
 
-    processedProductModel!.stockPiece =
-        _availableProductStockPiece - _doWorkPiece;
-    processedProductModel!.basePrice = CalculationOperations.calculateBasePrice(
-        processedProductModel!.unitPrice, processedProductModel!.stockPiece);
+    processedProductModel!.stockPiece = _availableProductStockPiece - _doWorkPiece;
+    processedProductModel!.basePrice =
+        CalculationOperations.calculateBasePrice(processedProductModel!.unitPrice, processedProductModel!.stockPiece);
   }
 
   @override
@@ -83,8 +80,7 @@ class DoWorkViewModel extends ChangeNotifier implements DbBase {
       result = await _productRepository.update(processedProductModel!);
     }
     if (result) {
-      resultMessageModel.message =
-          '${resultMessageModel.message} ve mevcut ürün güncellendi';
+      resultMessageModel.message = '${resultMessageModel.message} ve mevcut ürün güncellendi';
     }
     viewState = ViewState.IDLE;
     return resultMessageModel;

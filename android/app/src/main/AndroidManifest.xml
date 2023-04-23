@@ -4,9 +4,9 @@
    
    <uses-permission android:name="android.permission.INTERNET"/>
    <application
-        android:label="urun_takip_app"
+        android:label="ÜRÜN TAKİP"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/kade_medya">
         <activity
             android:name=".MainActivity"
             android:exported="true"

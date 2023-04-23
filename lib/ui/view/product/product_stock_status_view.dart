@@ -115,11 +115,12 @@ class _ProductStockStatusViewState extends State<ProductStockStatusView> {
         return Dismissible(
           key: ValueKey(index),
           background: Container(
-              color: Colors.red,
-              child: const Icon(
-                Icons.delete,
-                size: 64,
-              )),
+            color: Colors.red,
+            child: const Icon(
+              Icons.delete,
+              size: 64,
+            ),
+          ),
           direction: DismissDirection.endToStart,
           confirmDismiss: (direction) async {
             bool? result = await const PlatformSensitiveAlertDialog(

@@ -25,8 +25,13 @@ class ProductRepository extends DbBase {
       if (product.photoURL != null) {
         await _firebaseStorageServise.deleteFile(product.id!, product.photoPath!.split('.').last);
       }
-
       await _productDbService.delete(product);
+    } else if (product is WorkInProgressModel) {
+      bool? result = await _workDbService.delete(product);
+      return result!;
+    } else if (product is CompletedWorkModel) {
+      bool? result = await _workDbService.delete(product);
+      return result!;
     }
 
     return true;
@@ -63,7 +68,7 @@ class ProductRepository extends DbBase {
   @override
   Future<bool> update(BaseModel model) async {
     String? _photoURL;
-    late bool result;
+    bool? result;
 
     if (model is ProductModel) {
       _productModel = model;
@@ -72,12 +77,16 @@ class ProductRepository extends DbBase {
       result = await _productDbService.update(_productModel!);
     } else if (model is CompletedWorkModel) {
       _completedWorkModel = model;
+      await _workDbService.delete(model);
+      result = await _workDbService.update(_completedWorkModel!);
     } else if (model is WorkInProgressModel) {
       _workInProgressModel = model;
+      await _workDbService.delete(model);
+      result = await _workDbService.update(_workInProgressModel!);
     } else {
       result = false;
     }
-    return result;
+    return result!;
   }
 
   Future<List<BaseModel>> fetchProductByCategory(String categoryName) {
@@ -90,9 +99,9 @@ class ProductRepository extends DbBase {
       case DBCollectionName.products:
         return await _productDbService.fetchAll(collectionName);
       case DBCollectionName.completedWorks:
-        return await _productDbService.fetchAll(collectionName);
+        return await _workDbService.fetchAll(collectionName);
       case DBCollectionName.worksInProgress:
-        return await _productDbService.fetchAll(collectionName);
+        return await _workDbService.fetchAll(collectionName);
 
       default:
     }
