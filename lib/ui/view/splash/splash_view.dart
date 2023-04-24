@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:urun_takip_app/core/constant/images/const_image.dart';
 import 'package:urun_takip_app/core/constant/text/const_appbar_text.dart';
 import 'package:urun_takip_app/ui/components/common/lottie_custom_widget.dart';
@@ -23,12 +22,10 @@ class _SplashViewState extends State<SplashView> {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       // _splashViewModel da yapılacak işlemler burada yapılacak. Sayfa yönlendirme vs.
       await Future.delayed(const Duration(seconds: 2));
-      //! PROVİDER BURADAN VERİLİYOR
       if (mounted) {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            //! provider ürün ekle menüsünde bulunamıyor
             builder: (context) => HomeView(),
           ),
         );
@@ -46,22 +43,22 @@ class _SplashViewState extends State<SplashView> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             _buildLogo(),
+            const CircularProgressIndicator(color: Colors.white),
+            const Spacer(flex: 1),
             _buildAppName(context),
-            _buildLotieAnimation(),
+            //_buildLotieAnimation(),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildLogo() =>
-      Expanded(flex: 6, child: Image.asset(ConstImage.logoPath));
+  Widget _buildLogo() => Expanded(flex: 6, child: Image.asset(ConstImage.logoPath));
 
   Widget _buildAppName(BuildContext context) {
     return Expanded(
-      flex: 1,
-      child: Text(ConstAppbarText.appName,
-          style: Theme.of(context).textTheme.displayMedium),
+      flex: 3,
+      child: Text(ConstAppbarText.appName, style: Theme.of(context).textTheme.displayMedium),
     );
   }
 

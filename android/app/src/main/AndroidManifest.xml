@@ -6,7 +6,7 @@
    <application
         android:label="ÜRÜN TAKİP"
         android:name="${applicationName}"
-        android:icon="@mipmap/kade_medya">
+        android:icon="@mipmap/urun_takip_launcher_icon">
         <activity
             android:name=".MainActivity"
             android:exported="true"
