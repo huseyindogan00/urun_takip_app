@@ -27,6 +27,7 @@ class ProductStockWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('product_stock_widget çalıştı');
     titleStyle = Theme.of(context).textTheme.labelLarge!;
     contentStyle = Theme.of(context).textTheme.labelLarge!.copyWith(
           fontSize: 16,
@@ -69,15 +70,11 @@ class ProductStockWidget extends StatelessWidget {
       children: [
         CustomElevatedButton(
           buttonStyle: ElevatedButton.styleFrom(
-              backgroundColor: Colors.grey.shade500,
-              textStyle: const TextStyle(color: Colors.black)),
+              backgroundColor: Colors.grey.shade500, textStyle: const TextStyle(color: Colors.black)),
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(
-                builder: (contex) =>
-                    ProductUpdateView(productModel: productModel),
-              ),
+              MaterialPageRoute(builder: (contex) => ProductUpdateView(productModel: productModel)),
             );
           },
           text: 'Güncelle',
@@ -85,20 +82,17 @@ class ProductStockWidget extends StatelessWidget {
           width: 120,
         ),
         CustomElevatedButton(
-          buttonStyle: ElevatedButton.styleFrom(
-              backgroundColor: Colors.grey.shade900,
-              textStyle: const TextStyle(color: Colors.black)),
-          onPressed: () async {
-            await Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => DoWorkView(productModel: productModel),
-              ),
-            );
-          },
           text: 'İş Yap',
           height: 40,
           width: 120,
+          buttonStyle: ElevatedButton.styleFrom(
+              backgroundColor: Colors.grey.shade900, textStyle: const TextStyle(color: Colors.black)),
+          onPressed: () async {
+            await Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => DoWorkView(productModel: productModel)),
+            );
+          },
         ),
       ],
     );
@@ -119,13 +113,10 @@ class ProductStockWidget extends StatelessWidget {
 
   InkWell _buildOnTapPhoto(BuildContext context) {
     return InkWell(
-      onTap: () {
-        Navigator.push(
+      onTap: () async {
+        await Navigator.push(
           context,
-          MaterialPageRoute(
-            builder: (context) =>
-                ImageViewWidget(imagePath: productModel.photoURL!),
-          ),
+          MaterialPageRoute(builder: (context) => ImageViewWidget(imagePath: productModel.photoURL!)),
         );
       },
       child: Material(
@@ -171,8 +162,7 @@ class ProductStockWidget extends StatelessWidget {
         Row(
           children: [
             Text(ProductStockStatusText.adet, style: titleStyle),
-            Text(productModel.stockPiece.toInt().toString(),
-                style: contentStyle),
+            Text(productModel.stockPiece.toInt().toString(), style: contentStyle),
           ],
         ),
         Row(
@@ -201,10 +191,7 @@ class ProductStockWidget extends StatelessWidget {
         Wrap(
           children: [
             Text(ProductStockStatusText.aciklama, style: titleStyle),
-            Text(productModel.title,
-                style: contentStyle,
-                overflow: TextOverflow.ellipsis,
-                maxLines: 2),
+            Text(productModel.title, style: contentStyle, overflow: TextOverflow.ellipsis, maxLines: 2),
           ],
         ),
       ],

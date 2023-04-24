@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:urun_takip_app/ui/components/common/custom_appbar_widget.dart';
 
