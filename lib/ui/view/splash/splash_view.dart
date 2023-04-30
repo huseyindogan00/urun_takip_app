@@ -3,6 +3,7 @@ import 'package:urun_takip_app/core/constant/images/const_image.dart';
 import 'package:urun_takip_app/core/constant/text/const_appbar_text.dart';
 import 'package:urun_takip_app/ui/components/common/lottie_custom_widget.dart';
 import 'package:urun_takip_app/ui/view/home/home_page.dart';
+import 'package:urun_takip_app/ui/view/home/home_view_v2.dart';
 import 'package:urun_takip_app/ui/view/splash/splash_view_model.dart';
 
 class SplashView extends StatefulWidget {
@@ -26,7 +27,7 @@ class _SplashViewState extends State<SplashView> {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => HomeView(),
+            builder: (context) => HomeViewV2(),
           ),
         );
       }

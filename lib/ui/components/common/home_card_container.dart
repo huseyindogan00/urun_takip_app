@@ -26,27 +26,38 @@ class HomeCardContainer extends StatelessWidget {
         width: width,
         height: height,
         decoration: BoxDecoration(
-            color: color,
-            borderRadius: BorderRadius.all(
-              Radius.circular(borderRadius ?? 0),
-            ),
-            boxShadow: const [
-              BoxShadow(blurRadius: 10, blurStyle: BlurStyle.normal),
-            ]),
-        child: Center(
-            child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Image(image: AssetImage(iconPath)),
-            Text(
-              title,
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyLarge!
-                  .copyWith(color: Colors.black, fontWeight: FontWeight.bold),
-            ),
+          color: color,
+          borderRadius: BorderRadius.all(
+            Radius.circular(borderRadius ?? 0),
+          ),
+          boxShadow: const [
+            BoxShadow(blurRadius: 10, blurStyle: BlurStyle.normal),
           ],
-        )),
+        ),
+        child: Center(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Expanded(
+                flex: 2,
+                child: SizedBox(
+                  width: 50,
+                  height: 50,
+                  child: Image(
+                    image: AssetImage(iconPath),
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: 3,
+                child: Text(
+                  title,
+                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: Colors.black, fontSize: 18),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
